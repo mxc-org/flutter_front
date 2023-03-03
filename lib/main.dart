@@ -86,8 +86,11 @@ class _MyHomePageState extends State<MyHomePage> {
             uiType = type;
             setState(() {});
           },
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(BeveledRectangleBorder()),
+          ),
           child: Container(
-            margin: EdgeInsets.symmetric(vertical: 5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
             child: Column(
               children: [
                 icon,
