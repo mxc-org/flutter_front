@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/friendsUI.dart';
 import 'package:flutter_front/gameUI.dart';
+import 'package:flutter_front/loginUI.dart';
 import 'package:flutter_front/myUI.dart';
 
 void main() {
@@ -10,16 +11,16 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '网络五子棋',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange, background: Colors.white,),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: '网络五子棋'),
+      home: const LoginUI(),
     );
   }
 }
@@ -39,14 +40,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     Widget ui;
     if (uiType == 1) {
-      ui = const GameUI();
-    } else if (uiType == 2) {
       ui = const FriendsUI();
+    } else if (uiType == 2) {
+      ui = const GameUI();
     } else {
       ui = const MyUI();
     }
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(widget.title),
       ),
       body: Column(
@@ -56,15 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Row(
             children: [
-              Expanded(
-                child: myTextButton(1, "游戏", Icon(Icons.games)),
-              ),
-              Expanded(
-                child: myTextButton(2, "好友", Icon(Icons.people)),
-              ),
-              Expanded(
-                child: myTextButton(3, "我的", Icon(Icons.person)),
-              )
+              Expanded(child: myTextButton(1, "好友", Icons.people)),
+              Expanded(child: myTextButton(2, "对战", Icons.games)),
+              Expanded(child: myTextButton(3, "我的", Icons.person))
             ],
           )
         ],
@@ -72,29 +68,23 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget myTextButton(int type, String text, Icon icon) {
-    Color color;
-    if (type == uiType) {
-      color = Color.fromARGB(31, 104, 58, 183);
-    } else {
-      color = Colors.transparent;
+  Widget myTextButton(int type, String text, IconData icon) {
+    Color color = Colors.black;
+    if (uiType == type) {
+      color = Colors.orange;
     }
     return Container(
-      color: color,
       child: TextButton(
           onPressed: () {
             uiType = type;
             setState(() {});
           },
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(BeveledRectangleBorder()),
-          ),
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 5),
             child: Column(
               children: [
-                icon,
-                Text(text),
+                Icon(icon, color: color),
+                Text(text, style: TextStyle(color: color)),
               ],
             ),
           )),
