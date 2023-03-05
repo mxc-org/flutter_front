@@ -17,7 +17,10 @@ class MyApp extends StatelessWidget {
       title: '网络五子棋',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange, background: Colors.white,),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.orange,
+          background: Colors.white,
+        ),
         useMaterial3: true,
       ),
       home: const LoginUI(),
@@ -75,19 +78,20 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return Container(
       child: TextButton(
-          onPressed: () {
-            uiType = type;
-            setState(() {});
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 5),
-            child: Column(
-              children: [
-                Icon(icon, color: color),
-                Text(text, style: TextStyle(color: color)),
-              ],
-            ),
-          )),
+        onPressed: () {
+          uiType = type;
+          setState(() {});
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          child: Column(
+            children: [
+              Icon(icon, color: color),
+              Text(text, style: TextStyle(color: color)),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

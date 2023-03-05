@@ -17,44 +17,57 @@ class _LoginUIState extends State<LoginUI> {
   Widget build(BuildContext context) {
     if (login == true) return const MyHomePage(title: "网络五子棋");
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(left: 20, right: 20, top: 300),
-          child: Column(
-            children: [
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: "请输入用户名",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(50.0)),
+      body: Container(
+        height: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: const AssetImage("images/login.jpg"),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.5),
+              BlendMode.dstATop,
+            ),
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(left: 20, right: 20, top: 500),
+            child: Column(
+              children: [
+                TextField(
+                  decoration: const InputDecoration(
+                    hintText: "请输入用户名",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                  ),
+                  onChanged: (value) {},
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  decoration: const InputDecoration(
+                    hintText: "请输入密码",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                  ),
+                  onChanged: (value) {},
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    login = true;
+                    setState(() {});
+                  },
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.orange)),
+                  child: const Text(
+                    "登录",
+                    style: TextStyle(fontSize: 24, color: Colors.white),
                   ),
                 ),
-                onChanged: (value) {},
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: "请输入密码",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                  ),
-                ),
-                onChanged: (value) {},
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  login = true;
-                  setState(() {});
-                },
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.orange)),
-                child: const Text(
-                  "登录",
-                  style: TextStyle(fontSize: 24, color: Colors.white),
-                ),
-              ),
-              TextButton(
+                TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -62,8 +75,14 @@ class _LoginUIState extends State<LoginUI> {
                       ),
                     );
                   },
-                  child: const Text("新用户？点击注册"))
-            ],
+                  child: Text(
+                    "新用户？点击注册",
+                    style: TextStyle(
+                        backgroundColor: Colors.white.withOpacity(0.8)),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
