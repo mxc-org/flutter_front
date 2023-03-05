@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget myTextButton(int type, String text, IconData icon) {
     Color color = Colors.black;
     if (uiType == type) {
-      color = Colors.orange;
+      color = Colors.deepOrange;
     }
     return Container(
       child: TextButton(

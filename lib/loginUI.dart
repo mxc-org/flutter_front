@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_front/main.dart';
+import 'package:flutter_front/registerUI.dart';
 
 class LoginUI extends StatefulWidget {
   const LoginUI({super.key});
@@ -33,7 +34,7 @@ class _LoginUIState extends State<LoginUI> {
               const SizedBox(height: 20),
               TextField(
                 decoration: const InputDecoration(
-                  hintText: "请输入用户名",
+                  hintText: "请输入密码",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(50.0)),
                   ),
@@ -46,13 +47,22 @@ class _LoginUIState extends State<LoginUI> {
                   login = true;
                   setState(() {});
                 },
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.orange)),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.orange)),
                 child: const Text(
                   "登录",
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
               ),
-              TextButton(onPressed: () {}, child: const Text("新用户？点击注册"))
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (buildContext) => const RegisterUI(),
+                      ),
+                    );
+                  },
+                  child: const Text("新用户？点击注册"))
             ],
           ),
         ),
