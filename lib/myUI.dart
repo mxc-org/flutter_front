@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_front/main.dart';
+import 'package:flutter_front/values.dart';
 
 class MyUI extends StatefulWidget {
   const MyUI({super.key});
@@ -130,7 +132,10 @@ class _MyUIState extends State<MyUI> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.orange),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Values.login = false;
+              setState(() {});
+            },
             child: const Text(
               "退出登录",
               style: TextStyle(color: Colors.white, fontSize: 24),

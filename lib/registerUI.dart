@@ -27,59 +27,62 @@ class _RegisterUIState extends State<RegisterUI> {
             ),
           ),
         ),
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(left: 20, right: 20, top: 350),
-            child: Column(
-              children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: "请输入用户名",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+        child: Column(
+          children: [
+            const Expanded(child: Text("")),
+            Container(
+              alignment: AlignmentDirectional.bottomCenter,
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: Column(
+                children: [
+                  TextField(
+                    decoration: const InputDecoration(
+                      hintText: "请输入用户名",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      ),
+                    ),
+                    onChanged: (value) {},
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      hintText: "请输入密码",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      ),
+                    ),
+                    onChanged: (value) {},
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      hintText: "请再次输入密码",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      ),
+                    ),
+                    onChanged: (value) {},
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.orange)),
+                    child: const Text(
+                      "注册",
+                      style: TextStyle(fontSize: 24, color: Colors.white),
                     ),
                   ),
-                  onChanged: (value) {},
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: "请输入密码",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                    ),
-                  ),
-                  onChanged: (value) {},
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: "请再次输入密码",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                    ),
-                  ),
-                  onChanged: (value) {},
-                ),
-                
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {});
-                  },
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.orange)),
-                  child: const Text(
-                    "注册",
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

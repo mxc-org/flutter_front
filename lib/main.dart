@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_front/friendsUI.dart';
 import 'package:flutter_front/gameUI.dart';
 import 'package:flutter_front/loginUI.dart';
 import 'package:flutter_front/myUI.dart';
+import 'package:flutter_front/values.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,7 +43,21 @@ class _MyHomePageState extends State<MyHomePage> {
   int uiType = 2;
 
   @override
+  void initState() {
+    Timer.periodic(const Duration(microseconds: 100), (timer) {
+      if (Values.login == false) {
+        timer.cancel();
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (Values.login == false) {
+      return LoginUI();
+    }
     Widget ui;
     if (uiType == 1) {
       ui = const FriendsUI();
