@@ -63,17 +63,7 @@ class _RegisterUIState extends State<RegisterUI> {
                   ),
                   onChanged: (value) {},
                 ),
-                const SizedBox(height: 20),
-                TextField(
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: "请输入邮箱",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                    ),
-                  ),
-                  onChanged: (value) {},
-                ),
+                
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
