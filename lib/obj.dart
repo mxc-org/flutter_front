@@ -2,8 +2,8 @@ class User {
   int id;
   String username;
   String password;
-  int totalMatches = 0;
-  int winMatches = 0;
+  int totalMatches = 33;
+  int winMatches = 20;
   String avatarName = "default.png";
   User(this.id, this.username, this.password);
 }
