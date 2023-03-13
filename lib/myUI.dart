@@ -41,7 +41,7 @@ class _MyUIState extends State<MyUI> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
               child: ElevatedButton(
                 style: const ButtonStyle(
                   minimumSize: MaterialStatePropertyAll(
@@ -56,7 +56,7 @@ class _MyUIState extends State<MyUI> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
               child: ElevatedButton(
                 style: const ButtonStyle(
                   minimumSize: MaterialStatePropertyAll(
@@ -74,9 +74,11 @@ class _MyUIState extends State<MyUI> {
         ),
         Container(
           alignment: AlignmentDirectional.bottomCenter,
+          margin: EdgeInsets.only(bottom: 20),
           child: ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.orange),
+              minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
             ),
             onPressed: () {
               Values.login = false;
@@ -156,7 +158,9 @@ class _MyUIState extends State<MyUI> {
       builder: (buildContext) => AlertDialog(
         title: const Text("修改用户名"),
         content: TextField(
-          decoration: const InputDecoration(border: UnderlineInputBorder(), ),
+          decoration: const InputDecoration(
+            border: UnderlineInputBorder(),
+          ),
           style: const TextStyle(fontSize: 16),
           onChanged: (value) {
             newUsername = value;

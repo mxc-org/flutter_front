@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +18,7 @@ class _GameUIState extends State<GameUI> {
           image: DecorationImage(
             image: AssetImage("images/game.jpg"),
             fit: BoxFit.cover,
-            opacity: 0.8,
+            opacity: 0.75,
           ),
         ),
         child: Column(
@@ -30,10 +28,11 @@ class _GameUIState extends State<GameUI> {
               onPressed: () {},
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.orange),
+                minimumSize: const MaterialStatePropertyAll(Size(0, 60)),
               ),
               child: const Text(
                 "创建房间",
-                style: TextStyle(fontSize: 24, color: Colors.white),
+                style: TextStyle(fontSize: 30, color: Colors.white),
               ),
             ),
             const SizedBox(height: 20),
@@ -41,10 +40,11 @@ class _GameUIState extends State<GameUI> {
               onPressed: () {},
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.orange),
+                minimumSize: const MaterialStatePropertyAll(Size(0, 60)),
               ),
               child: const Text(
                 "匹配对手",
-                style: TextStyle(fontSize: 24, color: Colors.white),
+                style: TextStyle(fontSize: 30, color: Colors.white),
               ),
             ),
           ],
