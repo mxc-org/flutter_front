@@ -34,7 +34,7 @@ class Match {
   int id;
   int roomId;
   String info;
-  Match(this.id, this.roomId, String this.info);
+  Match(this.id, this.roomId, this.info);
 }
 
 class ChessBoard {
