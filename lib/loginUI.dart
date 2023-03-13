@@ -79,12 +79,7 @@ class _LoginUIState extends State<LoginUI> {
                         ),
                       );
                     },
-                    child: Text(
-                      "新用户？点击注册",
-                      style: TextStyle(
-                        backgroundColor: Colors.white.withOpacity(0.8),
-                      ),
-                    ),
+                    child: const Text("新用户？点击注册"),
                   )
                 ],
               ),
