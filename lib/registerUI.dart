@@ -120,7 +120,7 @@ class _RegisterUIState extends State<RegisterUI> {
           title: const Text("提示"),
           content: const Text(
             "用户名密码为空，或两次密码输入不一致，请检查",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 16),
           ),
           actions: [
             TextButton(
@@ -129,12 +129,13 @@ class _RegisterUIState extends State<RegisterUI> {
               },
               child: const Text(
                 "确定",
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 16),
               ),
             )
           ],
         ),
       );
+      return;
     }
     Map<String, dynamic> postBody = {
       "username": username,
@@ -150,7 +151,7 @@ class _RegisterUIState extends State<RegisterUI> {
           title: const Text("提示"),
           content: const Text(
             "注册成功，请返回登录",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 16),
           ),
           actions: [
             TextButton(
@@ -159,7 +160,7 @@ class _RegisterUIState extends State<RegisterUI> {
               },
               child: const Text(
                 "确定",
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 16),
               ),
             )
           ],
