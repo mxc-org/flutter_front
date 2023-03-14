@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_front/main.dart';
@@ -103,24 +102,7 @@ class _LoginUIState extends State<LoginUI> {
 
   void onLoginPressed() {
     if (username == "" || password == "") {
-      showDialog(
-        context: context,
-        builder: (buildContext) => AlertDialog(
-          title: const Text("提示"),
-          content: const Text(
-            "请输入用户名和密码",
-            style: TextStyle(fontSize: 16),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("确定"),
-            )
-          ],
-        ),
-      );
+      showSingleActionDialog("请输入用户名和密码");
       return;
     }
     Map<String, dynamic> postUser = {
@@ -132,27 +114,7 @@ class _LoginUIState extends State<LoginUI> {
         .then((value) {
       String response = utf8.decode(value.bodyBytes);
       if (response == "") {
-        showDialog(
-          context: context,
-          builder: (buildContext) => AlertDialog(
-            title: const Text("提示"),
-            content: const Text(
-              "用户名或密码不正确",
-              style: TextStyle(fontSize: 16),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  "确定",
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            ],
-          ),
-        );
+        showSingleActionDialog("用户名或密码不正确");
         return;
       }
       Map<String, dynamic> mp = jsonDecode(response);
@@ -165,7 +127,32 @@ class _LoginUIState extends State<LoginUI> {
         mp["avatarName"],
       );
       Values.login = true;
+      setState(() {});
     });
     setState(() {});
+  }
+
+  showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

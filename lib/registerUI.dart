@@ -113,27 +113,7 @@ class _RegisterUIState extends State<RegisterUI> {
 
   void onRegisterPressed() async {
     if (password != passwordAgain || password == "" || username == "") {
-      showDialog(
-        context: context,
-        builder: (buildContext) => AlertDialog(
-          title: const Text("提示"),
-          content: const Text(
-            "用户名密码为空，或两次密码输入不一致，请检查",
-            style: TextStyle(fontSize: 16),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                "确定",
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      );
+      showSingleActionDialog("用户名密码为空，或两次密码输入不一致，请检查");
       return;
     }
     Map<String, dynamic> postBody = {
@@ -143,28 +123,35 @@ class _RegisterUIState extends State<RegisterUI> {
     http
         .post(Uri.parse("${Values.server}/User/Register"), body: postBody)
         .then((value) {
-      //TODO 检查是否注册成功
-      showDialog(
-        context: context,
-        builder: (buildContext) => AlertDialog(
-          title: const Text("提示"),
-          content: const Text(
-            "注册成功，请返回登录",
-            style: TextStyle(fontSize: 16),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                "确定",
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      );
+      if (value.body == "") {
+        showSingleActionDialog("注册失败，请换个用户名试试");
+        return;
+      }
+      showSingleActionDialog("注册成功，请返回登录");
     });
+  }
+
+  showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
