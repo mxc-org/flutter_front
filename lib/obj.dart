@@ -1,12 +1,18 @@
 class User {
-  int id;
+  late int id;
   String username;
   String password;
-  int totalMatches = 33;
-  int winMatches = 20;
-  String avatarName = "default.png";
+  int totalMatches;
+  int winMatches;
+  late double winPercentage;
+  String avatarName;
   User(this.id, this.username, this.password, this.totalMatches,
-      this.winMatches, this.avatarName);
+      this.winMatches, this.avatarName) {
+    winPercentage = 0;
+    if (totalMatches != 0) {
+      winPercentage = winMatches / totalMatches;
+    }
+  }
 }
 
 class Friend {

@@ -105,7 +105,7 @@ class _MyUIState extends State<MyUI> {
               margin: const EdgeInsets.only(left: 20, top: 20),
               width: 80,
               height: 80,
-              child: Image(image: AssetImage("images/userpic.png")),
+              child: Image.network(Values.avatarUrl + Values.user.avatarName),
             ),
             //用户名
             Container(
@@ -132,7 +132,7 @@ class _MyUIState extends State<MyUI> {
             ),
             matchInfo(
               "胜率",
-              "${((Values.user.winMatches / Values.user.totalMatches) * 100).toStringAsFixed(1)}%",
+              "${(Values.user.winPercentage * 100).toStringAsFixed(1)}%",
             ),
           ],
         )
