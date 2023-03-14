@@ -92,7 +92,6 @@ class _RegisterUIState extends State<RegisterUI> {
                     style:
                         const TextStyle(fontSize: 16, color: Colors.deepOrange),
                   ),
-                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: onRegisterPressed,
                     style: ButtonStyle(

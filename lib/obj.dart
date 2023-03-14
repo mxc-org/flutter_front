@@ -5,7 +5,8 @@ class User {
   int totalMatches = 33;
   int winMatches = 20;
   String avatarName = "default.png";
-  User(this.id, this.username, this.password);
+  User(this.id, this.username, this.password, this.totalMatches,
+      this.winMatches, this.avatarName);
 }
 
 class Friend {
@@ -49,7 +50,7 @@ class ChessBoard {
       this.count, this.isWin);
 }
 
-class Chat{
+class Chat {
   int fromId;
   int told;
   String content;

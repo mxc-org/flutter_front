@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,8 @@ import 'package:flutter_front/main.dart';
 import 'package:flutter_front/registerUI.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
+
+import 'obj.dart';
 
 class LoginUI extends StatefulWidget {
   const LoginUI({super.key});
@@ -56,6 +59,7 @@ class _LoginUIState extends State<LoginUI> {
                   ),
                   const SizedBox(height: 20),
                   TextField(
+                    obscureText: true,
                     decoration: const InputDecoration(
                       hintText: "请输入密码",
                       border: OutlineInputBorder(
@@ -123,13 +127,45 @@ class _LoginUIState extends State<LoginUI> {
       "username": username,
       "password": password
     };
-    // http
-    //     .post(Uri.parse("${Values.server}/User/Login"), body: postUser)
-    //     .then((value) {
-    //       //TODO 判断是否登录成功并获取用户信息
-    //       Values.login = true;
-    //     });
-    Values.login = true;
+    http
+        .post(Uri.parse("${Values.server}/User/Login"), body: postUser)
+        .then((value) {
+      String response = utf8.decode(value.bodyBytes);
+      if (response == "") {
+        showDialog(
+          context: context,
+          builder: (buildContext) => AlertDialog(
+            title: const Text("提示"),
+            content: const Text(
+              "用户名或密码不正确",
+              style: TextStyle(fontSize: 16),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  "确定",
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+            ],
+          ),
+        );
+        return;
+      }
+      Map<String, dynamic> mp = jsonDecode(response);
+      Values.user = User(
+        mp["id"],
+        mp["username"],
+        mp["password"],
+        mp["totalMatches"],
+        mp["winMatches"],
+        mp["avatarName"],
+      );
+      Values.login = true;
+    });
     setState(() {});
   }
 }
