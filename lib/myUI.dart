@@ -181,20 +181,24 @@ class _MyUIState extends State<MyUI> {
           ),
           TextButton(
             onPressed: () async {
-              bool ok = await modifyUsername(newUsername);
-              // ignore: use_build_context_synchronously
-              Navigator.of(context).pop();
-              if (ok) {
-                showSingleActionDialog("修改成功");
-              } else {
-                showSingleActionDialog("修改失败，换一个用户名试试");
-              }
+              onModifyUsernameConfirm(newUsername);
             },
             child: const Text("确定", style: TextStyle(fontSize: 16)),
           ),
         ],
       ),
     );
+  }
+
+  void onModifyUsernameConfirm(String newUsername) async {
+    bool ok = await modifyUsername(newUsername);
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
+    if (ok) {
+      showSingleActionDialog("修改成功");
+    } else {
+      showSingleActionDialog("修改失败，换一个用户名试试");
+    }
   }
 
   Future<bool> modifyUsername(String newUsername) async {
