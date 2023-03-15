@@ -117,15 +117,7 @@ class _LoginUIState extends State<LoginUI> {
         showSingleActionDialog("用户名或密码不正确");
         return;
       }
-      Map<String, dynamic> mp = jsonDecode(response);
-      Values.user = User(
-        mp["id"],
-        mp["username"],
-        mp["password"],
-        mp["totalMatches"],
-        mp["winMatches"],
-        mp["avatarName"],
-      );
+      Values.user = User.jsonToUser(response);
       Values.login = true;
       setState(() {});
     });

@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     if (Values.login == false) {
-      return LoginUI();
+      return const LoginUI();
     }
     Widget ui;
     if (uiType == 1) {
@@ -93,20 +93,18 @@ class _MyHomePageState extends State<MyHomePage> {
     if (uiType == type) {
       color = Colors.deepOrange;
     }
-    return Container(
-      child: TextButton(
-        onPressed: () {
-          uiType = type;
-          setState(() {});
-        },
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 5),
-          child: Column(
-            children: [
-              Icon(icon, color: color),
-              Text(text, style: TextStyle(color: color)),
-            ],
-          ),
+    return TextButton(
+      onPressed: () {
+        uiType = type;
+        setState(() {});
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        child: Column(
+          children: [
+            Icon(icon, color: color),
+            Text(text, style: TextStyle(color: color)),
+          ],
         ),
       ),
     );

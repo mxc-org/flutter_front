@@ -1,17 +1,33 @@
+import 'dart:convert';
+
 class User {
-  late int id;
+  int id;
   String username;
   String password;
   int totalMatches;
   int winMatches;
   late double winPercentage;
   String avatarName;
+
   User(this.id, this.username, this.password, this.totalMatches,
       this.winMatches, this.avatarName) {
     winPercentage = 0;
     if (totalMatches != 0) {
       winPercentage = winMatches / totalMatches;
     }
+  }
+
+  static User jsonToUser(String str) {
+    Map<String, dynamic> mp = jsonDecode(str);
+    User user = User(
+      mp["id"],
+      mp["username"],
+      mp["password"],
+      mp["totalMatches"],
+      mp["winMatches"],
+      mp["avatarName"],
+    );
+    return user;
   }
 }
 

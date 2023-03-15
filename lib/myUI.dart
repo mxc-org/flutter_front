@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_front/main.dart';
 import 'package:flutter_front/values.dart';
+import 'package:http/http.dart' as http;
+
+import 'obj.dart';
 
 class MyUI extends StatefulWidget {
   const MyUI({super.key});
@@ -74,7 +79,7 @@ class _MyUIState extends State<MyUI> {
         ),
         Container(
           alignment: AlignmentDirectional.bottomCenter,
-          margin: EdgeInsets.only(bottom: 20),
+          margin: const EdgeInsets.only(bottom: 20),
           child: ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.orange),
@@ -152,12 +157,13 @@ class _MyUIState extends State<MyUI> {
   }
 
   void onModifyUsername() {
-    String newUsername = "";
+    String newUsername = Values.user.username;
     showDialog(
       context: context,
       builder: (buildContext) => AlertDialog(
         title: const Text("修改用户名"),
-        content: TextField(
+        content: TextFormField(
+          initialValue: newUsername,
           decoration: const InputDecoration(
             border: UnderlineInputBorder(),
           ),
@@ -174,8 +180,15 @@ class _MyUIState extends State<MyUI> {
             child: const Text("取消", style: TextStyle(fontSize: 16)),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
+              bool ok = await modifyUsername(newUsername);
+              // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
+              if (ok) {
+                showSingleActionDialog("修改成功");
+              } else {
+                showSingleActionDialog("修改失败，换一个用户名试试");
+              }
             },
             child: const Text("确定", style: TextStyle(fontSize: 16)),
           ),
@@ -184,7 +197,118 @@ class _MyUIState extends State<MyUI> {
     );
   }
 
+  Future<bool> modifyUsername(String newUsername) async {
+    Map<String, dynamic> bodyMap = {
+      "userId": Values.user.id.toString(),
+      "username": newUsername
+    };
+    if (newUsername == "") {
+      return false;
+    }
+    var value = await http.post(
+      Uri.parse("${Values.server}/User/ModifyUserName"),
+      body: bodyMap,
+    );
+    if (value.body == "") {
+      return false;
+    } else {
+      String res = utf8.decode(value.bodyBytes);
+      Values.user = User.jsonToUser(res);
+      setState(() {});
+      return true;
+    }
+  }
+
   void onModifyAvatar() {}
 
-  void onModifyPassword() {}
+  void onModifyPassword() {
+    String newPassword = Values.user.password;
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("修改密码"),
+        content: TextFormField(
+          obscureText: true,
+          initialValue: newPassword,
+          decoration: const InputDecoration(
+            border: UnderlineInputBorder(),
+          ),
+          style: const TextStyle(fontSize: 16),
+          onChanged: (value) {
+            newPassword = value;
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("取消", style: TextStyle(fontSize: 16)),
+          ),
+          TextButton(
+            onPressed: () async {
+              onModifyPasswordConfirm(newPassword);
+            },
+            child: const Text("确定", style: TextStyle(fontSize: 16)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void onModifyPasswordConfirm(newPassword) async {
+    bool ok = await modifyPassword(newPassword);
+    Navigator.of(context).pop();
+    if (ok) {
+      showSingleActionDialog("修改成功");
+    } else {
+      showSingleActionDialog("修改失败");
+    }
+  }
+
+  Future<bool> modifyPassword(String password) async {
+    Map<String, dynamic> bodyMap = {
+      "userId": Values.user.id.toString(),
+      "username": password
+    };
+    if (password == "") {
+      return false;
+    }
+    var value = await http.post(
+      Uri.parse("${Values.server}/User/ModifyUserPassword"),
+      body: bodyMap,
+    );
+    if (value.body == "") {
+      return false;
+    } else {
+      String res = utf8.decode(value.bodyBytes);
+      Values.user = User.jsonToUser(res);
+      setState(() {});
+      return true;
+    }
+  }
+
+  void showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
