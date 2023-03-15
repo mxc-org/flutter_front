@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/main.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
 
@@ -262,6 +261,7 @@ class _MyUIState extends State<MyUI> {
 
   void onModifyPasswordConfirm(newPassword) async {
     bool ok = await modifyPassword(newPassword);
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pop();
     if (ok) {
       showSingleActionDialog("修改成功");
@@ -273,7 +273,7 @@ class _MyUIState extends State<MyUI> {
   Future<bool> modifyPassword(String password) async {
     Map<String, dynamic> bodyMap = {
       "userId": Values.user.id.toString(),
-      "username": password
+      "password": password
     };
     if (password == "") {
       return false;
