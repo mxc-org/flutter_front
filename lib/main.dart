@@ -67,10 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ui = const MyUI();
     }
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.white,
-      //   title: Text(widget.title),
-      // ),
       body: Column(
         children: [
           Expanded(

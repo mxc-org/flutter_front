@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_front/values.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 
 import 'obj.dart';
@@ -222,7 +225,81 @@ class _MyUIState extends State<MyUI> {
     }
   }
 
-  void onModifyAvatar() {}
+  void onModifyAvatar() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      withData: true,
+      type: FileType.image,
+    );
+    if (result == null) {
+      return;
+    }
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).push(
+      // ignore: use_build_context_synchronously
+      DialogRoute(
+        context: context,
+        builder: (buildContext) => AlertDialog(
+          title: const Text("修改头像"),
+          content: Image.memory(result.files.first.bytes!),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                "取消",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                onModifyAvatarConfirm(result.files.first.bytes!);
+              },
+              child: const Text(
+                "确定",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> onModifyAvatarConfirm(Uint8List fileBytes) async {
+    Navigator.of(context).pop();
+    bool check = await modifyAvatar(fileBytes);
+    if (check == true) {
+      showSingleActionDialog("修改头像成功");
+    } else {
+      showSingleActionDialog("修改头像失败");
+    }
+  }
+
+  Future<bool> modifyAvatar(Uint8List fileBytes) async {
+    var request = http.MultipartRequest(
+      "post",
+      Uri.parse("${Values.server}/User/UploadAvatar"),
+    )
+      ..fields["userId"] = Values.user.id.toString()
+      ..files.add(
+        http.MultipartFile.fromBytes(
+          "avatar",
+          fileBytes,
+          filename: "${Values.user.username}.png",
+        ),
+      );
+    var response = await request.send();
+    var response2 = await http.Response.fromStream(response);
+    if (response2.body == "") {
+      return false;
+    } else {
+      String body = utf8.decode(response2.bodyBytes);
+      Values.user = User.jsonToUser(body);
+      setState(() {});
+      return true;
+    }
+  }
 
   void onModifyPassword() {
     String newPassword = Values.user.password;
