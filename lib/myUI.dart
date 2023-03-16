@@ -25,7 +25,7 @@ class _MyUIState extends State<MyUI> {
           children: [
             //用户信息展示
             Container(
-              height: 200,
+              height: 220,
               decoration: const BoxDecoration(
                 color: Color.fromARGB(127, 255, 153, 0),
               ),
@@ -109,18 +109,24 @@ class _MyUIState extends State<MyUI> {
           children: [
             //头像
             Container(
-              margin: const EdgeInsets.only(left: 20, top: 20),
+              margin: const EdgeInsets.only(left: 20, top: 40),
               width: 80,
               height: 80,
-              child: Image.network(Values.avatarUrl + Values.user.avatarName),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40),
+                image: DecorationImage(
+                  image:
+                      NetworkImage(Values.avatarUrl + Values.user.avatarName),
+                ),
+              ),
             ),
             //用户名
             Container(
-              margin: const EdgeInsets.only(
-                left: 20,
-              ),
+              alignment: AlignmentDirectional.centerStart,
+              margin: const EdgeInsets.only(left: 20, top: 40),
               child: Text(
                 Values.user.username,
+                textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 24),
               ),
             )
@@ -240,7 +246,16 @@ class _MyUIState extends State<MyUI> {
         context: context,
         builder: (buildContext) => AlertDialog(
           title: const Text("修改头像"),
-          content: Image.memory(result.files.first.bytes!),
+          content: Container(
+            width: 250,
+            height: 250,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              image: DecorationImage(
+                image: MemoryImage(result.files.first.bytes!),
+              ),
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
