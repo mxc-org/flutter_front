@@ -17,8 +17,7 @@ class User {
     }
   }
 
-  static User jsonToUser(String str) {
-    Map<String, dynamic> mp = jsonDecode(str);
+  static User mpToUser(Map<String, dynamic> mp) {
     User user = User(
       mp["id"],
       mp["username"],
@@ -29,6 +28,11 @@ class User {
     );
     return user;
   }
+
+  static User jsonToUser(String str) {
+    Map<String, dynamic> mp = jsonDecode(str);
+    return mpToUser(mp);
+  }
 }
 
 class Friend {
@@ -38,8 +42,30 @@ class Friend {
   bool status;
   User userFrom;
   User userTo;
-  Friend(this.id, this.userIdFrom, this.userIdTo, this.status, this.userFrom,
-      this.userTo);
+  Friend(
+    this.id,
+    this.userIdFrom,
+    this.userIdTo,
+    this.status,
+    this.userFrom,
+    this.userTo,
+  );
+  static Friend mpToFriend(Map<String, dynamic> mp) {
+    Friend friend = Friend(
+      mp["id"],
+      mp["userIdFrom"],
+      mp["userIdTo"],
+      mp["status"],
+      User.mpToUser(mp["userFrom"]),
+      User.mpToUser(mp["userTo"]),
+    );
+    return friend;
+  }
+
+  static Friend jsonToFriend(String str) {
+    Map<String, dynamic> mp = jsonDecode(str);
+    return mpToFriend(mp);
+  }
 }
 
 class Room {

@@ -17,7 +17,14 @@ class _SearchUIState extends State<SearchUI> {
   List<User> listUser = [];
 
   @override
+  initState() {
+    super.initState();
+    onSearchPressed("");
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: const Text("添加好友"),
@@ -29,36 +36,10 @@ class _SearchUIState extends State<SearchUI> {
           const SizedBox(
             height: 20,
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: listUser.length,
-            itemBuilder: (context, i) {
-              return ListTile(
-                title: Text(listUser[i].username),
-                leading: Container(
-                  margin: const EdgeInsets.only(left: 10),
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                        "${Values.avatarUrl}${listUser[i].avatarName}",
-                      ),
-                    ),
-                  ),
-                ),
-                trailing: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "添加",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              );
-            },
-          ),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: height - 150),
+            child: myListView(),
+          )
         ],
       ),
     );
@@ -85,6 +66,56 @@ class _SearchUIState extends State<SearchUI> {
     );
   }
 
+  Widget myListView() {
+    return ListView.builder(
+      // shrinkWrap: true,
+      itemCount: listUser.length,
+      itemBuilder: (context, i) {
+        return ListTile(
+          title: Text(listUser[i].username),
+          leading: Container(
+            margin: const EdgeInsets.only(left: 10),
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                  "${Values.avatarUrl}${listUser[i].avatarName}",
+                ),
+              ),
+            ),
+          ),
+          trailing: TextButton(
+            onPressed: () {
+              onAddPressed(listUser[i].id);
+            },
+            child: const Text(
+              "添加",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void onAddPressed(int id) async {
+    if (id == Values.user.id) {
+      showSingleActionDialog("不能自己添加自己噢");
+      return;
+    }
+    http.post(
+      Uri.parse("${Values.server}/Friend/MakeFriend"),
+      body: {
+        "userIdFrom": Values.user.id.toString(),
+        "userIdTo": id.toString(),
+      },
+    );
+    showSingleActionDialog("已发送好友请求");
+  }
+
   void onSearchPressed(String username) async {
     var response = await http.get(
       Uri.parse("${Values.server}/User/FindUserByUsername?username=$username"),
@@ -95,7 +126,35 @@ class _SearchUIState extends State<SearchUI> {
       return;
     }
     listUser.clear();
-    listUser.add(User.jsonToUser(utf8.decode(response.bodyBytes)));
+    List<dynamic> ls = json.decode(utf8.decode(response.bodyBytes));
+    for (Map<String, dynamic> mp in ls) {
+      listUser.add(User.mpToUser(mp));
+    }
+
     setState(() {});
+  }
+
+  showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

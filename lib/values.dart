@@ -5,4 +5,6 @@ class Values {
   static String server = "http://81.69.99.102:8080";
   static String avatarUrl = "http://81.69.99.102/gobang/avatar/";
   static User user = User(0, "mdd", "", 0, 3, "");
+  static List<User> friendList = [];
+  static List<Friend> newFriendList = [];
 }
