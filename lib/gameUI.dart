@@ -35,7 +35,7 @@ class _GameUIState extends State<GameUI> {
                 style: TextStyle(fontSize: 30, color: Colors.white),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 35),
             ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(
