@@ -19,68 +19,64 @@ class MyUI extends StatefulWidget {
 class _MyUIState extends State<MyUI> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: [
-        Column(
-          children: [
-            //用户信息展示
-            Container(
-              height: 220,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(127, 255, 153, 0),
-              ),
-              child: userInfoColum(),
-            ),
-            //其他一些选项，例如修改用户名
-            Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              child: ElevatedButton(
-                style: const ButtonStyle(
-                  minimumSize: MaterialStatePropertyAll(
-                    Size(double.infinity, 50),
-                  ),
-                ),
-                onPressed: onModifyUsername,
-                child: const Text(
-                  "修改用户名",
-                  style: TextStyle(fontSize: 20),
-                ),
+        //用户信息展示
+        Container(
+          height: 220,
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(127, 255, 153, 0),
+          ),
+          child: userInfoColum(),
+        ),
+        //其他一些选项，例如修改用户名
+        Container(
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          child: ElevatedButton(
+            style: const ButtonStyle(
+              minimumSize: MaterialStatePropertyAll(
+                Size(double.infinity, 50),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: ElevatedButton(
-                style: const ButtonStyle(
-                  minimumSize: MaterialStatePropertyAll(
-                    Size(double.infinity, 50),
-                  ),
-                ),
-                onPressed: onModifyAvatar,
-                child: const Text(
-                  "修改头像",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
+            onPressed: onModifyUsername,
+            child: const Text(
+              "修改用户名",
+              style: TextStyle(fontSize: 20),
             ),
-            Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: ElevatedButton(
-                style: const ButtonStyle(
-                  minimumSize: MaterialStatePropertyAll(
-                    Size(double.infinity, 50),
-                  ),
-                ),
-                onPressed: onModifyPassword,
-                child: const Text(
-                  "修改密码",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-            )
-          ],
+          ),
         ),
         Container(
-          alignment: AlignmentDirectional.bottomCenter,
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          child: ElevatedButton(
+            style: const ButtonStyle(
+              minimumSize: MaterialStatePropertyAll(
+                Size(double.infinity, 50),
+              ),
+            ),
+            onPressed: onModifyAvatar,
+            child: const Text(
+              "修改头像",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          child: ElevatedButton(
+            style: const ButtonStyle(
+              minimumSize: MaterialStatePropertyAll(
+                Size(double.infinity, 50),
+              ),
+            ),
+            onPressed: onModifyPassword,
+            child: const Text(
+              "修改密码",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+        ),
+        const Expanded(child: Text("")),
+        Container(
           margin: const EdgeInsets.only(bottom: 20),
           child: ElevatedButton(
             style: ButtonStyle(
@@ -115,6 +111,7 @@ class _MyUIState extends State<MyUI> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40),
                 image: DecorationImage(
+                  fit: BoxFit.cover,
                   image:
                       NetworkImage(Values.avatarUrl + Values.user.avatarName),
                 ),
@@ -250,9 +247,10 @@ class _MyUIState extends State<MyUI> {
             width: 250,
             height: 250,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(125),
               image: DecorationImage(
                 image: MemoryImage(result.files.first.bytes!),
+                fit: BoxFit.cover,
               ),
             ),
           ),

@@ -81,6 +81,7 @@ class _LoginUIState extends State<LoginUI> {
                       style: TextStyle(fontSize: 24, color: Colors.white),
                     ),
                   ),
+                  SizedBox(height: 20),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
