@@ -94,14 +94,11 @@ class _MyHomePageState extends State<MyHomePage> {
         uiType = type;
         setState(() {});
       },
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        child: Column(
-          children: [
-            Icon(icon, color: color),
-            Text(text, style: TextStyle(color: color)),
-          ],
-        ),
+      child: Column(
+        children: [
+          Icon(icon, color: color),
+          Text(text, style: TextStyle(color: color)),
+        ],
       ),
     );
   }

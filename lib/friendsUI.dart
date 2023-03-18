@@ -73,6 +73,7 @@ class _FriendsUIState extends State<FriendsUI> {
   Widget myListView() {
     return ListView.builder(
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: Values.friendList.length,
       itemBuilder: (context, i) {
         return ListTile(
@@ -94,7 +95,7 @@ class _FriendsUIState extends State<FriendsUI> {
           trailing: TextButton(
             onPressed: () {},
             child: const Text(
-              "邀请",
+              "对战",
               style: TextStyle(fontSize: 16),
             ),
           ),

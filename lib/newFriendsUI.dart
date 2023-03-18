@@ -31,6 +31,7 @@ class _newFriendsUIState extends State<newFriendsUI> {
   Widget myListView() {
     return ListView.builder(
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: Values.newFriendList.length,
       itemBuilder: (context, i) {
         return ListTile(

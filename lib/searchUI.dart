@@ -30,16 +30,13 @@ class _SearchUIState extends State<SearchUI> {
         title: const Text("添加好友"),
         backgroundColor: Colors.white,
       ),
-      body: Column(
+      body: Stack(
         children: [
           searchBar(),
-          const SizedBox(
-            height: 20,
-          ),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: height - 150),
+          Container(
+            margin: const EdgeInsets.only(top: 50),
             child: myListView(),
-          )
+          ),
         ],
       ),
     );
@@ -47,13 +44,13 @@ class _SearchUIState extends State<SearchUI> {
 
   Widget searchBar() {
     double width = MediaQuery.of(context).size.width;
-    String usernameToSearch = "";
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: 50, maxWidth: width - 40),
         child: TextField(
           decoration: const InputDecoration(
+            contentPadding: EdgeInsets.all(10),
             hintText: "用户名",
             border: OutlineInputBorder(),
           ),
@@ -68,7 +65,8 @@ class _SearchUIState extends State<SearchUI> {
 
   Widget myListView() {
     return ListView.builder(
-      // shrinkWrap: true,
+      shrinkWrap: true,
+      // physics: const NeverScrollableScrollPhysics(),
       itemCount: listUser.length,
       itemBuilder: (context, i) {
         return ListTile(

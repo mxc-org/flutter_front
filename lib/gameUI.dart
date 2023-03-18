@@ -28,11 +28,11 @@ class _GameUIState extends State<GameUI> {
               onPressed: () {},
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.orange),
-                minimumSize: const MaterialStatePropertyAll(Size(0, 60)),
+                minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
               ),
               child: const Text(
                 "创建房间",
-                style: TextStyle(fontSize: 30, color: Colors.white),
+                style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
             const SizedBox(height: 35),
@@ -40,11 +40,11 @@ class _GameUIState extends State<GameUI> {
               onPressed: () {},
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.orange),
-                minimumSize: const MaterialStatePropertyAll(Size(0, 60)),
+                minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
               ),
               child: const Text(
                 "匹配对手",
-                style: TextStyle(fontSize: 30, color: Colors.white),
+                style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
           ],

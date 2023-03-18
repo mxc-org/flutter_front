@@ -50,6 +50,10 @@ class _RegisterUIState extends State<RegisterUI> {
                   TextField(
                     decoration: const InputDecoration(
                       hintText: "请输入用户名",
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(50.0)),
                       ),
@@ -59,10 +63,14 @@ class _RegisterUIState extends State<RegisterUI> {
                       setState(() {});
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   TextField(
                     obscureText: true,
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
                       hintText: "请输入密码",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -73,10 +81,14 @@ class _RegisterUIState extends State<RegisterUI> {
                       setState(() {});
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   TextField(
                     obscureText: true,
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
                       hintText: "请再次输入密码",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -89,17 +101,19 @@ class _RegisterUIState extends State<RegisterUI> {
                   ),
                   Text(
                     checkPassword,
-                    style:
-                        const TextStyle(fontSize: 16, color: Colors.deepOrange),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.deepOrange,
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: onRegisterPressed,
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.orange)),
+                      backgroundColor: MaterialStateProperty.all(Colors.orange),
+                    ),
                     child: const Text(
                       "注册",
-                      style: TextStyle(fontSize: 24, color: Colors.white),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ],

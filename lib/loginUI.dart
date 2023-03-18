@@ -41,11 +41,12 @@ class _LoginUIState extends State<LoginUI> {
               child: Text(""),
             ),
             Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
               child: Column(
                 children: [
                   TextField(
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric( horizontal: 20, vertical: 10),
                       hintText: "请输入用户名",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -56,10 +57,11 @@ class _LoginUIState extends State<LoginUI> {
                       setState(() {});
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   TextField(
                     obscureText: true,
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric( horizontal: 20, vertical: 10),
                       hintText: "请输入密码",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -70,18 +72,18 @@ class _LoginUIState extends State<LoginUI> {
                       setState(() {});
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: onLoginPressed,
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.orange)),
+                      backgroundColor: MaterialStateProperty.all(Colors.orange),
+                    ),
                     child: const Text(
                       "登录",
-                      style: TextStyle(fontSize: 24, color: Colors.white),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  // const SizedBox(height: 10),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(

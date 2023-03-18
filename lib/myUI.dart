@@ -23,7 +23,7 @@ class _MyUIState extends State<MyUI> {
       children: [
         //用户信息展示
         Container(
-          height: 220,
+          height: 200,
           decoration: const BoxDecoration(
             color: Color.fromARGB(127, 255, 153, 0),
           ),
@@ -31,47 +31,47 @@ class _MyUIState extends State<MyUI> {
         ),
         //其他一些选项，例如修改用户名
         Container(
-          margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
           child: ElevatedButton(
             style: const ButtonStyle(
               minimumSize: MaterialStatePropertyAll(
-                Size(double.infinity, 50),
+                Size(double.infinity, 40),
               ),
             ),
             onPressed: onModifyUsername,
             child: const Text(
               "修改用户名",
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 16),
             ),
           ),
         ),
         Container(
-          margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: ElevatedButton(
             style: const ButtonStyle(
               minimumSize: MaterialStatePropertyAll(
-                Size(double.infinity, 50),
+                Size(double.infinity, 40),
               ),
             ),
             onPressed: onModifyAvatar,
             child: const Text(
               "修改头像",
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 16),
             ),
           ),
         ),
         Container(
-          margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: ElevatedButton(
             style: const ButtonStyle(
               minimumSize: MaterialStatePropertyAll(
-                Size(double.infinity, 50),
+                Size(double.infinity, 40),
               ),
             ),
             onPressed: onModifyPassword,
             child: const Text(
               "修改密码",
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 16),
             ),
           ),
         ),
@@ -89,7 +89,7 @@ class _MyUIState extends State<MyUI> {
             },
             child: const Text(
               "退出登录",
-              style: TextStyle(color: Colors.white, fontSize: 24),
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
         ),
@@ -104,27 +104,37 @@ class _MyUIState extends State<MyUI> {
         Row(
           children: [
             //头像
-            Container(
-              margin: const EdgeInsets.only(left: 20, top: 40),
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image:
-                      NetworkImage(Values.avatarUrl + Values.user.avatarName),
+            GestureDetector(
+              onTap: () {
+                onModifyAvatar();
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 20, top: 40),
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image:
+                        NetworkImage(Values.avatarUrl + Values.user.avatarName),
+                  ),
                 ),
               ),
             ),
             //用户名
-            Container(
-              alignment: AlignmentDirectional.centerStart,
-              margin: const EdgeInsets.only(left: 20, top: 40),
-              child: Text(
-                Values.user.username,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 24),
+            GestureDetector(
+              onTap: () {
+                onModifyUsername();
+              },
+              child: Container(
+                alignment: AlignmentDirectional.centerStart,
+                margin: const EdgeInsets.only(left: 20, top: 40),
+                child: Text(
+                  Values.user.username,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 20),
+                ),
               ),
             )
           ],
@@ -154,8 +164,8 @@ class _MyUIState extends State<MyUI> {
     return Expanded(
       child: Column(
         children: [
-          Text(text1, style: const TextStyle(fontSize: 20)),
-          Text(text2, style: const TextStyle(fontSize: 20)),
+          Text(text1, style: const TextStyle(fontSize: 16)),
+          Text(text2, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
