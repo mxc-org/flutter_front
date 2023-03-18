@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_front/Room.dart';
 import 'package:http/http.dart' as http;
 
 class GameUI extends StatefulWidget {
@@ -25,7 +26,13 @@ class _GameUIState extends State<GameUI> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (buildContext) => const RoomUI(),
+                  ),
+                );
+              },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.orange),
                 minimumSize: const MaterialStatePropertyAll(Size(0, 50)),

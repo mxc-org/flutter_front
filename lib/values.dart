@@ -7,4 +7,5 @@ class Values {
   static User user = User(0, "mdd", "", 0, 3, "");
   static List<User> friendList = [];
   static List<Friend> newFriendList = [];
+  static List<Room> RoomList = [];
 }

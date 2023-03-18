@@ -73,10 +73,31 @@ class Room {
   String status;
   int userIdCreator;
   int userIdJoin;
-  User userCreatetor;
-  User userJoin;
-  Room(this.id, this.status, this.userIdCreator, this.userIdJoin,
-      this.userCreatetor, this.userJoin);
+  // User userCreatetor;
+  //User userJoin;
+  Room(
+    this.id,
+    this.status,
+    this.userIdCreator,
+    this.userIdJoin,
+    // this.userCreatetor, this.userJoin
+  );
+  static Room mpToRoom(Map<String, dynamic> mp) {
+    Room room = Room(
+      mp["id"],
+      mp["status"],
+      mp["userIdCreator"],
+      mp["userIdJoin"],
+      //User.mpToUser(mp["userCreatetor"]),
+      //User.mpToUser(mp["userJoin"]),
+    );
+    return room;
+  }
+
+  static Room jsonToFriend(String str) {
+    Map<String, dynamic> mp = jsonDecode(str);
+    return mpToRoom(mp);
+  }
 }
 
 class Match {
