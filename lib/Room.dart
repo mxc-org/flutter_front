@@ -14,6 +14,7 @@ class RoomUI extends StatefulWidget {
 }
 
 class _RoomUIState extends State<RoomUI> {
+  List<User> listUser = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -41,7 +42,7 @@ class _RoomUIState extends State<RoomUI> {
               onPressed: () {},
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.orange),
-                minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
+                minimumSize: const MaterialStatePropertyAll(Size(10, 50)),
               ),
               child: const Text(
                 "创建房间",
@@ -53,15 +54,11 @@ class _RoomUIState extends State<RoomUI> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (buildContext) => const GameUI(),
-                  ),
-                );
+                Navigator.pop(context);
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.orange),
-                minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
+                minimumSize: const MaterialStatePropertyAll(Size(10, 50)),
               ),
               child: const Text(
                 "退出房间",
@@ -84,9 +81,44 @@ class _RoomUIState extends State<RoomUI> {
           title: Container(
             alignment: Alignment.center,
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(Values.RoomList[i].userIdCreator.toString()),
-              Text("VS"),
-              Text(Values.RoomList[i].userIdJoin.toString())
+              // Text(Values.RoomList[i].userIdCreator.toString()),
+              if (listUser.length != 0)
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                          Values.avatarUrl + listUser[i * 2].avatarName),
+                    ),
+                  ),
+                ),
+              SizedBox(
+                width: 15,
+              ),
+              Container(
+                height: 30,
+                width: 30,
+                child: Image.asset('images/VS.jpeg'),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              if (listUser.length % 2 == 0 && listUser.length != 0)
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                          Values.avatarUrl + listUser[i * 2 + 1].avatarName),
+                    ),
+                  ),
+                ),
             ]),
           ),
           leading: Container(
@@ -97,7 +129,11 @@ class _RoomUIState extends State<RoomUI> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text(Values.RoomList[i].id.toString() + "号房间"),
+            child: Text(
+              Values.RoomList[i].id.toString() + "号房间",
+              style:
+                  TextStyle(fontSize: 12, color: Color.fromARGB(255, 9, 9, 9)),
+            ),
           ),
           trailing: Text(Values.RoomList[i].status),
         );
@@ -106,6 +142,7 @@ class _RoomUIState extends State<RoomUI> {
   }
 
   void getRoomlist() async {
+    listUser.clear();
     var response = await http.get(
       Uri.parse("${Values.server}/Room/RoomList"),
     );
@@ -119,6 +156,22 @@ class _RoomUIState extends State<RoomUI> {
     for (Map<String, dynamic> mp in ls) {
       Values.RoomList.add(Room.mpToRoom(mp));
     }
+    for (int i = 0; i < Values.RoomList.length; i++) {
+      getroomuser(Values.RoomList[i].userIdCreator);
+      getroomuser(Values.RoomList[i].userIdJoin);
+    }
+    setState(() {});
+  }
+
+  void getroomuser(int id) async {
+    var response = await http.get(
+      Uri.parse("${Values.server}/User/FindUserById?id=$id"),
+    );
+    if (response.bodyBytes == null) {
+      return null;
+    }
+    Map<String, dynamic> ls = json.decode(utf8.decode(response.bodyBytes));
+    listUser.add(User.mpToUser(ls));
     setState(() {});
   }
 }
