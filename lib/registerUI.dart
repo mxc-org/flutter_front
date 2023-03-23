@@ -41,7 +41,10 @@ class _RegisterUIState extends State<RegisterUI> {
         ),
         child: Column(
           children: [
-            const Expanded(child: Text("")),
+            const Expanded(
+              flex: 5,
+              child: Text(""),
+            ),
             Container(
               alignment: AlignmentDirectional.bottomCenter,
               margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
@@ -113,12 +116,16 @@ class _RegisterUIState extends State<RegisterUI> {
                     ),
                     child: const Text(
                       "注册",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ),
                 ],
               ),
-            )
+            ),
+            const Expanded(
+              flex: 1,
+              child: Text(""),
+            ),
           ],
         ),
       ),

@@ -18,7 +18,6 @@ class FriendsUI extends StatefulWidget {
 class _FriendsUIState extends State<FriendsUI> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getFriends(Values.user.id);
     getNewFriends(Values.user.id);
@@ -73,7 +72,7 @@ class _FriendsUIState extends State<FriendsUI> {
   Widget myListView() {
     return ListView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: Values.friendList.length,
       itemBuilder: (context, i) {
         return ListTile(

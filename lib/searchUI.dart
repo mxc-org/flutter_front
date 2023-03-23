@@ -85,15 +85,20 @@ class _SearchUIState extends State<SearchUI> {
               ),
             ),
           ),
-          trailing: TextButton(
-            onPressed: () {
-              onAddPressed(listUser[i].id);
-            },
-            child: const Text(
-              "添加",
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
+          trailing: listUser[i].isFriend
+              ? const Text(
+                  "已添加",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                )
+              : TextButton(
+                  onPressed: () {
+                    onAddPressed(listUser[i].id);
+                  },
+                  child: const Text(
+                    "添加",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
         );
       },
     );
@@ -126,7 +131,16 @@ class _SearchUIState extends State<SearchUI> {
     listUser.clear();
     List<dynamic> ls = json.decode(utf8.decode(response.bodyBytes));
     for (Map<String, dynamic> mp in ls) {
+      User searchUser = User.mpToUser(mp);
+      bool isFriend = false;
+      for (User user in Values.friendList) {
+        if (searchUser.id == user.id) {
+          isFriend = true;
+          break;
+        }
+      }
       listUser.add(User.mpToUser(mp));
+      listUser[listUser.length - 1].isFriend = isFriend;
     }
 
     setState(() {});

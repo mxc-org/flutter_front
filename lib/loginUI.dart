@@ -38,6 +38,7 @@ class _LoginUIState extends State<LoginUI> {
         child: Column(
           children: [
             const Expanded(
+              flex: 5,
               child: Text(""),
             ),
             Container(
@@ -80,7 +81,7 @@ class _LoginUIState extends State<LoginUI> {
                     ),
                     child: const Text(
                       "登录",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ),
                   // const SizedBox(height: 10),
@@ -96,6 +97,10 @@ class _LoginUIState extends State<LoginUI> {
                   )
                 ],
               ),
+            ),
+            const Expanded(
+              flex: 1,
+              child: Text(""),
             ),
           ],
         ),

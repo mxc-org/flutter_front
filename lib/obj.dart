@@ -8,12 +8,16 @@ class User {
   int winMatches;
   late double winPercentage;
   String avatarName;
+  bool isFriend = false;
 
   User(this.id, this.username, this.password, this.totalMatches,
-      this.winMatches, this.avatarName) {
+      this.winMatches, this.avatarName, {bool? isFriend}) {
     winPercentage = 0;
     if (totalMatches != 0) {
       winPercentage = winMatches / totalMatches;
+    }
+    if(isFriend != null){
+      isFriend = true;
     }
   }
 
