@@ -5,6 +5,7 @@ import 'package:flutter_front/main.dart';
 import 'package:flutter_front/registerUI.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'obj.dart';
 
@@ -47,7 +48,8 @@ class _LoginUIState extends State<LoginUI> {
                 children: [
                   TextField(
                     decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric( horizontal: 20, vertical: 10),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       hintText: "请输入用户名",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -62,7 +64,8 @@ class _LoginUIState extends State<LoginUI> {
                   TextField(
                     obscureText: true,
                     decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric( horizontal: 20, vertical: 10),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       hintText: "请输入密码",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -126,6 +129,9 @@ class _LoginUIState extends State<LoginUI> {
         return;
       }
       Values.user = User.jsonToUser(response);
+      Values.channel = WebSocketChannel.connect(
+        Uri.parse("${Values.wsUrl}/play?id=${Values.user.id}"),
+      );
       Values.login = true;
       setState(() {});
     });

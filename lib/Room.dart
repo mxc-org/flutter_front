@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_front/gameUI.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 
 import 'obj.dart';
@@ -15,11 +16,13 @@ class RoomUI extends StatefulWidget {
 
 class _RoomUIState extends State<RoomUI> {
   List<User> listUser = [];
+  final channel = WebSocketChannel.connect(
+    Uri.parse("ws://81.69.99.102:8081/play?id=${Values.user.id}"),
+  );
   @override
   void initState() {
-    // TODO: implement initState
+    getRoomList();
     super.initState();
-    getRoomlist();
   }
 
   @override
@@ -37,7 +40,24 @@ class _RoomUIState extends State<RoomUI> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            RoomListView(),
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            Expanded(
+              flex: 2,
+              child: StreamBuilder(
+                stream: channel.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    handleRoomList(snapshot.data);
+                  }
+                  return SingleChildScrollView(
+                    child: roomListView(),
+                  );
+                },
+              ),
+            ),
             ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(
@@ -49,9 +69,7 @@ class _RoomUIState extends State<RoomUI> {
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -65,64 +83,60 @@ class _RoomUIState extends State<RoomUI> {
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
+            const SizedBox(height: 20)
           ],
         ),
       ),
     );
   }
 
-  Widget RoomListView() {
+  Widget roomListView() {
     return ListView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: Values.RoomList.length,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: Values.roomList.length,
       itemBuilder: (context, i) {
         return ListTile(
-          title: Container(
-            alignment: Alignment.center,
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              // Text(Values.RoomList[i].userIdCreator.toString()),
-              if (listUser.length != 0)
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                          Values.avatarUrl + listUser[i * 2].avatarName),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      Values.avatarUrl +
+                          Values.roomList[i].userCreator.avatarName,
                     ),
                   ),
                 ),
-              SizedBox(
-                width: 15,
               ),
-              Container(
+              const SizedBox(width: 15),
+              SizedBox(
                 height: 30,
                 width: 30,
                 child: Image.asset('images/VS.jpeg'),
               ),
-              SizedBox(
-                width: 15,
-              ),
-              if (listUser.length % 2 == 0 && listUser.length != 0)
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                          Values.avatarUrl + listUser[i * 2 + 1].avatarName),
+              const SizedBox(width: 15),
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      Values.avatarUrl + Values.roomList[i].userJoin.avatarName,
                     ),
                   ),
                 ),
-            ]),
+              ),
+            ],
           ),
           leading: Container(
-            // margin: const EdgeInsets.only(left: 10),
             alignment: Alignment.center,
             width: 50,
             height: 40,
@@ -130,48 +144,37 @@ class _RoomUIState extends State<RoomUI> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              Values.RoomList[i].id.toString() + "号房间",
-              style:
-                  TextStyle(fontSize: 12, color: Color.fromARGB(255, 9, 9, 9)),
+              "${Values.roomList[i].id}号房间",
+              style: const TextStyle(
+                fontSize: 12,
+                color: Color.fromARGB(255, 9, 9, 9),
+              ),
             ),
           ),
-          trailing: Text(Values.RoomList[i].status),
+          trailing: Text(Values.roomList[i].status),
         );
       },
     );
   }
 
-  void getRoomlist() async {
+  void getRoomList() async {
     listUser.clear();
     var response = await http.get(
       Uri.parse("${Values.server}/Room/RoomList"),
     );
-    Values.RoomList.clear();
+    Values.roomList.clear();
     String str = utf8.decode(response.bodyBytes);
     if (str == "") {
-      setState(() {});
       return;
     }
     List<dynamic> ls = json.decode(str);
     for (Map<String, dynamic> mp in ls) {
-      Values.RoomList.add(Room.mpToRoom(mp));
-    }
-    for (int i = 0; i < Values.RoomList.length; i++) {
-      getroomuser(Values.RoomList[i].userIdCreator);
-      getroomuser(Values.RoomList[i].userIdJoin);
+      Values.roomList.add(Room.mpToRoom(mp));
     }
     setState(() {});
   }
 
-  void getroomuser(int id) async {
-    var response = await http.get(
-      Uri.parse("${Values.server}/User/FindUserById?id=$id"),
-    );
-    if (response.bodyBytes == null) {
-      return null;
-    }
-    Map<String, dynamic> ls = json.decode(utf8.decode(response.bodyBytes));
-    listUser.add(User.mpToUser(ls));
-    setState(() {});
+  void handleRoomList(String snapshot) {
+    print(snapshot);
   }
 }
