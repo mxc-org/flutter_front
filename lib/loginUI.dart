@@ -129,9 +129,7 @@ class _LoginUIState extends State<LoginUI> {
         return;
       }
       Values.user = User.jsonToUser(response);
-      Values.channel = WebSocketChannel.connect(
-        Uri.parse("${Values.wsUrl}/play?id=${Values.user.id}"),
-      );
+      Values.myWebSocket.connect();
       Values.login = true;
       setState(() {});
     });

@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter_front/values.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
 class User {
   int id;
   String username;
@@ -125,4 +128,15 @@ class Chat {
   String content;
   DateTime time;
   Chat(this.fromId, this.told, this.content, this.time);
+}
+
+class MyWebSocket {
+  static late WebSocketChannel channel;
+
+  void connect() {
+    channel = WebSocketChannel.connect(
+      Uri.parse("${Values.wsUrl}/play?id=${Values.user.id}"),
+    );
+  }
+
 }

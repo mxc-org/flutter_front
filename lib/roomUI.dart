@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_front/gameUI.dart';
+import 'package:flutter_front/createRoomUI.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -16,9 +16,6 @@ class RoomUI extends StatefulWidget {
 
 class _RoomUIState extends State<RoomUI> {
   List<User> listUser = [];
-  final channel = WebSocketChannel.connect(
-    Uri.parse("ws://81.69.99.102:8081/play?id=${Values.user.id}"),
-  );
   @override
   void initState() {
     getRoomList();
@@ -45,21 +42,24 @@ class _RoomUIState extends State<RoomUI> {
               child: Container(),
             ),
             Expanded(
-              flex: 2,
-              child: StreamBuilder(
-                stream: channel.stream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    handleRoomList(snapshot.data);
-                  }
-                  return SingleChildScrollView(
-                    child: roomListView(),
-                  );
-                },
-              ),
-            ),
+                flex: 2,
+                child: SingleChildScrollView(
+                  child: roomListView(),
+                )
+                // StreamBuilder(
+                //   stream: MyWebSocket.channel.stream,
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasData) {
+                //       handleRoomList(snapshot.data);
+                //     }
+                //     return SingleChildScrollView(
+                //       child: roomListView(),
+                //     );
+                //   },
+                // ),
+                ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: onCreateRoomPressed,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.orange),
                 minimumSize: const MaterialStatePropertyAll(Size(10, 50)),
@@ -175,6 +175,16 @@ class _RoomUIState extends State<RoomUI> {
   }
 
   void handleRoomList(String snapshot) {
+    //TODO 接收ws消息，更新房间信息
     print(snapshot);
+  }
+
+  void onCreateRoomPressed() {
+    //TODO 发送创建房间请求
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (buildContext) => const CreateRoomUI(),
+      ),
+    );
   }
 }

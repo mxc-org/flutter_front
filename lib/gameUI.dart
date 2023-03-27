@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_front/Room.dart';
+import 'package:flutter_front/roomUI.dart';
 import 'package:http/http.dart' as http;
 
 class GameUI extends StatefulWidget {
