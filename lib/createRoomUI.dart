@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_front/values.dart';
+
 class CreateRoomUI extends StatefulWidget {
   const CreateRoomUI({super.key});
 
@@ -28,6 +30,42 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
           const Expanded(
             child: Text(""),
           ),
+          Container(
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(Values.avatarUrl + Values.user.avatarName),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          SizedBox(
+            height: 35,
+            width: 35,
+            child: Image.asset('images/VS.jpeg'),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          Container(
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              image: const DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage("images/nobody.png"),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
           ElevatedButton(
             onPressed: () {
               leaveRoom();
@@ -52,6 +90,5 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
 
   void leaveRoom() {
     //TODO 发送离开房间请求
-    
   }
 }

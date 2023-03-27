@@ -90,7 +90,7 @@ class _RoomUIState extends State<RoomUI> {
           trailingText = const Text("等待中");
         } else if (Values.roomList[i].status == "FIGHTING") {
           trailingText = const Text("游戏中");
-        } else if (Values.roomList[i].status == "FIGHTING") {
+        } else if (Values.roomList[i].status == "CLOSED") {
           trailingText = const Text("已结束");
         }
 
