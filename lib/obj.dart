@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter_front/values.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
 class User {
   int id;
   String username;
@@ -11,13 +14,14 @@ class User {
   bool isFriend = false;
 
   User(this.id, this.username, this.password, this.totalMatches,
-      this.winMatches, this.avatarName, {bool? isFriend}) {
+      this.winMatches, this.avatarName,
+      {bool? isFriend}) {
     winPercentage = 0;
     if (totalMatches != 0) {
       winPercentage = winMatches / totalMatches;
     }
-    if(isFriend != null){
-      isFriend = true;
+    if (isFriend != null) {
+      this.isFriend = isFriend;
     }
   }
 
@@ -77,23 +81,18 @@ class Room {
   String status;
   int userIdCreator;
   int userIdJoin;
-  // User userCreatetor;
-  //User userJoin;
-  Room(
-    this.id,
-    this.status,
-    this.userIdCreator,
-    this.userIdJoin,
-    // this.userCreatetor, this.userJoin
-  );
+  User userCreator;
+  User? userJoin;
+  Room(this.id, this.status, this.userIdCreator, this.userIdJoin,
+      this.userCreator, this.userJoin);
   static Room mpToRoom(Map<String, dynamic> mp) {
     Room room = Room(
       mp["id"],
       mp["status"],
       mp["userIdCreator"],
-      mp["userIdJoin"],
-      //User.mpToUser(mp["userCreatetor"]),
-      //User.mpToUser(mp["userJoin"]),
+      mp["userIdJoin"] ?? 0,
+      User.mpToUser(mp["userCreator"]),
+      mp["userJoin"] == null ? null : User.mpToUser(mp["userJoin"]),
     );
     return room;
   }
@@ -119,8 +118,15 @@ class ChessBoard {
   int roomId;
   int count;
   bool isWin;
-  ChessBoard(this.userId, this.opponentId, this.x, this.y, this.roomId,
-      this.count, this.isWin);
+  ChessBoard(
+    this.userId,
+    this.opponentId,
+    this.x,
+    this.y,
+    this.roomId,
+    this.count,
+    this.isWin,
+  );
 }
 
 class Chat {
@@ -129,4 +135,17 @@ class Chat {
   String content;
   DateTime time;
   Chat(this.fromId, this.told, this.content, this.time);
+}
+
+class MyWebSocket {
+  static late WebSocketChannel channel;
+
+  void connect() {
+    channel = WebSocketChannel.connect(
+      Uri.parse("${Values.wsUrl}/play?id=${Values.user.id}"),
+    );
+    channel.stream.listen((event) {
+      print("收到了websocket信息: $event");
+    });
+  }
 }

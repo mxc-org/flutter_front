@@ -34,7 +34,7 @@ class _FriendsUIState extends State<FriendsUI> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (buildContext) => SearchUI(),
+                  builder: (buildContext) => const SearchUI(),
                 ),
               );
             },
@@ -78,7 +78,6 @@ class _FriendsUIState extends State<FriendsUI> {
         return ListTile(
           title: Text(Values.friendList[i].username),
           leading: Container(
-            // margin: const EdgeInsets.only(left: 10),
             width: 40,
             height: 40,
             decoration: BoxDecoration(

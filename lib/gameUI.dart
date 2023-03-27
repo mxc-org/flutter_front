@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_front/Room.dart';
+import 'package:flutter_front/roomUI.dart';
 import 'package:http/http.dart' as http;
 
 class GameUI extends StatefulWidget {
@@ -38,7 +38,7 @@ class _GameUIState extends State<GameUI> {
                 minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
               ),
               child: const Text(
-                "创建房间",
+                "游戏大厅",
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
@@ -50,7 +50,7 @@ class _GameUIState extends State<GameUI> {
                 minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
               ),
               child: const Text(
-                "匹配对手",
+                "立即匹配",
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
