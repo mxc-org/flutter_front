@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_front/createRoomUI.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 
 import 'obj.dart';
@@ -42,22 +41,11 @@ class _RoomUIState extends State<RoomUI> {
               child: Container(),
             ),
             Expanded(
-                flex: 2,
-                child: SingleChildScrollView(
-                  child: roomListView(),
-                )
-                // StreamBuilder(
-                //   stream: MyWebSocket.channel.stream,
-                //   builder: (context, snapshot) {
-                //     if (snapshot.hasData) {
-                //       handleRoomList(snapshot.data);
-                //     }
-                //     return SingleChildScrollView(
-                //       child: roomListView(),
-                //     );
-                //   },
-                // ),
-                ),
+              flex: 2,
+              child: SingleChildScrollView(
+                child: roomListView(),
+              ),
+            ),
             ElevatedButton(
               onPressed: onCreateRoomPressed,
               style: ButtonStyle(
@@ -79,7 +67,7 @@ class _RoomUIState extends State<RoomUI> {
                 minimumSize: const MaterialStatePropertyAll(Size(10, 50)),
               ),
               child: const Text(
-                "退出房间",
+                "返回主页",
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
@@ -96,7 +84,47 @@ class _RoomUIState extends State<RoomUI> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: Values.roomList.length,
       itemBuilder: (context, i) {
+        // 房间状态：WAITING，FIGHTING，CLOSED
+        Widget trailingText = const Text("");
+        if (Values.roomList[i].status == "WAITING") {
+          trailingText = const Text("等待中");
+        } else if (Values.roomList[i].status == "FIGHTING") {
+          trailingText = const Text("游戏中");
+        } else if (Values.roomList[i].status == "FIGHTING") {
+          trailingText = const Text("已结束");
+        }
+
+        Widget userJoinContainer = Values.roomList[i].userIdJoin == 0
+            ? Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: const DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage("images/nobody.png"),
+                  ),
+                ),
+              )
+            : Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      Values.avatarUrl +
+                          Values.roomList[i].userJoin!.avatarName,
+                    ),
+                  ),
+                ),
+              );
+
         return ListTile(
+          onTap: () {
+            //TODO 进入房间开始游戏
+          },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -121,37 +149,11 @@ class _RoomUIState extends State<RoomUI> {
                 child: Image.asset('images/VS.jpeg'),
               ),
               const SizedBox(width: 15),
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      Values.avatarUrl + Values.roomList[i].userJoin.avatarName,
-                    ),
-                  ),
-                ),
-              ),
+              userJoinContainer
             ],
           ),
-          leading: Container(
-            alignment: Alignment.center,
-            width: 50,
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              "${Values.roomList[i].id}号房间",
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color.fromARGB(255, 9, 9, 9),
-              ),
-            ),
-          ),
-          trailing: Text(Values.roomList[i].status),
+          leading: Text("${Values.roomList[i].id}号房"),
+          trailing: trailingText,
         );
       },
     );
@@ -174,16 +176,45 @@ class _RoomUIState extends State<RoomUI> {
     setState(() {});
   }
 
-  void handleRoomList(String snapshot) {
-    //TODO 接收ws消息，更新房间信息
-    print(snapshot);
-  }
-
-  void onCreateRoomPressed() {
-    //TODO 发送创建房间请求
+  void onCreateRoomPressed() async {
+    var response = await http.post(
+      Uri.parse("${Values.server}/Room/CreateRoom"),
+      body: {"userId": Values.user.id.toString()},
+    );
+    String str = utf8.decode(response.bodyBytes);
+    if (str == "") {
+      showSingleActionDialog("创建房间失败");
+      return;
+    }
+    Values.currentRoom = Room.mpToRoom(json.decode(str));
+    // ignore: use_build_context_synchronously
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (buildContext) => const CreateRoomUI(),
+      ),
+    );
+  }
+
+  showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
       ),
     );
   }

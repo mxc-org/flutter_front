@@ -82,7 +82,7 @@ class Room {
   int userIdCreator;
   int userIdJoin;
   User userCreator;
-  User userJoin;
+  User? userJoin;
   Room(this.id, this.status, this.userIdCreator, this.userIdJoin,
       this.userCreator, this.userJoin);
   static Room mpToRoom(Map<String, dynamic> mp) {
@@ -90,9 +90,9 @@ class Room {
       mp["id"],
       mp["status"],
       mp["userIdCreator"],
-      mp["userIdJoin"],
+      mp["userIdJoin"] ?? 0,
       User.mpToUser(mp["userCreator"]),
-      User.mpToUser(mp["userJoin"]),
+      mp["userJoin"] == null ? null : User.mpToUser(mp["userJoin"]),
     );
     return room;
   }
@@ -118,8 +118,15 @@ class ChessBoard {
   int roomId;
   int count;
   bool isWin;
-  ChessBoard(this.userId, this.opponentId, this.x, this.y, this.roomId,
-      this.count, this.isWin);
+  ChessBoard(
+    this.userId,
+    this.opponentId,
+    this.x,
+    this.y,
+    this.roomId,
+    this.count,
+    this.isWin,
+  );
 }
 
 class Chat {
@@ -137,6 +144,8 @@ class MyWebSocket {
     channel = WebSocketChannel.connect(
       Uri.parse("${Values.wsUrl}/play?id=${Values.user.id}"),
     );
+    channel.stream.listen((event) {
+      print("收到了websocket信息: $event");
+    });
   }
-
 }
