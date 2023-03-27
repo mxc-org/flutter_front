@@ -148,4 +148,12 @@ class MyWebSocket {
       print("收到了websocket信息: $event");
     });
   }
+
+  void dispose() {
+    channel.sink.close();
+  }
+
+  void _sendMessage(String text) {
+    channel.sink.add(text);
+  }
 }
