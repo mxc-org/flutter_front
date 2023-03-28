@@ -146,7 +146,27 @@ class MyWebSocket {
     );
     channel.stream.listen((event) {
       print("收到了websocket信息: $event");
+      Map<String, dynamic> mp = json.decode(event);
+      if (mp["name"] == "Room") {
+        handleRoom(mp["content"]);
+      }
     });
+  }
+
+  void handleRoom(Map<String, dynamic> mp) {
+    int nowId = mp["id"];
+    int roomIndex = 0;
+    for (int i = 0; i < Values.roomList.length; i++) {
+      if (Values.roomList[i].id == nowId) {
+        roomIndex = i;
+        break;
+      }
+    }
+    if (roomIndex != 0) {
+      Values.roomList[roomIndex] = Room.mpToRoom(mp);
+    } else {
+      Values.roomList.add(Room.mpToRoom(mp));
+    }
   }
 
   void dispose() {

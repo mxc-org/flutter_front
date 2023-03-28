@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter_front/values.dart';
 
@@ -31,8 +32,8 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
             child: Text(""),
           ),
           Container(
-            width: 70,
-            height: 70,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
               image: DecorationImage(
@@ -41,20 +42,19 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
               ),
             ),
           ),
-          SizedBox(
-            height: 25,
+          const SizedBox(
+            height: 20,
           ),
-          SizedBox(
-            height: 35,
-            width: 35,
-            child: Image.asset('images/VS.jpeg'),
+          const Text(
+            "VS",
+            style: TextStyle(color: Colors.black),
           ),
-          SizedBox(
-            height: 25,
+          const SizedBox(
+            height: 20,
           ),
           Container(
-            width: 70,
-            height: 70,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
               image: const DecorationImage(
@@ -63,8 +63,8 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
               ),
             ),
           ),
-          SizedBox(
-            height: 30,
+          const Expanded(
+            child: Text(""),
           ),
           ElevatedButton(
             onPressed: () {
@@ -80,15 +80,19 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
               style: TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
-          const Expanded(
-            child: Text(""),
-          )
+          const SizedBox(height: 20)
         ],
       ),
     );
   }
 
   void leaveRoom() {
-    //TODO 发送离开房间请求
+    http.post(
+      Uri.parse("${Values.server}/Room/LeaveRoom"),
+      body: {
+        "userId": Values.user.id.toString(),
+        "roomId": Values.currentRoom.id.toString(),
+      },
+    );
   }
 }

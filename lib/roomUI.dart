@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_front/createRoomUI.dart';
 import 'package:flutter_front/values.dart';
@@ -15,10 +17,24 @@ class RoomUI extends StatefulWidget {
 
 class _RoomUIState extends State<RoomUI> {
   List<User> listUser = [];
+  late Timer timer;
+
   @override
   void initState() {
     getRoomList();
     super.initState();
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        setState(() {});
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
