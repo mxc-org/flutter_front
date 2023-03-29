@@ -167,6 +167,9 @@ class MyWebSocket {
     } else {
       Values.roomList.add(Room.mpToRoom(mp));
     }
+    if (Values.currentRoom.id == nowId) {
+      Values.currentRoom = Room.mpToRoom(mp);
+    }
   }
 
   void dispose() {

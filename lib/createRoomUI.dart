@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_front/fightUI.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_front/values.dart';
@@ -11,9 +14,28 @@ class CreateRoomUI extends StatefulWidget {
 }
 
 class _CreateRoomUIState extends State<CreateRoomUI> {
+  late Timer timer;
+
   @override
   void initState() {
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (Values.currentRoom.userIdJoin != 0) {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (buildContext) => const FightUI()),
+          );
+          timer.cancel();
+        }
+      },
+    );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -42,16 +64,12 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           const Text(
             "VS",
             style: TextStyle(color: Colors.black),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Container(
             width: 80,
             height: 80,
@@ -63,9 +81,7 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
               ),
             ),
           ),
-          const Expanded(
-            child: Text(""),
-          ),
+          const Expanded(child: Text("")),
           ElevatedButton(
             onPressed: () {
               leaveRoom();
