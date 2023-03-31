@@ -153,6 +153,10 @@ class MyWebSocket {
     });
   }
 
+  void close() {
+    channel.sink.close();
+  }
+
   void handleRoom(Map<String, dynamic> mp) {
     int nowId = mp["id"];
     int roomIndex = 0;
