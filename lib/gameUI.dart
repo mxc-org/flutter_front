@@ -15,11 +15,14 @@ class _GameUIState extends State<GameUI> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/game.jpg"),
+            image: const AssetImage("images/game.jpg"),
             fit: BoxFit.cover,
-            opacity: 0.75,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.75),
+              BlendMode.dstATop,
+            ),
           ),
         ),
         child: Column(

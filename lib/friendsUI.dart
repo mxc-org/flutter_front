@@ -27,9 +27,8 @@ class _FriendsUIState extends State<FriendsUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(127, 255, 153, 0),
+        backgroundColor: Colors.white,
         title: const Text("好友"),
-        elevation: 10,
         actions: [
           IconButton(
             onPressed: () {

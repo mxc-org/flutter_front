@@ -13,16 +13,38 @@ class _FightUIState extends State<FightUI> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      height: double.infinity,
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("images/fight.jpeg"),
+          image: const AssetImage("images/fight.jpeg"),
           fit: BoxFit.cover,
-          opacity: 0.75,
+          colorFilter: ColorFilter.mode(
+            Colors.white.withOpacity(0.75),
+            BlendMode.dstATop,
+          ),
         ),
       ),
-      child: ElevatedButton(
-        onPressed: returnRoomUI,
-        child: const Text("返回"),
+      child: Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("images/pk.jpg"), fit: BoxFit.cover),
+              ),
+              child: Row(),
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: Text("棋盘"),
+          ),
+          ElevatedButton(
+            onPressed: returnRoomUI,
+            child: const Text("返回"),
+          ),
+        ],
       ),
     );
   }

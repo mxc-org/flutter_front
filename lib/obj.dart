@@ -159,14 +159,14 @@ class MyWebSocket {
 
   void handleRoom(Map<String, dynamic> mp) {
     int nowId = mp["id"];
-    int roomIndex = 0;
+    int roomIndex = -1;
     for (int i = 0; i < Values.roomList.length; i++) {
       if (Values.roomList[i].id == nowId) {
         roomIndex = i;
         break;
       }
     }
-    if (roomIndex != 0) {
+    if (roomIndex != -1) {
       Values.roomList[roomIndex] = Room.mpToRoom(mp);
     } else {
       Values.roomList.add(Room.mpToRoom(mp));
