@@ -84,8 +84,7 @@ class _MyUIState extends State<MyUI> {
               minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
             ),
             onPressed: () {
-              Values.login = false;
-              setState(() {});
+              onLoginOut();
             },
             child: const Text(
               "退出登录",
@@ -414,5 +413,11 @@ class _MyUIState extends State<MyUI> {
         ],
       ),
     );
+  }
+
+  void onLoginOut() {
+    Values.myWebSocket.close();
+    Values.login = false;
+    setState(() {});
   }
 }
