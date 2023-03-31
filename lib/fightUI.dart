@@ -31,7 +31,9 @@ class _FightUIState extends State<FightUI> {
             child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("images/pk.jpg"), fit: BoxFit.cover),
+                  image: AssetImage("images/pk.jpg"),
+                  fit: BoxFit.cover,
+                ),
               ),
               child: Row(),
             ),
@@ -40,10 +42,33 @@ class _FightUIState extends State<FightUI> {
             flex: 5,
             child: Text("棋盘"),
           ),
-          ElevatedButton(
-            onPressed: returnRoomUI,
-            child: const Text("返回"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.orange),
+                ),
+                onPressed: () {},
+                child: const Text(
+                  "聊天",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+              const SizedBox(width: 20),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.orange),
+                ),
+                onPressed: returnRoomUI,
+                child: const Text(
+                  "退出",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+            ],
           ),
+          const SizedBox(height: 20)
         ],
       ),
     );
