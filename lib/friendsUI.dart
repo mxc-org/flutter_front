@@ -27,8 +27,9 @@ class _FriendsUIState extends State<FriendsUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(127, 255, 153, 0),
         title: const Text("好友"),
+        elevation: 10,
         actions: [
           IconButton(
             onPressed: () {
@@ -38,7 +39,7 @@ class _FriendsUIState extends State<FriendsUI> {
                 ),
               );
             },
-            iconSize: 30,
+            iconSize: 25,
             icon: const Icon(Icons.search),
           ),
         ],
@@ -46,7 +47,7 @@ class _FriendsUIState extends State<FriendsUI> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             ListTile(
               leading: const Icon(Icons.people),
               title: const Text(
