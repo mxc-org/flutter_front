@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_front/createRoomUI.dart';
+import 'package:flutter_front/fightUI.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -15,10 +18,24 @@ class RoomUI extends StatefulWidget {
 
 class _RoomUIState extends State<RoomUI> {
   List<User> listUser = [];
+  late Timer timer;
+
   @override
   void initState() {
     getRoomList();
     super.initState();
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        setState(() {});
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -93,37 +110,26 @@ class _RoomUIState extends State<RoomUI> {
         } else if (Values.roomList[i].status == "CLOSED") {
           trailingText = const Text("已结束");
         }
-
-        Widget userJoinContainer = Values.roomList[i].userIdJoin == 0
-            ? Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  image: const DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage("images/nobody.png"),
-                  ),
-                ),
+        DecorationImage decorationImage = Values.roomList[i].userIdJoin == 0
+            ? const DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage("images/nobody.png"),
               )
-            : Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      Values.avatarUrl +
-                          Values.roomList[i].userJoin!.avatarName,
-                    ),
-                  ),
+            : DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                  Values.avatarUrl + Values.roomList[i].userJoin!.avatarName,
                 ),
               );
-
         return ListTile(
           onTap: () {
-            //TODO 进入房间开始游戏
+            if (Values.roomList[i].status == "WAITING") {
+              onJoinRoomPressed(Values.roomList[i]);
+            } else if (Values.roomList[i].status == "CLOSED") {
+              showSingleActionDialog("该房间已关闭，无法进入噢");
+            } else {
+              showSingleActionDialog("该房间正在游戏，无法进入噢");
+            }
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -149,7 +155,14 @@ class _RoomUIState extends State<RoomUI> {
                 child: Image.asset('images/VS.jpeg'),
               ),
               const SizedBox(width: 15),
-              userJoinContainer
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: decorationImage,
+                ),
+              )
             ],
           ),
           leading: Text("${Values.roomList[i].id}号房"),
@@ -216,6 +229,20 @@ class _RoomUIState extends State<RoomUI> {
           )
         ],
       ),
+    );
+  }
+
+  void onJoinRoomPressed(Room room) {
+    Values.currentRoom = room;
+    http.post(
+      Uri.parse("${Values.server}/Room/JoinRoom"),
+      body: {
+        "userId": Values.user.id.toString(),
+        "roomId": Values.currentRoom.id.toString(),
+      },
+    );
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (buildContext) => const FightUI()),
     );
   }
 }
