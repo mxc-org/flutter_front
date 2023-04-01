@@ -135,6 +135,15 @@ class Chat {
   String content;
   DateTime time;
   Chat(this.fromId, this.told, this.content, this.time);
+  static Chat mpToChat(Map<String, dynamic> mp) {
+    Chat chat = Chat(mp["fromId"], mp["told"], mp["content"], mp["time"]);
+    return chat;
+  }
+
+  static Chat jsonToFriend(String str) {
+    Map<String, dynamic> mp = jsonDecode(str);
+    return mpToChat(mp);
+  }
 }
 
 class MyWebSocket {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
+import 'obj.dart';
 
 class FightUI extends StatefulWidget {
   const FightUI({super.key});
@@ -10,20 +11,167 @@ class FightUI extends StatefulWidget {
 }
 
 class _FightUIState extends State<FightUI> {
+  final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("images/fight.jpeg"),
-          fit: BoxFit.cover,
-          opacity: 0.75,
+    return Scaffold(
+      body: Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/fight.jpeg"),
+              fit: BoxFit.cover,
+              opacity: 0.75,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (Values.ischat == false) chatbutton(),
+              if (Values.ischat == true)
+                Container(
+                  width: double.infinity,
+                  height: 180,
+                  color: Colors.white,
+                  child: Column(
+                    children: [communicationView()],
+                  ),
+                ),
+            ],
+          )),
+    );
+  }
+
+  Widget chatbutton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.orange),
+            minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
+          ),
+          onPressed: startchat,
+          child: const Text("与对手对话"),
         ),
+        SizedBox(
+          width: 20,
+        ),
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.orange),
+            minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
+          ),
+          onPressed: returnRoomUI,
+          child: const Text("返回"),
+        )
+      ],
+    );
+  }
+
+  void startchat() async {
+    Values.myWebSocket.connect();
+    setState(() {
+      if (Values.ischat == false) {
+        Values.ischat = true;
+      }
+    });
+  }
+
+  void endchat() async {
+    setState(() {
+      if (Values.ischat == true) {
+        Values.ischat = false;
+      }
+    });
+  }
+
+  Widget communicationView() {
+    return Expanded(
+      child: Column(
+        children: [
+          TextButton(
+            onPressed: endchat,
+            child: Text("收起对话框"),
+          ),
+          Expanded(
+            flex: 2,
+            child: SingleChildScrollView(
+              child: chatView(),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          inputView(),
+        ],
       ),
-      child: ElevatedButton(
-        onPressed: returnRoomUI,
-        child: const Text("返回"),
+    );
+  }
+
+  Widget chatView() {
+    return ListView.builder(
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        itemCount: 8,
+        itemBuilder: (context, index) {
+          return Text("功能未实现");
+        });
+  }
+
+  Widget inputView() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          // 左侧文字输入框
+          Expanded(
+            child: TextField(
+              maxLines: null,
+              controller: _controller,
+              cursorColor: Colors.black,
+              keyboardType: TextInputType.multiline,
+
+              minLines: 2, //最少多少行
+              style: TextStyle(fontSize: 16, color: Colors.black87), //文字大小、颜色
+
+              decoration: InputDecoration(
+                isCollapsed: true,
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // 右侧发送文字的按钮
+          ElevatedButton(
+            onPressed: send,
+            child: const Text('发送'),
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  void send() async {
+    final text = _controller.text;
+    var response = await http.post(
+      Uri.parse("${Values.server}/Chat/SendMessage"),
+      body: {
+        "fromId": Values.user.id.toString(),
+        "toId": Values.currentRoom.userIdCreator.toString(), //对手id存在问题
+        "content": text.toString()
+      },
     );
   }
 
