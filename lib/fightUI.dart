@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
 import 'obj.dart';
+import 'dart:convert';
 
 class FightUI extends StatefulWidget {
   const FightUI({super.key});
@@ -115,9 +116,48 @@ class _FightUIState extends State<FightUI> {
     return ListView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        itemCount: 8,
+        itemCount: Values.message.length,
         itemBuilder: (context, index) {
-          return Text("功能未实现");
+          return ListTile(
+              title: Row(
+            textDirection: Values.user.id == Values.message[index].fromId
+                ? TextDirection.ltr
+                : TextDirection.rtl,
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      Values.currentRoom.userIdJoin ==
+                              Values.message[index].fromId
+                          ? Values.avatarUrl +
+                              Values.currentRoom.userJoin!.avatarName
+                          : Values.avatarUrl +
+                              Values.currentRoom.userCreator.avatarName,
+                    ),
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                  child:
+                      SelectableText(Values.message[index].content.toString()),
+                ),
+              ),
+            ],
+          ));
         });
   }
 
@@ -164,15 +204,26 @@ class _FightUIState extends State<FightUI> {
   }
 
   void send() async {
-    final text = _controller.text;
+    String text = _controller.text;
     var response = await http.post(
       Uri.parse("${Values.server}/Chat/SendMessage"),
       body: {
         "fromId": Values.user.id.toString(),
-        "toId": Values.currentRoom.userIdCreator.toString(), //对手id存在问题
+        "toId": Values.currentRoom.userIdJoin == Values.user.id
+            ? Values.currentRoom.userIdCreator.toString()
+            : Values.currentRoom.userIdJoin.toString(),
         "content": text.toString()
       },
     );
+    var response2 = await http.post(
+      Uri.parse("${Values.server}/Chat/SendMessage"),
+      body: {
+        "fromId": Values.user.id.toString(),
+        "toId": Values.user.id.toString(),
+        "content": text.toString()
+      },
+    );
+    _controller.clear();
   }
 
   void returnRoomUI() {

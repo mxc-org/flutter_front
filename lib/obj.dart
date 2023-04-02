@@ -130,17 +130,22 @@ class ChessBoard {
 }
 
 class Chat {
-  int fromId;
-  int told;
   String content;
+  int fromId;
   DateTime time;
-  Chat(this.fromId, this.told, this.content, this.time);
+  int toId;
+  Chat(this.content, this.fromId, this.time, this.toId);
   static Chat mpToChat(Map<String, dynamic> mp) {
-    Chat chat = Chat(mp["fromId"], mp["told"], mp["content"], mp["time"]);
+    Chat chat = Chat(
+      mp["content"],
+      mp["fromId"],
+      DateTime.parse(mp["time"]),
+      mp["toId"],
+    );
     return chat;
   }
 
-  static Chat jsonToFriend(String str) {
+  static Chat jsonToChat(String str) {
     Map<String, dynamic> mp = jsonDecode(str);
     return mpToChat(mp);
   }
@@ -159,11 +164,18 @@ class MyWebSocket {
       if (mp["name"] == "Room") {
         handleRoom(mp["content"]);
       }
+      if (mp["name"] == "Chat") {
+        getMessage(mp["content"]);
+      }
     });
   }
 
   void close() {
     channel.sink.close();
+  }
+
+  void getMessage(Map<String, dynamic> mp) {
+    Values.message.add(Chat.mpToChat(mp));
   }
 
   void handleRoom(Map<String, dynamic> mp) {
