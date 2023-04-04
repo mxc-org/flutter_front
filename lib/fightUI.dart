@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_front/roomUI.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
 import 'obj.dart';
@@ -13,6 +16,19 @@ class FightUI extends StatefulWidget {
 
 class _FightUIState extends State<FightUI> {
   final TextEditingController _controller = TextEditingController();
+  late Timer timer;
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (mounted) {
+          setState(() {});
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,6 +251,7 @@ class _FightUIState extends State<FightUI> {
   }
 
   void leaveRoom() {
+    Values.message.clear();
     http.post(
       Uri.parse("${Values.server}/Room/LeaveRoom"),
       body: {
