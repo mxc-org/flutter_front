@@ -1,11 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/roomUI.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
-import 'obj.dart';
-import 'dart:convert';
 
 class FightUI extends StatefulWidget {
   const FightUI({super.key});
@@ -17,11 +14,12 @@ class FightUI extends StatefulWidget {
 class _FightUIState extends State<FightUI> {
   final TextEditingController _controller = TextEditingController();
   late Timer timer;
+
   @override
   void initState() {
     super.initState();
     timer = Timer.periodic(
-      const Duration(seconds: 1),
+      const Duration(milliseconds: 100),
       (timer) {
         if (mounted) {
           setState(() {});
@@ -31,32 +29,46 @@ class _FightUIState extends State<FightUI> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("images/fight.jpeg"),
-              fit: BoxFit.cover,
-              opacity: 0.75,
-            ),
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/fight.jpeg"),
+            fit: BoxFit.cover,
+            opacity: 0.75,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              if (Values.ischat == false) chatbutton(),
-              if (Values.ischat == true)
-                Container(
-                  width: double.infinity,
-                  height: 180,
-                  color: Colors.white,
-                  child: Column(
-                    children: [communicationView()],
-                  ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(
+                top: 40,
+                left: 20,
+                right: 20,
+              ),
+            ),
+            if (Values.ischat == false) chatbutton(),
+            if (Values.ischat == true)
+              Container(
+                width: double.infinity,
+                height: 180,
+                color: Colors.white,
+                child: Column(
+                  children: [communicationView()],
                 ),
-            ],
-          )),
+              ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -71,9 +83,12 @@ class _FightUIState extends State<FightUI> {
             minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
           ),
           onPressed: startchat,
-          child: const Text("与对手对话"),
+          child: const Text(
+            "对话",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 20,
         ),
         ElevatedButton(
@@ -82,14 +97,16 @@ class _FightUIState extends State<FightUI> {
             minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
           ),
           onPressed: returnRoomUI,
-          child: const Text("返回"),
+          child: const Text(
+            "返回",
+            style: TextStyle(color: Colors.white),
+          ),
         )
       ],
     );
   }
 
   void startchat() async {
-    Values.myWebSocket.connect();
     setState(() {
       if (Values.ischat == false) {
         Values.ischat = true;
@@ -111,7 +128,7 @@ class _FightUIState extends State<FightUI> {
         children: [
           TextButton(
             onPressed: endchat,
-            child: Text("收起对话框"),
+            child: const Text("收起对话框"),
           ),
           Expanded(
             flex: 2,
@@ -119,8 +136,8 @@ class _FightUIState extends State<FightUI> {
               child: chatView(),
             ),
           ),
-          SizedBox(
-            height: 20,
+          const SizedBox(
+            height: 10,
           ),
           inputView(),
         ],
@@ -130,12 +147,15 @@ class _FightUIState extends State<FightUI> {
 
   Widget chatView() {
     return ListView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        itemCount: Values.message.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-              title: Row(
+      shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: Values.message.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Row(
             textDirection: Values.user.id == Values.message[index].fromId
                 ? TextDirection.ltr
                 : TextDirection.rtl,
@@ -158,6 +178,9 @@ class _FightUIState extends State<FightUI> {
                   ),
                 ),
               ),
+              const SizedBox(
+                width: 10,
+              ),
               Flexible(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -168,13 +191,16 @@ class _FightUIState extends State<FightUI> {
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(32),
                   ),
-                  child:
-                      SelectableText(Values.message[index].content.toString()),
+                  child: SelectableText(
+                    Values.message[index].content.toString(),
+                  ),
                 ),
               ),
             ],
-          ));
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget inputView() {
@@ -185,21 +211,29 @@ class _FightUIState extends State<FightUI> {
           // 左侧文字输入框
           Expanded(
             child: TextField(
-              maxLines: null,
+              maxLines: 2,
               controller: _controller,
               cursorColor: Colors.black,
               keyboardType: TextInputType.multiline,
-
-              minLines: 2, //最少多少行
-              style: TextStyle(fontSize: 16, color: Colors.black87), //文字大小、颜色
-
-              decoration: InputDecoration(
+              minLines: 1, //最少多少行
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+              ), //文字大小、颜色
+              decoration: const InputDecoration(
                 isCollapsed: true,
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 ),
+                contentPadding: EdgeInsets.only(
+                  left: 14,
+                  right: 14,
+                  top: 12,
+                  bottom: 12,
+                ),
+                constraints: BoxConstraints(),
               ),
             ),
           ),
@@ -207,21 +241,21 @@ class _FightUIState extends State<FightUI> {
           // 右侧发送文字的按钮
           ElevatedButton(
             onPressed: send,
-            child: const Text('发送'),
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
+            child: const Text('发送'),
           ),
         ],
       ),
     );
   }
 
-  void send() async {
+  void send() {
     String text = _controller.text;
-    var response = await http.post(
+    http.post(
       Uri.parse("${Values.server}/Chat/SendMessage"),
       body: {
         "fromId": Values.user.id.toString(),
@@ -231,7 +265,7 @@ class _FightUIState extends State<FightUI> {
         "content": text.toString()
       },
     );
-    var response2 = await http.post(
+    http.post(
       Uri.parse("${Values.server}/Chat/SendMessage"),
       body: {
         "fromId": Values.user.id.toString(),
