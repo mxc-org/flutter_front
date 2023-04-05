@@ -11,4 +11,6 @@ class Values {
   static Room currentRoom = Room(0, "0", 0, 0, Values.user, null);
   static MyWebSocket myWebSocket = MyWebSocket();
   static String wsUrl = "ws://81.69.99.102:8081";
+  static bool ischat = false;
+  static List<Chat> message = [];
 }
