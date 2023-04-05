@@ -14,14 +14,10 @@ class _FightUIState extends State<FightUI> {
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
-          image: const AssetImage("images/fight.jpeg"),
+          image: AssetImage("images/fight.jpeg"),
           fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.white.withOpacity(0.75),
-            BlendMode.dstATop,
-          ),
         ),
       ),
       child: Column(
@@ -29,10 +25,14 @@ class _FightUIState extends State<FightUI> {
           Expanded(
             flex: 1,
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("images/pk.jpg"),
+                  image: const AssetImage("images/pk.jpg"),
                   fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                    Colors.white.withOpacity(0.75),
+                    BlendMode.dstATop,
+                  ),
                 ),
               ),
               child: Row(),

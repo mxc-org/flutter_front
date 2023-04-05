@@ -41,14 +41,10 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
-          image: const AssetImage("images/asdfasdf.jpeg"),
+          image: AssetImage("images/asdfasdf.jpeg"),
           fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.white.withOpacity(0.75),
-            BlendMode.dstATop,
-          ),
         ),
       ),
       child: Column(
