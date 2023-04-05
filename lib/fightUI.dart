@@ -36,6 +36,7 @@ class _FightUIState extends State<FightUI> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -46,25 +47,38 @@ class _FightUIState extends State<FightUI> {
             opacity: 0.75,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+        child: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
           children: [
-            Container(
-              padding: const EdgeInsets.only(
-                top: 40,
-                left: 20,
-                right: 20,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                //游戏中用户信息
+                Container(
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    left: 20,
+                    right: 20,
+                  ),
+                  height: 100,
+                ),
+                //TODO 棋盘
+                const Expanded(child: Text("棋盘")),
+                const SizedBox(height: 20)
+              ],
             ),
-            if (Values.ischat == false) chatbutton(),
+            if (Values.ischat == false)
+              Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: chatbutton(),
+              ),
             if (Values.ischat == true)
               Container(
+                padding: const EdgeInsets.only(bottom: 10),
                 width: double.infinity,
-                height: 180,
+                height: height / 2,
                 color: Colors.white,
-                child: Column(
-                  children: [communicationView()],
-                ),
+                child: communicationView(),
               ),
           ],
         ),
