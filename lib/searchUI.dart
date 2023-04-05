@@ -24,7 +24,6 @@ class _SearchUIState extends State<SearchUI> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: const Text("添加好友"),
