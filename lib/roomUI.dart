@@ -43,11 +43,14 @@ class _RoomUIState extends State<RoomUI> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/asdfasdf.jpeg"),
+            image: const AssetImage("images/asdfasdf.jpeg"),
             fit: BoxFit.cover,
-            opacity: 0.75,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.75),
+              BlendMode.dstATop,
+            ),
           ),
         ),
         child: Column(
@@ -121,54 +124,61 @@ class _RoomUIState extends State<RoomUI> {
                   Values.avatarUrl + Values.roomList[i].userJoin!.avatarName,
                 ),
               );
-        return ListTile(
-          onTap: () {
-            if (Values.roomList[i].status == "WAITING") {
-              onJoinRoomPressed(Values.roomList[i]);
-            } else if (Values.roomList[i].status == "CLOSED") {
-              showSingleActionDialog("该房间已关闭，无法进入噢");
-            } else {
-              showSingleActionDialog("该房间正在游戏，无法进入噢");
-            }
-          },
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      Values.avatarUrl +
-                          Values.roomList[i].userCreator.avatarName,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 15),
-              SizedBox(
-                height: 30,
-                width: 30,
-                child: Image.asset('images/VS.jpeg'),
-              ),
-              const SizedBox(width: 15),
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  image: decorationImage,
-                ),
-              )
-            ],
-          ),
-          leading: Text("${Values.roomList[i].id}号房"),
-          trailing: trailingText,
-        );
+        return myListTile(i, trailingText, decorationImage);
       },
+    );
+  }
+
+  Widget myListTile(
+    int i,
+    Widget trailingText,
+    DecorationImage decorationImage,
+  ) {
+    return ListTile(
+      onTap: () {
+        if (Values.roomList[i].status == "WAITING") {
+          onJoinRoomPressed(Values.roomList[i]);
+        } else if (Values.roomList[i].status == "CLOSED") {
+          showSingleActionDialog("该房间已关闭，无法进入噢");
+        } else {
+          showSingleActionDialog("该房间正在游戏，无法进入噢");
+        }
+      },
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                  Values.avatarUrl + Values.roomList[i].userCreator.avatarName,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 15),
+          SizedBox(
+            height: 30,
+            width: 30,
+            child: Image.asset('images/VS.jpeg'),
+          ),
+          const SizedBox(width: 15),
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              image: decorationImage,
+            ),
+          )
+        ],
+      ),
+      leading: Text("${Values.roomList[i].id}号房"),
+      trailing: trailingText,
     );
   }
 

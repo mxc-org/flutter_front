@@ -45,7 +45,6 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
         image: DecorationImage(
           image: AssetImage("images/asdfasdf.jpeg"),
           fit: BoxFit.cover,
-          opacity: 0.75,
         ),
       ),
       child: Column(

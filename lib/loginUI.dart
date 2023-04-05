@@ -5,7 +5,6 @@ import 'package:flutter_front/main.dart';
 import 'package:flutter_front/registerUI.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'obj.dart';
 
