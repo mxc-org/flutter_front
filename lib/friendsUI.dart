@@ -29,7 +29,6 @@ class _FriendsUIState extends State<FriendsUI> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(127, 255, 153, 0),
         title: const Text("好友"),
-        elevation: 10,
         actions: [
           IconButton(
             onPressed: () {
@@ -58,7 +57,7 @@ class _FriendsUIState extends State<FriendsUI> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (buildContext) => const newFriendsUI(),
+                    builder: (buildContext) => const NewFriendsUI(),
                   ),
                 );
               },

@@ -13,4 +13,6 @@ class Values {
   static String wsUrl = "ws://81.69.99.102:8081";
   static bool ischat = false;
   static List<Chat> message = [];
+  static List<ChessBoard> chessList = [];
+  static double width = 0;
 }

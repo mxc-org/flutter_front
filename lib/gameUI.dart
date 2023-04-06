@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/roomUI.dart';
+import 'package:flutter_front/values.dart';
 
 class GameUI extends StatefulWidget {
   const GameUI({super.key});
@@ -11,6 +12,7 @@ class GameUI extends StatefulWidget {
 class _GameUIState extends State<GameUI> {
   @override
   Widget build(BuildContext context) {
+    Values.width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         width: double.infinity,

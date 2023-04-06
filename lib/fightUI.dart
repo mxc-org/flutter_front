@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_front/boardView.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,6 +15,7 @@ class FightUI extends StatefulWidget {
 class _FightUIState extends State<FightUI> {
   final TextEditingController _controller = TextEditingController();
   late Timer timer;
+  List<Widget> gridList = [];
 
   @override
   void initState() {
@@ -53,24 +55,27 @@ class _FightUIState extends State<FightUI> {
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                //游戏中用户信息
                 Container(
                   padding: const EdgeInsets.only(
                     top: 20,
                     left: 20,
                     right: 20,
                   ),
-                  height: 100,
+                  height: 120,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("images/pk.jpg"),
                       fit: BoxFit.cover,
                     ),
                   ),
+                  child: myRow(),
                 ),
-                //TODO 棋盘
-                const Expanded(child: Text("棋盘")),
-                const SizedBox(height: 20)
+                const Expanded(flex: 1, child: Text("")),
+                SizedBox(
+                  height: Values.width,
+                  child: const BoardView(),
+                ),
+                const Expanded(flex: 5, child: Text("")),
               ],
             ),
             if (Values.ischat == false)
@@ -89,6 +94,56 @@ class _FightUIState extends State<FightUI> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget myRow() {
+    return Row(
+      children: [
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(
+                Values.avatarUrl + Values.currentRoom.userCreator.avatarName,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          Values.user.username,
+          style: const TextStyle(fontSize: 20),
+        ),
+        const Expanded(
+          child: Text(
+            "VS",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 30, color: Colors.yellow),
+          ),
+        ),
+        Text(
+          Values.currentRoom.userJoin!.username,
+          style: const TextStyle(fontSize: 20),
+        ),
+        const SizedBox(width: 10),
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(
+                Values.avatarUrl + Values.currentRoom.userJoin!.avatarName,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -121,25 +176,9 @@ class _FightUIState extends State<FightUI> {
             "退出",
             style: TextStyle(color: Colors.white),
           ),
-        )
+        ),
       ],
     );
-  }
-
-  void startchat() async {
-    setState(() {
-      if (Values.ischat == false) {
-        Values.ischat = true;
-      }
-    });
-  }
-
-  void endchat() async {
-    setState(() {
-      if (Values.ischat == true) {
-        Values.ischat = false;
-      }
-    });
   }
 
   Widget communicationView() {
@@ -272,6 +311,22 @@ class _FightUIState extends State<FightUI> {
         ],
       ),
     );
+  }
+
+  void startchat() async {
+    setState(() {
+      if (Values.ischat == false) {
+        Values.ischat = true;
+      }
+    });
+  }
+
+  void endchat() async {
+    setState(() {
+      if (Values.ischat == true) {
+        Values.ischat = false;
+      }
+    });
   }
 
   void send() {
