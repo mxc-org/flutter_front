@@ -61,6 +61,12 @@ class _FightUIState extends State<FightUI> {
                     right: 20,
                   ),
                   height: 100,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("images/pk.jpg"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 //TODO 棋盘
                 const Expanded(child: Text("棋盘")),
@@ -110,9 +116,9 @@ class _FightUIState extends State<FightUI> {
             backgroundColor: MaterialStateProperty.all(Colors.orange),
             minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
           ),
-          onPressed: returnRoomUI,
+          onPressed: onReturnRoom,
           child: const Text(
-            "返回",
+            "退出",
             style: TextStyle(color: Colors.white),
           ),
         )
@@ -137,25 +143,23 @@ class _FightUIState extends State<FightUI> {
   }
 
   Widget communicationView() {
-    return Expanded(
-      child: Column(
-        children: [
-          TextButton(
-            onPressed: endchat,
-            child: const Text("收起对话框"),
+    return Column(
+      children: [
+        TextButton(
+          onPressed: endchat,
+          child: const Text("收起对话框"),
+        ),
+        Expanded(
+          flex: 2,
+          child: SingleChildScrollView(
+            child: chatView(),
           ),
-          Expanded(
-            flex: 2,
-            child: SingleChildScrollView(
-              child: chatView(),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          inputView(),
-        ],
-      ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        inputView(),
+      ],
     );
   }
 
@@ -168,52 +172,55 @@ class _FightUIState extends State<FightUI> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: Values.message.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Row(
-            textDirection: Values.user.id == Values.message[index].fromId
-                ? TextDirection.ltr
-                : TextDirection.rtl,
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      Values.currentRoom.userIdJoin ==
-                              Values.message[index].fromId
-                          ? Values.avatarUrl +
-                              Values.currentRoom.userJoin!.avatarName
-                          : Values.avatarUrl +
-                              Values.currentRoom.userCreator.avatarName,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Flexible(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(32),
-                  ),
-                  child: SelectableText(
-                    Values.message[index].content.toString(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
+        return myListTile(index);
       },
+    );
+  }
+
+  Widget myListTile(int index) {
+    return ListTile(
+      title: Row(
+        textDirection: Values.user.id == Values.message[index].fromId
+            ? TextDirection.ltr
+            : TextDirection.rtl,
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                  Values.currentRoom.userIdJoin == Values.message[index].fromId
+                      ? Values.avatarUrl +
+                          Values.currentRoom.userJoin!.avatarName
+                      : Values.avatarUrl +
+                          Values.currentRoom.userCreator.avatarName,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(32),
+              ),
+              child: SelectableText(
+                Values.message[index].content.toString(),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -290,12 +297,38 @@ class _FightUIState extends State<FightUI> {
     _controller.clear();
   }
 
-  void returnRoomUI() {
-    leaveRoom();
-    if (Values.currentRoom.userIdCreator == Values.user.id) {
-      Navigator.of(context).pop();
-    }
-    Navigator.of(context).pop();
+  void onReturnRoom() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("提示"),
+        content: const Text(
+          "你确定要退出吗？",
+          style: TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "取消",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              leaveRoom();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void leaveRoom() {
@@ -307,5 +340,9 @@ class _FightUIState extends State<FightUI> {
         "roomId": Values.currentRoom.id.toString(),
       },
     );
+    if (Values.currentRoom.userIdCreator == Values.user.id) {
+      Navigator.of(context).pop();
+    }
+    Navigator.of(context).pop();
   }
 }
