@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_front/obj.dart';
 import 'package:flutter_front/values.dart';
+import 'package:http/http.dart' as http;
 
 class GridUnit extends StatefulWidget {
   const GridUnit({super.key, required this.x, required this.y});
@@ -17,7 +19,7 @@ class _GridUnitState extends State<GridUnit> {
   void initState() {
     super.initState();
     timer = Timer.periodic(
-      const Duration(milliseconds: 100),
+      const Duration(milliseconds: 500),
       (timer) {
         if (mounted) {
           setState(() {});
@@ -25,6 +27,7 @@ class _GridUnitState extends State<GridUnit> {
       },
     );
   }
+
   @override
   void dispose() {
     timer.cancel();
@@ -34,8 +37,52 @@ class _GridUnitState extends State<GridUnit> {
   @override
   Widget build(BuildContext context) {
     late Widget myWidget;
+    Widget myContainer = GestureDetector(
+      onTap: () {
+        onTapGridUnit(widget.x, widget.y);
+      },
+      child: SizedBox(
+        width: Values.width / 20,
+        height: Values.width / 20,
+      ),
+    );
+    //若是先手下子，则为黑子，反之为白子
+    ChessBoard oneChess = Values.chessList[widget.x * 15 + widget.y];
+    if (oneChess.exist && oneChess.userId == Values.currentRoom.userIdCreator) {
+      myContainer = GestureDetector(
+        onTap: () {
+          onTapGridUnit(widget.x, widget.y);
+        },
+        child: Container(
+          width: Values.width / 20,
+          height: Values.width / 20,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/black.png"),
+            ),
+          ),
+        ),
+      );
+    } else if (oneChess.exist &&
+        oneChess.userId == Values.currentRoom.userIdJoin) {
+      myContainer = GestureDetector(
+        onTap: () {
+          onTapGridUnit(widget.x, widget.y);
+        },
+        child: Container(
+          width: Values.width / 30,
+          height: Values.width / 30,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/white.png"),
+            ),
+          ),
+        ),
+      );
+    }
     if (widget.x != 0 && widget.x != 14 && widget.y == 0) {
       myWidget = Stack(
+        alignment: Alignment.center,
         children: [
           Column(
             children: [
@@ -62,11 +109,12 @@ class _GridUnitState extends State<GridUnit> {
               )
             ],
           ),
-          //TODO 下子
+          myContainer,
         ],
       );
     } else if (widget.x == 0 && widget.y != 0 && widget.y != 14) {
       myWidget = Stack(
+        alignment: Alignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -94,11 +142,12 @@ class _GridUnitState extends State<GridUnit> {
               )
             ],
           ),
-          //TODO 下子
+          myContainer
         ],
       );
     } else if (widget.x != 0 && widget.x != 14 && widget.y == 14) {
       myWidget = Stack(
+        alignment: Alignment.center,
         children: [
           Column(
             children: [
@@ -125,11 +174,12 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          //TODO 下子
+          myContainer
         ],
       );
     } else if (widget.x == 14 && widget.y != 0 && widget.y != 14) {
       myWidget = Stack(
+        alignment: Alignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -157,11 +207,12 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          //TODO 下子
+          myContainer
         ],
       );
     } else if (widget.x == 0 && widget.y == 0) {
       myWidget = Stack(
+        alignment: Alignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -196,11 +247,12 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          //TODO 下子
+          myContainer
         ],
       );
     } else if (widget.x == 14 && widget.y == 0) {
       myWidget = Stack(
+        alignment: Alignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -235,11 +287,12 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          //TODO 下子
+          myContainer
         ],
       );
     } else if (widget.x == 0 && widget.y == 14) {
       myWidget = Stack(
+        alignment: Alignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -274,11 +327,12 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          //TODO 下子
+          myContainer
         ],
       );
     } else if (widget.x == 14 && widget.y == 14) {
       myWidget = Stack(
+        alignment: Alignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -313,7 +367,7 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          //TODO 下子
+          myContainer
         ],
       );
     } else {
@@ -348,6 +402,86 @@ class _GridUnitState extends State<GridUnit> {
 
     return Container(
       child: myWidget,
+    );
+  }
+
+  void onTapGridUnit(int x, int y) {
+    if (Values.turn == false) {
+      showSingleActionDialog("还没轮到你下棋噢");
+    } else {
+      showDialog(
+        context: context,
+        builder: (buildContext) => AlertDialog(
+          title: const Text("提示"),
+          content: const Text(
+            "确定要在此下棋吗",
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                "取消",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                putPiece(x, y);
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                "确定",
+                style: TextStyle(fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+  }
+
+  void putPiece(int x, int y) {
+    int opponentId = 0;
+    if (Values.user.id == Values.currentRoom.userIdCreator) {
+      opponentId = Values.currentRoom.userIdJoin;
+    } else {
+      opponentId = Values.currentRoom.userIdCreator;
+    }
+    http.post(
+      Uri.parse("${Values.server}/ChessBoard/PutPiece"),
+      body: {
+        "userId": Values.user.id.toString(),
+        "opponentId": opponentId.toString(),
+        "x": x.toString(),
+        "y": y.toString(),
+      },
+    );
+  }
+
+  showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

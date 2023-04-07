@@ -186,7 +186,10 @@ class MyWebSocket {
 
   handleChess(Map<String, dynamic> mp) {
     ChessBoard chess = ChessBoard.mpToChess(mp);
-    Values.chessList[(chess.x + 1) * 15 + chess.y + 1] = chess;
+    Values.chessList[chess.x * 15 + chess.y] = chess;
+    if (chess.userId != Values.user.id) {
+      Values.turn = true;
+    }
   }
 
   void getMessage(Map<String, dynamic> mp) {

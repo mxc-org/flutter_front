@@ -66,7 +66,13 @@ class _BoardViewState extends State<BoardView> {
         color: Colors.white.withOpacity(0.5),
         backgroundBlendMode: BlendMode.srcATop,
       ),
-      child: GridView.count(crossAxisCount: 15, children: gridList),
+      child: GridView.count(
+        shrinkWrap: true,
+        crossAxisCount: 15,
+        physics: const NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        children: gridList,
+      ),
     );
   }
 }

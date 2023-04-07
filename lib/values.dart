@@ -15,4 +15,5 @@ class Values {
   static List<Chat> message = [];
   static List<ChessBoard> chessList = [];
   static double width = 0;
+  static bool turn = true; //是否轮到自己下棋
 }

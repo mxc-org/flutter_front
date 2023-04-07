@@ -200,6 +200,7 @@ class _RoomUIState extends State<RoomUI> {
   }
 
   void onCreateRoomPressed() async {
+    Values.turn = true;
     var response = await http.post(
       Uri.parse("${Values.server}/Room/CreateRoom"),
       body: {"userId": Values.user.id.toString()},
@@ -244,6 +245,7 @@ class _RoomUIState extends State<RoomUI> {
 
   void onJoinRoomPressed(Room room) {
     Values.currentRoom = room;
+    Values.turn = false;
     http.post(
       Uri.parse("${Values.server}/Room/JoinRoom"),
       body: {

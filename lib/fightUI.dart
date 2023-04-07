@@ -21,7 +21,7 @@ class _FightUIState extends State<FightUI> {
   void initState() {
     super.initState();
     timer = Timer.periodic(
-      const Duration(milliseconds: 100),
+      const Duration(seconds: 1),
       (timer) {
         if (mounted) {
           setState(() {});
@@ -99,6 +99,15 @@ class _FightUIState extends State<FightUI> {
   }
 
   Widget myRow() {
+    ImageProvider<Object> myImage;
+    //判空
+    if (Values.currentRoom.userIdJoin == 0) {
+      myImage = const AssetImage("images/nobody.png");
+    } else {
+      myImage = NetworkImage(
+        Values.avatarUrl + Values.currentRoom.userJoin!.avatarName,
+      );
+    }
     return Row(
       children: [
         Container(
@@ -116,7 +125,7 @@ class _FightUIState extends State<FightUI> {
         ),
         const SizedBox(width: 10),
         Text(
-          Values.user.username,
+          Values.currentRoom.userCreator.username,
           style: const TextStyle(fontSize: 20),
         ),
         const Expanded(
@@ -141,9 +150,7 @@ class _FightUIState extends State<FightUI> {
             borderRadius: BorderRadius.circular(40),
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: NetworkImage(
-                Values.avatarUrl + Values.currentRoom.userJoin!.avatarName,
-              ),
+              image: myImage,
             ),
           ),
         ),
