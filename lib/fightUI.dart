@@ -39,6 +39,7 @@ class _FightUIState extends State<FightUI> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    Values.width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -126,7 +127,10 @@ class _FightUIState extends State<FightUI> {
           ),
         ),
         Text(
-          Values.currentRoom.userJoin!.username,
+          //判空
+          Values.currentRoom.userIdJoin != 0
+              ? Values.currentRoom.userJoin!.username
+              : "",
           style: const TextStyle(fontSize: 20),
         ),
         const SizedBox(width: 10),

@@ -27,13 +27,16 @@ class _SearchUIState extends State<SearchUI> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("添加好友"),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(127, 255, 153, 0),
       ),
       body: Stack(
         children: [
-          searchBar(),
           Container(
-            margin: const EdgeInsets.only(top: 50),
+            margin: const EdgeInsets.only(top: 10),
+            child: searchBar(),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 60),
             child: myListView(),
           ),
         ],

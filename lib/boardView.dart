@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_front/gridUnit.dart';
 import 'package:flutter_front/obj.dart';
 import 'package:flutter_front/values.dart';
 
@@ -20,7 +21,7 @@ class _BoardViewState extends State<BoardView> {
     super.initState();
     initBoard();
     timer = Timer.periodic(
-      const Duration(milliseconds: 100),
+      const Duration(seconds: 1),
       (timer) {
         if (mounted) {
           initView();
@@ -32,7 +33,6 @@ class _BoardViewState extends State<BoardView> {
 
   initBoard() {
     Values.chessList.clear();
-    gridList.clear();
     for (int i = 0; i < 15; i++) {
       for (int j = 0; j < 15; j++) {
         Values.chessList.add(
@@ -45,77 +45,28 @@ class _BoardViewState extends State<BoardView> {
             false,
           ),
         );
-        gridList.add(gridUnit(Values.width / 15, i, j));
       }
     }
+    initView();
   }
 
   initView() {
     gridList.clear();
     for (int i = 0; i < 15; i++) {
       for (int j = 0; j < 15; j++) {
-        gridList.add(gridUnit(Values.width / 15, i, j));
+        gridList.add(GridUnit(x: j, y: i));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
-            backgroundBlendMode: BlendMode.srcATop,
-          ),
-          child: GridView.count(crossAxisCount: 15, children: gridList),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            initBoard();
-            setState(() {});
-          },
-          child: const Text("刷新"),
-        )
-      ],
-    );
-  }
-
-  Widget gridUnit(double width, int x, int y) {
     return Container(
-      width: width,
-      height: width,
       decoration: BoxDecoration(
-        color: Colors.brown.withOpacity(0.1),
+        color: Colors.white.withOpacity(0.5),
         backgroundBlendMode: BlendMode.srcATop,
       ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: 1,
-              minWidth: width,
-              maxHeight: 1,
-              maxWidth: width,
-            ),
-            child: Container(
-              color: Colors.black,
-            ),
-          ),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: width,
-              minWidth: 1,
-              maxHeight: width,
-              maxWidth: 1,
-            ),
-            child: Container(
-              color: Colors.black,
-            ),
-          )
-        ],
-      ),
+      child: GridView.count(crossAxisCount: 15, children: gridList),
     );
   }
 }
