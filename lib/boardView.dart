@@ -62,14 +62,13 @@ class _BoardViewState extends State<BoardView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(223, 170, 122, 60),
         backgroundBlendMode: BlendMode.srcATop,
       ),
       child: GridView.count(
         shrinkWrap: true,
         crossAxisCount: 15,
-        physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
         children: gridList,
       ),

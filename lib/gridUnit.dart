@@ -37,47 +37,53 @@ class _GridUnitState extends State<GridUnit> {
   @override
   Widget build(BuildContext context) {
     late Widget myWidget;
-    Widget myContainer = GestureDetector(
-      onTap: () {
-        onTapGridUnit(widget.x, widget.y);
-      },
-      child: SizedBox(
-        width: Values.width / 20,
-        height: Values.width / 20,
-      ),
-    );
+    Widget myContainer = Container();
     //若是先手下子，则为黑子，反之为白子
     ChessBoard oneChess = Values.chessList[widget.x * 15 + widget.y];
     if (oneChess.exist && oneChess.userId == Values.currentRoom.userIdCreator) {
-      myContainer = GestureDetector(
-        onTap: () {
-          onTapGridUnit(widget.x, widget.y);
-        },
-        child: Container(
-          width: Values.width / 20,
-          height: Values.width / 20,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("images/black.png"),
-            ),
+      myContainer = Container(
+        width: Values.width / 15,
+        height: Values.width / 15,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/black.png"),
           ),
         ),
+        child: Values.currentChess.x == widget.x &&
+                Values.currentChess.y == widget.y
+            ? Container(
+                width: Values.width / 15,
+                height: Values.width / 15,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("images/flag.png"),
+                  ),
+                ),
+              )
+            : Container(),
       );
     } else if (oneChess.exist &&
         oneChess.userId == Values.currentRoom.userIdJoin) {
-      myContainer = GestureDetector(
-        onTap: () {
-          onTapGridUnit(widget.x, widget.y);
-        },
-        child: Container(
-          width: Values.width / 30,
-          height: Values.width / 30,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("images/white.png"),
-            ),
+      myContainer = Container(
+        width: Values.width / 15,
+        height: Values.width / 15,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/white.png"),
           ),
         ),
+        child: Values.currentChess.x == widget.x &&
+                Values.currentChess.y == widget.y
+            ? Container(
+                width: Values.width / 15,
+                height: Values.width / 15,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("images/flag.png"),
+                  ),
+                ),
+              )
+            : Container(),
       );
     }
     if (widget.x != 0 && widget.x != 14 && widget.y == 0) {
@@ -142,7 +148,7 @@ class _GridUnitState extends State<GridUnit> {
               )
             ],
           ),
-          myContainer
+          myContainer,
         ],
       );
     } else if (widget.x != 0 && widget.x != 14 && widget.y == 14) {
@@ -174,7 +180,7 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          myContainer
+          myContainer,
         ],
       );
     } else if (widget.x == 14 && widget.y != 0 && widget.y != 14) {
@@ -207,48 +213,53 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          myContainer
+          myContainer,
         ],
       );
     } else if (widget.x == 0 && widget.y == 0) {
-      myWidget = Stack(
-        alignment: Alignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(
-                child: Text(""),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(),
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          border: BorderDirectional(
-                            start: BorderSide(
-                              width: 1,
-                              color: Colors.black,
-                            ),
-                            top: BorderSide(
-                              width: 1,
-                              color: Colors.black,
+      myWidget = GestureDetector(
+        onTap: () {
+          onTapGridUnit(widget.x, widget.y);
+        },
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Expanded(
+                  child: Text(""),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Container(),
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            border: BorderDirectional(
+                              start: BorderSide(
+                                width: 1,
+                                color: Colors.black,
+                              ),
+                              top: BorderSide(
+                                width: 1,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          myContainer
-        ],
+              ],
+            ),
+            myContainer,
+          ],
+        ),
       );
     } else if (widget.x == 14 && widget.y == 0) {
       myWidget = Stack(
@@ -287,7 +298,7 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          myContainer
+          myContainer,
         ],
       );
     } else if (widget.x == 0 && widget.y == 14) {
@@ -327,7 +338,7 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          myContainer
+          myContainer,
         ],
       );
     } else if (widget.x == 14 && widget.y == 14) {
@@ -371,7 +382,7 @@ class _GridUnitState extends State<GridUnit> {
         ],
       );
     } else {
-      return Stack(
+      myWidget = Stack(
         alignment: Alignment.center,
         children: [
           ConstrainedBox(
@@ -395,13 +406,20 @@ class _GridUnitState extends State<GridUnit> {
             child: Container(
               color: Colors.black,
             ),
-          )
+          ),
+          myContainer,
         ],
       );
     }
-
-    return Container(
-      child: myWidget,
+    return GestureDetector(
+      onTap: () {
+        onTapGridUnit(widget.x, widget.y);
+      },
+      child: SizedBox(
+        width: Values.width,
+        height: Values.width,
+        child: myWidget,
+      ),
     );
   }
 
@@ -430,6 +448,7 @@ class _GridUnitState extends State<GridUnit> {
             TextButton(
               onPressed: () {
                 putPiece(x, y);
+                Values.turn = false;
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -457,6 +476,7 @@ class _GridUnitState extends State<GridUnit> {
         "opponentId": opponentId.toString(),
         "x": x.toString(),
         "y": y.toString(),
+        "roomId": Values.currentRoom.id.toString(),
       },
     );
   }

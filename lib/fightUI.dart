@@ -20,11 +20,21 @@ class _FightUIState extends State<FightUI> {
   @override
   void initState() {
     super.initState();
+    Values.win = 0;
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
         if (mounted) {
           setState(() {});
+          if (Values.win == 1) {
+            showSingleActionDialog("恭喜你，成功打败了对手");
+            leaveRoom();
+            timer.cancel();
+          } else if (Values.win == 2) {
+            showSingleActionDialog("很遗憾，你失败了，不要灰心噢");
+            leaveRoom();
+            timer.cancel();
+          }
         }
       },
     );
@@ -57,11 +67,6 @@ class _FightUIState extends State<FightUI> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  padding: const EdgeInsets.only(
-                    top: 20,
-                    left: 20,
-                    right: 20,
-                  ),
                   height: 120,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -69,7 +74,17 @@ class _FightUIState extends State<FightUI> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  child: myRow(),
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      left: 20,
+                      right: 20,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.4),
+                    ),
+                    child: myRow(),
+                  ),
                 ),
                 const Expanded(flex: 1, child: Text("")),
                 SizedBox(
@@ -124,23 +139,31 @@ class _FightUIState extends State<FightUI> {
           ),
         ),
         const SizedBox(width: 10),
-        Text(
-          Values.currentRoom.userCreator.username,
-          style: const TextStyle(fontSize: 20),
+        Expanded(
+          child: Text(
+            Values.currentRoom.userCreator.username,
+            style: const TextStyle(fontSize: 20),
+          ),
         ),
         const Expanded(
           child: Text(
             "VS",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30, color: Colors.yellow),
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.redAccent,
+            ),
           ),
         ),
-        Text(
-          //判空
-          Values.currentRoom.userIdJoin != 0
-              ? Values.currentRoom.userJoin!.username
-              : "",
-          style: const TextStyle(fontSize: 20),
+        Expanded(
+          child: Text(
+            //判空
+            Values.currentRoom.userIdJoin != 0
+                ? Values.currentRoom.userJoin!.username
+                : "",
+            style: const TextStyle(fontSize: 20),
+            textAlign: TextAlign.end,
+          ),
         ),
         const SizedBox(width: 10),
         Container(
@@ -410,5 +433,29 @@ class _FightUIState extends State<FightUI> {
       Navigator.of(context).pop();
     }
     Navigator.of(context).pop();
+  }
+
+  void showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
