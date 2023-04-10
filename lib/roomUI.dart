@@ -17,7 +17,6 @@ class RoomUI extends StatefulWidget {
 }
 
 class _RoomUIState extends State<RoomUI> {
-  List<User> listUser = [];
   late Timer timer;
 
   @override
@@ -183,7 +182,6 @@ class _RoomUIState extends State<RoomUI> {
   }
 
   void getRoomList() async {
-    listUser.clear();
     var response = await http.get(
       Uri.parse("${Values.server}/Room/RoomList"),
     );
@@ -200,6 +198,7 @@ class _RoomUIState extends State<RoomUI> {
   }
 
   void onCreateRoomPressed() async {
+    Values.turn = true;
     var response = await http.post(
       Uri.parse("${Values.server}/Room/CreateRoom"),
       body: {"userId": Values.user.id.toString()},
@@ -244,6 +243,7 @@ class _RoomUIState extends State<RoomUI> {
 
   void onJoinRoomPressed(Room room) {
     Values.currentRoom = room;
+    Values.turn = false;
     http.post(
       Uri.parse("${Values.server}/Room/JoinRoom"),
       body: {

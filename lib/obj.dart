@@ -112,21 +112,30 @@ class Match {
 
 class ChessBoard {
   int userId;
-  int opponentId;
+  int roomId;
   int x;
   int y;
-  int roomId;
-  int count;
   bool isWin;
+  bool exist;
   ChessBoard(
     this.userId,
-    this.opponentId,
+    this.roomId,
     this.x,
     this.y,
-    this.roomId,
-    this.count,
     this.isWin,
+    this.exist,
   );
+  static mpToChess(Map<String, dynamic> mp) {
+    ChessBoard chess = ChessBoard(
+      mp["userId"],
+      mp["roomId"],
+      mp["x"],
+      mp["y"],
+      mp["isWin"],
+      true,
+    );
+    return chess;
+  }
 }
 
 class Chat {
@@ -163,15 +172,32 @@ class MyWebSocket {
       Map<String, dynamic> mp = json.decode(event);
       if (mp["name"] == "Room") {
         handleRoom(mp["content"]);
-      }
-      if (mp["name"] == "Chat") {
+      } else if (mp["name"] == "Chat") {
         getMessage(mp["content"]);
+      } else if (mp["name"] == "ChessBoard") {
+        handleChess(mp["content"]);
       }
     });
   }
 
   void close() {
     channel.sink.close();
+  }
+
+  handleChess(Map<String, dynamic> mp) {
+    ChessBoard chess = ChessBoard.mpToChess(mp);
+    if (chess.userId == Values.user.id && chess.isWin == true) {
+      Values.win = 1;
+      return;
+    } else if (chess.userId != Values.user.id && chess.isWin == true) {
+      Values.win = 2;
+      return;
+    }
+    Values.chessList[chess.x * 15 + chess.y] = chess;
+    Values.currentChess = chess;
+    if (chess.userId != Values.user.id) {
+      Values.turn = true;
+    }
   }
 
   void getMessage(Map<String, dynamic> mp) {

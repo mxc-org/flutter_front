@@ -6,14 +6,14 @@ import 'package:http/http.dart' as http;
 
 import 'obj.dart';
 
-class newFriendsUI extends StatefulWidget {
-  const newFriendsUI({super.key});
+class NewFriendsUI extends StatefulWidget {
+  const NewFriendsUI({super.key});
 
   @override
-  State<newFriendsUI> createState() => _newFriendsUIState();
+  State<NewFriendsUI> createState() => _NewFriendsUIState();
 }
 
-class _newFriendsUIState extends State<newFriendsUI> {
+class _NewFriendsUIState extends State<NewFriendsUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
