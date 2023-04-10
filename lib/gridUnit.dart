@@ -407,6 +407,18 @@ class _GridUnitState extends State<GridUnit> {
               color: Colors.black,
             ),
           ),
+          //这个ConstrainedBox是为了增加判定范围的，如果没有这个，那么只有点到了棋盘线上才可以被检测到
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: Values.width,
+              minWidth: Values.width,
+              maxHeight: Values.width,
+              maxWidth: Values.width,
+            ),
+            child: Container(
+              color: const Color.fromARGB(0, 255, 255, 255),
+            ),
+          ),
           myContainer,
         ],
       );
@@ -426,6 +438,8 @@ class _GridUnitState extends State<GridUnit> {
   void onTapGridUnit(int x, int y) {
     if (Values.turn == false) {
       showSingleActionDialog("还没轮到你下棋噢");
+    } else if (Values.chessList[x * 15 + y].exist) {
+      showSingleActionDialog("这里已经存在棋子了噢");
     } else {
       showDialog(
         context: context,

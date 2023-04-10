@@ -27,12 +27,10 @@ class _FightUIState extends State<FightUI> {
         if (mounted) {
           setState(() {});
           if (Values.win == 1) {
-            showSingleActionDialog("恭喜你，成功打败了对手");
-            leaveRoom();
+            showSingleActionDialogAndLeave("恭喜你，成功打败了对手");
             timer.cancel();
           } else if (Values.win == 2) {
-            showSingleActionDialog("很遗憾，你失败了，不要灰心噢");
-            leaveRoom();
+            showSingleActionDialogAndLeave("很遗憾，你失败了，不要灰心噢");
             timer.cancel();
           }
         }
@@ -435,7 +433,7 @@ class _FightUIState extends State<FightUI> {
     Navigator.of(context).pop();
   }
 
-  void showSingleActionDialog(String content) {
+  void showSingleActionDialogAndLeave(String content) {
     showDialog(
       context: context,
       builder: (buildContext) => AlertDialog(
@@ -448,6 +446,7 @@ class _FightUIState extends State<FightUI> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
+              leaveRoom();
             },
             child: const Text(
               "确定",
