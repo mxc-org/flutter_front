@@ -17,7 +17,6 @@ class RoomUI extends StatefulWidget {
 }
 
 class _RoomUIState extends State<RoomUI> {
-  List<User> listUser = [];
   late Timer timer;
 
   @override
@@ -183,7 +182,6 @@ class _RoomUIState extends State<RoomUI> {
   }
 
   void getRoomList() async {
-    listUser.clear();
     var response = await http.get(
       Uri.parse("${Values.server}/Room/RoomList"),
     );

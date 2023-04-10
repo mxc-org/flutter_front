@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_front/roomUI.dart';
 import 'package:flutter_front/values.dart';
+import 'package:http/http.dart' as http;
+
+import 'createRoomUI.dart';
+import 'fightUI.dart';
+import 'obj.dart';
 
 class GameUI extends StatefulWidget {
   const GameUI({super.key});
@@ -10,6 +17,7 @@ class GameUI extends StatefulWidget {
 }
 
 class _GameUIState extends State<GameUI> {
+  List<Room> roomList = [];
   @override
   Widget build(BuildContext context) {
     Values.width = MediaQuery.of(context).size.width;
@@ -48,7 +56,9 @@ class _GameUIState extends State<GameUI> {
             ),
             const SizedBox(height: 35),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                onPlayNowPressed();
+              },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.orange),
                 minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
@@ -60,6 +70,83 @@ class _GameUIState extends State<GameUI> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  onPlayNowPressed() async {
+    await getRoomList();
+    //如果没有房间则创建，否则就直接加入房间
+    if (roomList.isEmpty) {
+      Values.turn = true;
+      var response = await http.post(
+        Uri.parse("${Values.server}/Room/CreateRoom"),
+        body: {"userId": Values.user.id.toString()},
+      );
+      String str = utf8.decode(response.bodyBytes);
+      if (str == "") {
+        showSingleActionDialog("创建房间失败");
+        return;
+      }
+      Values.currentRoom = Room.mpToRoom(json.decode(str));
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (buildContext) => const CreateRoomUI(),
+        ),
+      );
+    } else {
+      Values.currentRoom = roomList[0];
+      Values.turn = false;
+      http.post(
+        Uri.parse("${Values.server}/Room/JoinRoom"),
+        body: {
+          "userId": Values.user.id.toString(),
+          "roomId": Values.currentRoom.id.toString(),
+        },
+      );
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (buildContext) => const FightUI()),
+      );
+    }
+  }
+
+  getRoomList() async {
+    roomList.clear();
+    var response = await http.get(
+      Uri.parse("${Values.server}/Room/RoomList"),
+    );
+    String str = utf8.decode(response.bodyBytes);
+    if (str == "") {
+      return;
+    }
+    List<dynamic> ls = json.decode(str);
+    for (Map<String, dynamic> mp in ls) {
+      roomList.add(Room.mpToRoom(mp));
+    }
+  }
+
+  showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
       ),
     );
   }
