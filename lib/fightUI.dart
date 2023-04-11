@@ -282,12 +282,17 @@ class _FightUIState extends State<FightUI> {
                 vertical: 8,
               ),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(32),
+                color: Values.user.id != Values.message[index].fromId
+                    ? Colors.grey[200]
+                    : Color.fromARGB(255, 97, 153, 243),
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: SelectableText(
-                Values.message[index].content.toString(),
-              ),
+              child: SelectableText(Values.message[index].content.toString(),
+                  style: TextStyle(
+                    color: Values.user.id != Values.message[index].fromId
+                        ? Colors.black
+                        : Colors.white,
+                  )),
             ),
           ),
         ],
