@@ -75,7 +75,7 @@ class _GameUIState extends State<GameUI> {
   }
 
   onPlayNowPressed() async {
-    await getRoomList();
+    await getRoomReadyList();
     //如果没有房间则创建，否则就直接加入房间
     if (roomList.isEmpty) {
       Values.turn = true;
@@ -98,21 +98,25 @@ class _GameUIState extends State<GameUI> {
     } else {
       Values.currentRoom = roomList[0];
       Values.turn = false;
-      http.post(
+      var response = await http.post(
         Uri.parse("${Values.server}/Room/JoinRoom"),
         body: {
           "userId": Values.user.id.toString(),
           "roomId": Values.currentRoom.id.toString(),
         },
       );
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (buildContext) => const FightUI()),
-      );
+      if (response.body == "") {
+        showSingleActionDialog("哎呀，加入房间失败，请重试");
+      } else {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (buildContext) => const FightUI()),
+        );
+      }
     }
   }
 
-  getRoomList() async {
+  getRoomReadyList() async {
     roomList.clear();
     var response = await http.get(
       Uri.parse("${Values.server}/Room/RoomList"),
@@ -123,7 +127,10 @@ class _GameUIState extends State<GameUI> {
     }
     List<dynamic> ls = json.decode(str);
     for (Map<String, dynamic> mp in ls) {
-      roomList.add(Room.mpToRoom(mp));
+      Room room = Room.mpToRoom(mp);
+      if (room.status == "WAITING") {
+        roomList.add(room);
+      }
     }
   }
 
