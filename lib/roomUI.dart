@@ -42,14 +42,10 @@ class _RoomUIState extends State<RoomUI> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
-            image: const AssetImage("images/asdfasdf.jpeg"),
+            image: AssetImage("images/asdfasdf.jpeg"),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.75),
-              BlendMode.dstATop,
-            ),
           ),
         ),
         child: Column(
@@ -241,18 +237,23 @@ class _RoomUIState extends State<RoomUI> {
     );
   }
 
-  void onJoinRoomPressed(Room room) {
+  void onJoinRoomPressed(Room room) async {
     Values.currentRoom = room;
     Values.turn = false;
-    http.post(
+    var response = await http.post(
       Uri.parse("${Values.server}/Room/JoinRoom"),
       body: {
         "userId": Values.user.id.toString(),
         "roomId": Values.currentRoom.id.toString(),
       },
     );
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (buildContext) => const FightUI()),
-    );
+    if (response.body == "") {
+      showSingleActionDialog("哎呀，加入房间失败，请重试");
+    } else {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (buildContext) => const FightUI()),
+      );
+    }
   }
 }

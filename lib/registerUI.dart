@@ -165,6 +165,7 @@ class _RegisterUIState extends State<RegisterUI> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
+              Navigator.of(context).pop();
             },
             child: const Text(
               "确定",

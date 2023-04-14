@@ -441,38 +441,40 @@ class _GridUnitState extends State<GridUnit> {
     } else if (Values.chessList[x * 15 + y].exist) {
       showSingleActionDialog("这里已经存在棋子了噢");
     } else {
-      showDialog(
-        context: context,
-        builder: (buildContext) => AlertDialog(
-          title: const Text("提示"),
-          content: const Text(
-            "确定要在此下棋吗",
-            style: TextStyle(fontSize: 16),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                "取消",
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                putPiece(x, y);
-                Values.turn = false;
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                "确定",
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      );
+      putPiece(x, y);
+      Values.turn = false;
+      // showDialog(
+      //   context: context,
+      //   builder: (buildContext) => AlertDialog(
+      //     title: const Text("提示"),
+      //     content: const Text(
+      //       "确定要在此下棋吗",
+      //       style: TextStyle(fontSize: 16),
+      //     ),
+      //     actions: [
+      //       TextButton(
+      //         onPressed: () {
+      //           Navigator.of(context).pop();
+      //         },
+      //         child: const Text(
+      //           "取消",
+      //           style: TextStyle(fontSize: 16),
+      //         ),
+      //       ),
+      //       TextButton(
+      //         onPressed: () {
+      //           putPiece(x, y);
+      //           Values.turn = false;
+      //           Navigator.of(context).pop();
+      //         },
+      //         child: const Text(
+      //           "确定",
+      //           style: TextStyle(fontSize: 16),
+      //         ),
+      //       )
+      //     ],
+      //   ),
+      // );
     }
   }
 
