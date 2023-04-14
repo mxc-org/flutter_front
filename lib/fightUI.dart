@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_front/boardView.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
+import 'package:badges/badges.dart' as badges;
 
 class FightUI extends StatefulWidget {
   const FightUI({super.key});
@@ -184,15 +185,18 @@ class _FightUIState extends State<FightUI> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.orange),
-            minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
-          ),
-          onPressed: startchat,
-          child: const Text(
-            "对话",
-            style: TextStyle(color: Colors.white),
+        badges.Badge(
+          showBadge: Values.notice,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.orange),
+              minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
+            ),
+            onPressed: startchat,
+            child: Text(
+              "对话",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
         const SizedBox(
@@ -352,6 +356,7 @@ class _FightUIState extends State<FightUI> {
 
   void startchat() async {
     setState(() {
+      Values.notice = false;
       if (Values.ischat == false) {
         Values.ischat = true;
       }
@@ -359,6 +364,7 @@ class _FightUIState extends State<FightUI> {
   }
 
   void endchat() async {
+    Values.notice = false;
     setState(() {
       if (Values.ischat == true) {
         Values.ischat = false;

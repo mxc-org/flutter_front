@@ -174,6 +174,9 @@ class MyWebSocket {
         handleRoom(mp["content"]);
       } else if (mp["name"] == "Chat") {
         getMessage(mp["content"]);
+        if (mp["content"]["fromId"] != Values.user.id) {
+          Values.notice = true;
+        }
       } else if (mp["name"] == "ChessBoard") {
         handleChess(mp["content"]);
       }
