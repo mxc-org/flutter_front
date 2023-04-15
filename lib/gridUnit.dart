@@ -38,6 +38,7 @@ class _GridUnitState extends State<GridUnit> {
   Widget build(BuildContext context) {
     late Widget myWidget;
     Widget myContainer = Container();
+    Widget previewContainer = Container();
     //若是先手下子，则为黑子，反之为白子
     ChessBoard oneChess = Values.chessList[widget.x * 15 + widget.y];
     if (oneChess.exist && oneChess.userId == Values.currentRoom.userIdCreator) {
@@ -86,6 +87,35 @@ class _GridUnitState extends State<GridUnit> {
             : Container(),
       );
     }
+    if (widget.x == Values.previewChess.x &&
+        widget.y == Values.previewChess.y &&
+        Values.user.id == Values.currentRoom.userIdCreator) {
+      //此处有虚影，并且是先手，即黑子阴影
+      previewContainer = Container(
+        width: Values.width / 15,
+        height: Values.width / 15,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/black.png"),
+            opacity: 0.5,
+          ),
+        ),
+      );
+    } else if (widget.x == Values.previewChess.x &&
+        widget.y == Values.previewChess.y &&
+        Values.user.id == Values.currentRoom.userIdJoin) {
+      //此处有虚影，并且是后手，即白字阴影
+      previewContainer = Container(
+        width: Values.width / 15,
+        height: Values.width / 15,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/white.png"),
+            opacity: 0.5,
+          ),
+        ),
+      );
+    }
     if (widget.x != 0 && widget.x != 14 && widget.y == 0) {
       myWidget = Stack(
         alignment: Alignment.center,
@@ -116,6 +146,7 @@ class _GridUnitState extends State<GridUnit> {
             ],
           ),
           myContainer,
+          previewContainer,
         ],
       );
     } else if (widget.x == 0 && widget.y != 0 && widget.y != 14) {
@@ -149,6 +180,7 @@ class _GridUnitState extends State<GridUnit> {
             ],
           ),
           myContainer,
+          previewContainer,
         ],
       );
     } else if (widget.x != 0 && widget.x != 14 && widget.y == 14) {
@@ -181,6 +213,7 @@ class _GridUnitState extends State<GridUnit> {
             ],
           ),
           myContainer,
+          previewContainer,
         ],
       );
     } else if (widget.x == 14 && widget.y != 0 && widget.y != 14) {
@@ -214,6 +247,7 @@ class _GridUnitState extends State<GridUnit> {
             ],
           ),
           myContainer,
+          previewContainer,
         ],
       );
     } else if (widget.x == 0 && widget.y == 0) {
@@ -258,6 +292,7 @@ class _GridUnitState extends State<GridUnit> {
               ],
             ),
             myContainer,
+            previewContainer,
           ],
         ),
       );
@@ -299,6 +334,7 @@ class _GridUnitState extends State<GridUnit> {
             ],
           ),
           myContainer,
+          previewContainer,
         ],
       );
     } else if (widget.x == 0 && widget.y == 14) {
@@ -339,6 +375,7 @@ class _GridUnitState extends State<GridUnit> {
             ],
           ),
           myContainer,
+          previewContainer,
         ],
       );
     } else if (widget.x == 14 && widget.y == 14) {
@@ -378,7 +415,8 @@ class _GridUnitState extends State<GridUnit> {
               ),
             ],
           ),
-          myContainer
+          myContainer,
+          previewContainer,
         ],
       );
     } else {
@@ -420,6 +458,7 @@ class _GridUnitState extends State<GridUnit> {
             ),
           ),
           myContainer,
+          previewContainer,
         ],
       );
     }
@@ -440,41 +479,16 @@ class _GridUnitState extends State<GridUnit> {
       showSingleActionDialog("还没轮到你下棋噢");
     } else if (Values.chessList[x * 15 + y].exist) {
       showSingleActionDialog("这里已经存在棋子了噢");
-    } else {
+    } else if (x == Values.previewChess.x && y == Values.previewChess.y) {
+      // 第二次点击相同的位置，则落子
       putPiece(x, y);
       Values.turn = false;
-      // showDialog(
-      //   context: context,
-      //   builder: (buildContext) => AlertDialog(
-      //     title: const Text("提示"),
-      //     content: const Text(
-      //       "确定要在此下棋吗",
-      //       style: TextStyle(fontSize: 16),
-      //     ),
-      //     actions: [
-      //       TextButton(
-      //         onPressed: () {
-      //           Navigator.of(context).pop();
-      //         },
-      //         child: const Text(
-      //           "取消",
-      //           style: TextStyle(fontSize: 16),
-      //         ),
-      //       ),
-      //       TextButton(
-      //         onPressed: () {
-      //           putPiece(x, y);
-      //           Values.turn = false;
-      //           Navigator.of(context).pop();
-      //         },
-      //         child: const Text(
-      //           "确定",
-      //           style: TextStyle(fontSize: 16),
-      //         ),
-      //       )
-      //     ],
-      //   ),
-      // );
+      Values.previewChess.x = -1;
+      Values.previewChess.y = -1;
+    } else {
+      // 第一次点击，则落下虚影
+      Values.previewChess.x = x;
+      Values.previewChess.y = y;
     }
   }
 

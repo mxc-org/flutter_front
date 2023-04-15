@@ -193,7 +193,7 @@ class _FightUIState extends State<FightUI> {
               minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
             ),
             onPressed: startchat,
-            child: Text(
+            child: const Text(
               "对话",
               style: TextStyle(color: Colors.white),
             ),
@@ -288,7 +288,7 @@ class _FightUIState extends State<FightUI> {
               decoration: BoxDecoration(
                 color: Values.user.id != Values.message[index].fromId
                     ? Colors.grey[200]
-                    : Color.fromARGB(255, 97, 153, 243),
+                    : const Color.fromARGB(255, 97, 153, 243),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: SelectableText(Values.message[index].content.toString(),
