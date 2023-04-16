@@ -167,20 +167,22 @@ class MyWebSocket {
     channel = WebSocketChannel.connect(
       Uri.parse("${Values.wsUrl}/play?id=${Values.user.id}"),
     );
-    channel.stream.listen((event) {
-      print("收到了websocket信息: $event");
-      Map<String, dynamic> mp = json.decode(event);
-      if (mp["name"] == "Room") {
-        handleRoom(mp["content"]);
-      } else if (mp["name"] == "Chat") {
-        getMessage(mp["content"]);
-        if (mp["content"]["fromId"] != Values.user.id) {
-          Values.notice = true;
+    channel.stream.listen(
+      (event) {
+        print("收到了websocket信息: $event");
+        Map<String, dynamic> mp = json.decode(event);
+        if (mp["name"] == "Room") {
+          handleRoom(mp["content"]);
+        } else if (mp["name"] == "Chat") {
+          getMessage(mp["content"]);
+          if (mp["content"]["fromId"] != Values.user.id) {
+            Values.notice = true;
+          }
+        } else if (mp["name"] == "ChessBoard") {
+          handleChess(mp["content"]);
         }
-      } else if (mp["name"] == "ChessBoard") {
-        handleChess(mp["content"]);
-      }
-    });
+      },
+    );
   }
 
   void close() {
@@ -188,6 +190,7 @@ class MyWebSocket {
   }
 
   handleChess(Map<String, dynamic> mp) {
+    Values.remainTime = 60;
     ChessBoard chess = ChessBoard.mpToChess(mp);
     if (chess.userId == Values.user.id && chess.isWin == true) {
       Values.win = 1;

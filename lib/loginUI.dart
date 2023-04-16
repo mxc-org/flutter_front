@@ -129,6 +129,7 @@ class _LoginUIState extends State<LoginUI> {
       }
       Values.user = User.jsonToUser(response);
       Values.myWebSocket.connect();
+      Values.connectStatus = true;
       Values.login = true;
       setState(() {});
     });

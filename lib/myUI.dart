@@ -17,6 +17,12 @@ class MyUI extends StatefulWidget {
 
 class _MyUIState extends State<MyUI> {
   @override
+  void initState() {
+    super.initState();
+    getUserInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -101,13 +107,16 @@ class _MyUIState extends State<MyUI> {
         //个人头像和昵称展示
         Row(
           children: [
+            Expanded(
+              child: Container(),
+            ),
             //头像
             GestureDetector(
               onTap: () {
                 onModifyAvatar();
               },
               child: Container(
-                margin: const EdgeInsets.only(left: 20, top: 40),
+                margin: const EdgeInsets.only( top: 40),
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
@@ -134,7 +143,11 @@ class _MyUIState extends State<MyUI> {
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
-            )
+            ),
+            Expanded(
+              flex: 6,
+              child: Container(),
+            ),
           ],
         ),
         const SizedBox(
@@ -167,6 +180,15 @@ class _MyUIState extends State<MyUI> {
         ],
       ),
     );
+  }
+
+  void getUserInfo() async {
+    var response = await http.get(
+      Uri.parse("${Values.server}/User/FindUserById?id=${Values.user.id}"),
+    );
+    String str = utf8.decode(response.bodyBytes);
+    Values.user = User.jsonToUser(str);
+    setState(() {});
   }
 
   void onModifyUsername() {
