@@ -250,6 +250,14 @@ class _FightUIState extends State<FightUI> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         badges.Badge(
+          badgeContent: Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: Colors.red,
+              shape: BoxShape.circle,
+            ),
+          ),
           showBadge: Values.notice,
           child: ElevatedButton(
             style: ButtonStyle(
