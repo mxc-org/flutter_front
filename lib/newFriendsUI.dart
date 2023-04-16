@@ -19,7 +19,7 @@ class _NewFriendsUIState extends State<NewFriendsUI> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("新的朋友"),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(127, 255, 153, 0),
       ),
       body: SingleChildScrollView(
         child: myListView(),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_front/boardView.dart';
+import 'package:flutter_front/remainTimeWidget.dart';
 import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
 import 'package:badges/badges.dart' as badges;
@@ -23,6 +24,7 @@ class _FightUIState extends State<FightUI> {
   @override
   void initState() {
     super.initState();
+    Values.remainTime = 90;
     Values.win = 0;
     Values.currentChess = ChessBoard(0, 0, -1, -1, false, false);
     timer = Timer.periodic(
@@ -41,6 +43,7 @@ class _FightUIState extends State<FightUI> {
             showSingleActionDialogAndLeave("糟糕，你断线了，请重新登录");
             timer.cancel();
           }
+          Values.remainTime--;
         }
       },
     );
@@ -48,8 +51,8 @@ class _FightUIState extends State<FightUI> {
 
   @override
   void dispose() {
-    super.dispose();
     timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -73,7 +76,7 @@ class _FightUIState extends State<FightUI> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  height: 120,
+                  height: 150,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("images/pk.jpg"),
@@ -89,7 +92,7 @@ class _FightUIState extends State<FightUI> {
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.4),
                     ),
-                    child: myRow(),
+                    child: myColumn(),
                   ),
                 ),
                 const Expanded(flex: 1, child: Text("")),
@@ -116,6 +119,60 @@ class _FightUIState extends State<FightUI> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget myColumn() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        myRow(),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Text(
+                    "对局数：${Values.currentRoom.userCreator.totalMatches}场",
+                    style: TextStyle(
+                      backgroundColor: Colors.white.withOpacity(0.5),
+                    ),
+                  ),
+                  Text(
+                    "胜率：${(Values.currentRoom.userCreator.winPercentage * 100).toStringAsFixed(2)} %",
+                    style: TextStyle(
+                      backgroundColor: Colors.white.withOpacity(0.5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Expanded(
+              child: RemainTimeWidget(),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Text(
+                    Values.currentRoom.userJoin == null
+                        ? ""
+                        : "对局数：${Values.currentRoom.userJoin!.totalMatches}场",
+                    style: TextStyle(
+                      backgroundColor: Colors.white.withOpacity(0.5),
+                    ),
+                  ),
+                  Text(
+                    "胜率：${(Values.currentRoom.userJoin!.winPercentage * 100).toStringAsFixed(2)} %",
+                    style: TextStyle(
+                      backgroundColor: Colors.white.withOpacity(0.5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
+      ],
     );
   }
 
@@ -157,7 +214,7 @@ class _FightUIState extends State<FightUI> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 30,
-              color: Colors.redAccent,
+              color: Colors.red,
             ),
           ),
         ),
