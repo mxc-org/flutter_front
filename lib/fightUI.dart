@@ -6,6 +6,8 @@ import 'package:flutter_front/values.dart';
 import 'package:http/http.dart' as http;
 import 'package:badges/badges.dart' as badges;
 
+import 'obj.dart';
+
 class FightUI extends StatefulWidget {
   const FightUI({super.key});
 
@@ -22,6 +24,7 @@ class _FightUIState extends State<FightUI> {
   void initState() {
     super.initState();
     Values.win = 0;
+    Values.currentChess = ChessBoard(0, 0, -1, -1, false, false);
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
@@ -32,6 +35,10 @@ class _FightUIState extends State<FightUI> {
             timer.cancel();
           } else if (Values.win == 2) {
             showSingleActionDialogAndLeave("很遗憾，你失败了，不要灰心噢");
+            timer.cancel();
+          }
+          if (Values.connectStatus == false) {
+            showSingleActionDialogAndLeave("糟糕，你断线了，请重新登录");
             timer.cancel();
           }
         }

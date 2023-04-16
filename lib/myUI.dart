@@ -17,6 +17,12 @@ class MyUI extends StatefulWidget {
 
 class _MyUIState extends State<MyUI> {
   @override
+  void initState() {
+    super.initState();
+    getUserInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -167,6 +173,15 @@ class _MyUIState extends State<MyUI> {
         ],
       ),
     );
+  }
+
+  void getUserInfo() async {
+    var response = await http.get(
+      Uri.parse("${Values.server}/User/FindUserById?id=${Values.user.id}"),
+    );
+    String str = utf8.decode(response.bodyBytes);
+    Values.user = User.jsonToUser(str);
+    setState(() {});
   }
 
   void onModifyUsername() {
