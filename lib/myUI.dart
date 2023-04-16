@@ -107,13 +107,16 @@ class _MyUIState extends State<MyUI> {
         //个人头像和昵称展示
         Row(
           children: [
+            Expanded(
+              child: Container(),
+            ),
             //头像
             GestureDetector(
               onTap: () {
                 onModifyAvatar();
               },
               child: Container(
-                margin: const EdgeInsets.only(left: 20, top: 40),
+                margin: const EdgeInsets.only( top: 40),
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
@@ -140,7 +143,11 @@ class _MyUIState extends State<MyUI> {
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
-            )
+            ),
+            Expanded(
+              flex: 6,
+              child: Container(),
+            ),
           ],
         ),
         const SizedBox(

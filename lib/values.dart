@@ -23,5 +23,5 @@ class Values {
   static int win = 0; //0代表正在对局，1代表自己胜利，2代表对方胜利
   static bool notice = false;
   static bool connectStatus = true;
-  static int remainTime = 90;
+  static int remainTime = 60;
 }

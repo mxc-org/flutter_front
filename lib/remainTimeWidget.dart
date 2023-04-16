@@ -37,7 +37,6 @@ class _RemainTimeWidgetState extends State<RemainTimeWidget> {
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 24,
-        backgroundColor: Colors.white.withOpacity(0.5),
       ),
     );
   }

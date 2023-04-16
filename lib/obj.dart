@@ -190,7 +190,7 @@ class MyWebSocket {
   }
 
   handleChess(Map<String, dynamic> mp) {
-    Values.remainTime = 90;
+    Values.remainTime = 60;
     ChessBoard chess = ChessBoard.mpToChess(mp);
     if (chess.userId == Values.user.id && chess.isWin == true) {
       Values.win = 1;
