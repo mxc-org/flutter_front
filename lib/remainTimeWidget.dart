@@ -32,13 +32,20 @@ class _RemainTimeWidgetState extends State<RemainTimeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      "${Values.remainTime}秒",
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 24,
-        backgroundColor: Colors.white.withOpacity(0.5),
-      ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Text(
+          "${Values.remainTime}",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        CircularProgressIndicator(
+          value: 1.0 - Values.remainTime / 90,
+        )
+      ],
     );
   }
 }

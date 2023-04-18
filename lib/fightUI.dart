@@ -24,7 +24,7 @@ class _FightUIState extends State<FightUI> {
   @override
   void initState() {
     super.initState();
-    Values.remainTime = 90;
+    Values.remainTime = 60;
     Values.win = 0;
     Values.currentChess = ChessBoard(0, 0, -1, -1, false, false);
     timer = Timer.periodic(
