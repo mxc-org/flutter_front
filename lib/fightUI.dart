@@ -44,7 +44,7 @@ class _FightUIState extends State<FightUI> {
             timer.cancel();
           }
           Values.remainTime--;
-          if (Values.remainTime <= 0) {
+          if (Values.remainTime <= 0 && Values.turn == true) {
             showSingleActionDialogAndLeave("抱歉，你已超时");
             timer.cancel();
           }

@@ -35,7 +35,7 @@ class _RemainTimeWidgetState extends State<RemainTimeWidget> {
     return Text(
       "${Values.remainTime}秒",
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 24,
       ),
     );
