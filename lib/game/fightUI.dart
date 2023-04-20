@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/boardView.dart';
-import 'package:flutter_front/remainTimeWidget.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/game/boardView.dart';
+import 'package:flutter_front/game/remainTimeWidget.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:http/http.dart' as http;
 import 'package:badges/badges.dart' as badges;
 
-import 'obj.dart';
+import '../util/obj.dart';
 
 class FightUI extends StatefulWidget {
   const FightUI({super.key});

@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/friendsUI.dart';
-import 'package:flutter_front/gameUI.dart';
-import 'package:flutter_front/loginUI.dart';
-import 'package:flutter_front/myUI.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/friend/friendsUI.dart';
+import 'package:flutter_front/game/gameUI.dart';
+import 'package:flutter_front/login_register/loginUI.dart';
+import 'package:flutter_front/my/myUI.dart';
+import 'package:flutter_front/util/values.dart';
 
 void main() {
   runApp(const MyApp());

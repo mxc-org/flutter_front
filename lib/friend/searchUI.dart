@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/util/values.dart';
 
 import 'package:http/http.dart' as http;
-import 'obj.dart';
+import '../util/obj.dart';
 
 class SearchUI extends StatefulWidget {
   const SearchUI({super.key});

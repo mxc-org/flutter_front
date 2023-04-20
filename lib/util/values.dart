@@ -1,5 +1,5 @@
-import 'package:flutter_front/obj.dart';
-import 'package:flutter_front/AudioPlay.dart';
+import 'package:flutter_front/util/obj.dart';
+import 'package:flutter_front/util/audioPlay.dart';
 
 class Values {
   static bool login = false;

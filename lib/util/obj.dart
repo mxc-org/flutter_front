@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class User {
@@ -105,9 +105,38 @@ class Room {
 
 class Match {
   int id;
+  int winnerId;
+  int loserId;
+  String history;
+  String date;
+
+  Match(
+    this.id,
+    this.winnerId,
+    this.loserId,
+    this.history,
+    this.date,
+  );
+}
+
+class Invitation {
+  int id;
   int roomId;
-  String info;
-  Match(this.id, this.roomId, this.info);
+  int inviterId;
+  int inviteeId;
+  bool isValid;
+  bool isAccepted;
+  User Inviter;
+
+  Invitation(
+    this.id,
+    this.roomId,
+    this.inviterId,
+    this.inviteeId,
+    this.isValid,
+    this.isAccepted,
+    this.Inviter,
+  );
 }
 
 class ChessBoard {

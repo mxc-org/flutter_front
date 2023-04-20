@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/newFriendsUI.dart';
-import 'package:flutter_front/searchUI.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/friend/newFriendsUI.dart';
+import 'package:flutter_front/friend/searchUI.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:http/http.dart' as http;
 
-import 'obj.dart';
+import '../util/obj.dart';
 
 class FriendsUI extends StatefulWidget {
   const FriendsUI({super.key});
