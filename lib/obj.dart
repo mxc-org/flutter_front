@@ -189,7 +189,7 @@ class MyWebSocket {
     channel.sink.close();
   }
 
-  handleChess(Map<String, dynamic> mp) {
+  handleChess(Map<String, dynamic> mp) async {
     Values.remainTime = 60;
     ChessBoard chess = ChessBoard.mpToChess(mp);
     if (chess.userId == Values.user.id && chess.isWin == true) {
@@ -199,6 +199,7 @@ class MyWebSocket {
       Values.win = 2;
       return;
     }
+    Values.audioPlay.play("audio/chess.mp3");
     Values.chessList[chess.x * 15 + chess.y] = chess;
     Values.currentChess = chess;
     if (chess.userId != Values.user.id) {

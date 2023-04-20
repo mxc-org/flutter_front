@@ -38,6 +38,10 @@ dependencies:
   http: ^0.13.5
   file_picker: ^5.2.6
   web_socket_channel: ^2.3.0
+  audioplayers: ^4.0.1
+  # flutter_sound: ^9.2.13
+  # just_audio: ^0.9.32
+  # just_audio_mpv: ^0.1.6
   
 
 
@@ -79,6 +83,7 @@ flutter:
     - images/white.png
     - images/black.png
     - images/flag.png
+    - assets/audio/chess.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
