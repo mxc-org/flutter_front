@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/my/historyUI.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 
-import 'obj.dart';
+import '../util/obj.dart';
 
 class MyUI extends StatefulWidget {
   const MyUI({super.key});
@@ -80,6 +81,21 @@ class _MyUIState extends State<MyUI> {
             ),
           ),
         ),
+        Container(
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
+          child: ElevatedButton(
+            style: const ButtonStyle(
+              minimumSize: MaterialStatePropertyAll(
+                Size(double.infinity, 40),
+              ),
+            ),
+            onPressed: onHistoryPressed,
+            child: const Text(
+              "历史记录",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
         const Expanded(child: Text("")),
         Container(
           margin: const EdgeInsets.only(bottom: 20),
@@ -107,13 +123,16 @@ class _MyUIState extends State<MyUI> {
         //个人头像和昵称展示
         Row(
           children: [
+            Expanded(
+              child: Container(),
+            ),
             //头像
             GestureDetector(
               onTap: () {
                 onModifyAvatar();
               },
               child: Container(
-                margin: const EdgeInsets.only(left: 20, top: 40),
+                margin: const EdgeInsets.only(top: 40),
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
@@ -140,7 +159,11 @@ class _MyUIState extends State<MyUI> {
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
-            )
+            ),
+            Expanded(
+              flex: 6,
+              child: Container(),
+            ),
           ],
         ),
         const SizedBox(
@@ -381,6 +404,14 @@ class _MyUIState extends State<MyUI> {
     } else {
       showSingleActionDialog("修改失败");
     }
+  }
+
+  void onHistoryPressed() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (buildContext) => const HistoryUI(),
+      ),
+    );
   }
 
   Future<bool> modifyPassword(String password) async {

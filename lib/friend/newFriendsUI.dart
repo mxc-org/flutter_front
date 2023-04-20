@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:http/http.dart' as http;
 
-import 'obj.dart';
+import '../util/obj.dart';
 
 class NewFriendsUI extends StatefulWidget {
   const NewFriendsUI({super.key});
@@ -22,7 +22,10 @@ class _NewFriendsUIState extends State<NewFriendsUI> {
         backgroundColor: const Color.fromARGB(127, 255, 153, 0),
       ),
       body: SingleChildScrollView(
-        child: myListView(),
+        child: Container(
+          margin: const EdgeInsets.only(top: 10),
+          child: myListView(),
+        ),
       ),
     );
   }

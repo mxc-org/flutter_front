@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/newFriendsUI.dart';
-import 'package:flutter_front/searchUI.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/friend/invitedUI.dart';
+import 'package:flutter_front/friend/newFriendsUI.dart';
+import 'package:flutter_front/friend/searchUI.dart';
+import 'package:flutter_front/game/createRoomUI.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:http/http.dart' as http;
 
-import 'obj.dart';
+import '../util/obj.dart';
 
 class FriendsUI extends StatefulWidget {
   const FriendsUI({super.key});
@@ -62,6 +64,21 @@ class _FriendsUIState extends State<FriendsUI> {
                 );
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.games),
+              title: const Text(
+                "对战请求",
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              trailing: const Icon(Icons.arrow_forward),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (buildContext) => const InvitedUI(),
+                  ),
+                );
+              },
+            ),
             myListView()
           ],
         ),
@@ -91,7 +108,9 @@ class _FriendsUIState extends State<FriendsUI> {
             ),
           ),
           trailing: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              onInvitePressed(Values.friendList[i].id.toString());
+            },
             child: const Text(
               "对战",
               style: TextStyle(fontSize: 16),
@@ -137,5 +156,59 @@ class _FriendsUIState extends State<FriendsUI> {
       Values.newFriendList.add(Friend.mpToFriend(mp));
     }
     setState(() {});
+  }
+
+  void onInvitePressed(String inviteeId) async {
+    Values.turn = true;
+    var response = await http.post(
+      Uri.parse("${Values.server}/Room/CreateRoom"),
+      body: {"userId": Values.user.id.toString()},
+    );
+    String str = utf8.decode(response.bodyBytes);
+    if (str == "") {
+      showSingleActionDialog("创建房间失败");
+      return;
+    }
+    Values.currentRoom = Room.mpToRoom(json.decode(str));
+    http.post(
+      Uri.parse(
+        "${Values.server}/Invitation/InviteToBattle",
+      ),
+      body: {
+        "userId": Values.user.id.toString(),
+        "inviteeId": inviteeId,
+        "roomId": Values.currentRoom.id.toString(),
+      },
+    );
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (buildContext) => const CreateRoomUI(),
+      ),
+    );
+  }
+
+  showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/fightUI.dart';
+import 'package:flutter_front/game/fightUI.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/util/values.dart';
 
 class CreateRoomUI extends StatefulWidget {
   const CreateRoomUI({super.key});

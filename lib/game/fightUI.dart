@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/boardView.dart';
-import 'package:flutter_front/remainTimeWidget.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/game/boardView.dart';
+import 'package:flutter_front/game/remainTimeWidget.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:http/http.dart' as http;
 import 'package:badges/badges.dart' as badges;
 
-import 'obj.dart';
+import '../util/obj.dart';
 
 class FightUI extends StatefulWidget {
   const FightUI({super.key});
@@ -44,6 +44,10 @@ class _FightUIState extends State<FightUI> {
             timer.cancel();
           }
           Values.remainTime--;
+          if (Values.remainTime <= 0 && Values.turn == true) {
+            showSingleActionDialogAndLeave("抱歉，你已超时");
+            timer.cancel();
+          }
         }
       },
     );
@@ -76,12 +80,9 @@ class _FightUIState extends State<FightUI> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  height: 150,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("images/pk.jpg"),
-                      fit: BoxFit.cover,
-                    ),
+                  height: 170,
+                  decoration: BoxDecoration(
+                    color: Colors.orangeAccent.withOpacity(0.5),
                   ),
                   child: Container(
                     padding: const EdgeInsets.only(
@@ -90,7 +91,7 @@ class _FightUIState extends State<FightUI> {
                       right: 20,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.4),
+                      color: Colors.white.withOpacity(0.5),
                     ),
                     child: myColumn(),
                   ),
@@ -127,6 +128,9 @@ class _FightUIState extends State<FightUI> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         myRow(),
+        const SizedBox(
+          height: 10,
+        ),
         Row(
           children: [
             Expanded(
@@ -134,15 +138,9 @@ class _FightUIState extends State<FightUI> {
                 children: [
                   Text(
                     "对局数：${Values.currentRoom.userCreator.totalMatches}场",
-                    style: TextStyle(
-                      backgroundColor: Colors.white.withOpacity(0.5),
-                    ),
                   ),
                   Text(
                     "胜率：${(Values.currentRoom.userCreator.winPercentage * 100).toStringAsFixed(2)} %",
-                    style: TextStyle(
-                      backgroundColor: Colors.white.withOpacity(0.5),
-                    ),
                   ),
                 ],
               ),
@@ -157,15 +155,9 @@ class _FightUIState extends State<FightUI> {
                     Values.currentRoom.userJoin == null
                         ? ""
                         : "对局数：${Values.currentRoom.userJoin!.totalMatches}场",
-                    style: TextStyle(
-                      backgroundColor: Colors.white.withOpacity(0.5),
-                    ),
                   ),
                   Text(
                     "胜率：${(Values.currentRoom.userJoin!.winPercentage * 100).toStringAsFixed(2)} %",
-                    style: TextStyle(
-                      backgroundColor: Colors.white.withOpacity(0.5),
-                    ),
                   ),
                 ],
               ),
@@ -188,24 +180,31 @@ class _FightUIState extends State<FightUI> {
     }
     return Row(
       children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40),
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                Values.avatarUrl + Values.currentRoom.userCreator.avatarName,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
         Expanded(
-          child: Text(
-            Values.currentRoom.userCreator.username,
-            style: const TextStyle(fontSize: 20),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      Values.avatarUrl +
+                          Values.currentRoom.userCreator.avatarName,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                Values.currentRoom.userCreator.username,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ],
           ),
         ),
         const Expanded(
@@ -219,25 +218,30 @@ class _FightUIState extends State<FightUI> {
           ),
         ),
         Expanded(
-          child: Text(
-            //判空
-            Values.currentRoom.userIdJoin != 0
-                ? Values.currentRoom.userJoin!.username
-                : "",
-            style: const TextStyle(fontSize: 20),
-            textAlign: TextAlign.end,
-          ),
-        ),
-        const SizedBox(width: 10),
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40),
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: myImage,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                //判空
+                Values.currentRoom.userIdJoin != 0
+                    ? Values.currentRoom.userJoin!.username
+                    : "",
+                style: const TextStyle(fontSize: 20),
+                textAlign: TextAlign.end,
+              ),
+              const SizedBox(width: 10),
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: myImage,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -488,8 +492,7 @@ class _FightUIState extends State<FightUI> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
-              leaveRoom();
+              retrunRoomConfirm();
             },
             child: const Text(
               "确定",
@@ -501,6 +504,15 @@ class _FightUIState extends State<FightUI> {
     );
   }
 
+  void retrunRoomConfirm() {
+    Navigator.of(context).pop();
+    leaveRoom();
+    if (Values.currentRoom.userIdCreator == Values.user.id) {
+      Navigator.of(context).pop();
+    }
+    Navigator.of(context).pop();
+  }
+
   void leaveRoom() {
     Values.message.clear();
     http.post(
@@ -510,13 +522,10 @@ class _FightUIState extends State<FightUI> {
         "roomId": Values.currentRoom.id.toString(),
       },
     );
-    if (Values.currentRoom.userIdCreator == Values.user.id) {
-      Navigator.of(context).pop();
-    }
-    Navigator.of(context).pop();
   }
 
   void showSingleActionDialogAndLeave(String content) {
+    leaveRoom();
     showDialog(
       context: context,
       builder: (buildContext) => AlertDialog(
@@ -529,7 +538,6 @@ class _FightUIState extends State<FightUI> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              leaveRoom();
             },
             child: const Text(
               "确定",

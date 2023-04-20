@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/util/values.dart';
 
 class RemainTimeWidget extends StatefulWidget {
   const RemainTimeWidget({super.key});
