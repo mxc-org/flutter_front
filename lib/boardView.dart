@@ -15,6 +15,7 @@ class BoardView extends StatefulWidget {
 class _BoardViewState extends State<BoardView> {
   List<Widget> gridList = [];
   late Timer timer;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   initState() {
@@ -25,6 +26,7 @@ class _BoardViewState extends State<BoardView> {
       (timer) {
         if (mounted) {
           initView();
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
           setState(() {});
         }
       },
@@ -70,6 +72,7 @@ class _BoardViewState extends State<BoardView> {
         shrinkWrap: true,
         crossAxisCount: 15,
         scrollDirection: Axis.vertical,
+        controller: _scrollController,
         children: gridList,
       ),
     );
