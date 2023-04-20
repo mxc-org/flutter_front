@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_front/my/historyUI.dart';
 import 'package:flutter_front/util/values.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
@@ -404,9 +405,13 @@ class _MyUIState extends State<MyUI> {
       showSingleActionDialog("修改失败");
     }
   }
-  
-  void onHistoryPressed(){
 
+  void onHistoryPressed() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (buildContext) => const HistoryUI(),
+      ),
+    );
   }
 
   Future<bool> modifyPassword(String password) async {

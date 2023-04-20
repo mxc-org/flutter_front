@@ -1,24 +1,32 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/util/values.dart';
+import 'package:flutter_front/game/fightUI.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_front/util/obj.dart';
+import 'package:flutter_front/util/values.dart';
 
-import '../util/obj.dart';
-
-class NewFriendsUI extends StatefulWidget {
-  const NewFriendsUI({super.key});
+class InvitedUI extends StatefulWidget {
+  const InvitedUI({super.key});
 
   @override
-  State<NewFriendsUI> createState() => _NewFriendsUIState();
+  State<InvitedUI> createState() => _InvitedUIState();
 }
 
-class _NewFriendsUIState extends State<NewFriendsUI> {
+class _InvitedUIState extends State<InvitedUI> {
+  List<Invitation> invitationList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getInvitaionList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("新的朋友"),
+        title: const Text("对战请求"),
         backgroundColor: const Color.fromARGB(127, 255, 153, 0),
       ),
       body: SingleChildScrollView(
@@ -34,10 +42,10 @@ class _NewFriendsUIState extends State<NewFriendsUI> {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: Values.newFriendList.length,
+      itemCount: invitationList.length,
       itemBuilder: (context, i) {
         return ListTile(
-          title: Text(Values.newFriendList[i].userFrom.username),
+          title: Text(invitationList[i].Inviter.username),
           leading: Container(
             margin: const EdgeInsets.only(left: 10),
             width: 40,
@@ -47,14 +55,14 @@ class _NewFriendsUIState extends State<NewFriendsUI> {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  "${Values.avatarUrl}${Values.newFriendList[i].userFrom.avatarName}",
+                  "${Values.avatarUrl}${invitationList[i].Inviter.avatarName}",
                 ),
               ),
             ),
           ),
           trailing: TextButton(
             onPressed: () {
-              onAcceptPressed(Values.newFriendList[i].id);
+              onAcceptPressed(invitationList[i]);
             },
             child: const Text(
               "接受",
@@ -66,49 +74,39 @@ class _NewFriendsUIState extends State<NewFriendsUI> {
     );
   }
 
-  void onAcceptPressed(int friendId) async {
-    showSingleActionDialog("已和对方成为好友，快去玩耍吧");
-    await http.post(
-      Uri.parse("${Values.server}/Friend/Accept"),
-      body: {"friendId": friendId.toString()},
+  void onAcceptPressed(Invitation invitation) async {
+    var response = await http.post(
+      Uri.parse("${Values.server}/Invitation/HandleInvitation"),
+      body: {
+        "invitationId": invitation.id.toString(),
+        "isAccept": true.toString(),
+      },
     );
-    getFriends(Values.user.id);
-    getNewFriends(Values.user.id);
+    String str = utf8.decode(response.bodyBytes);
+    Values.currentRoom = Room.mpToRoom(jsonDecode(str));
+    Values.turn = false;
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (buildContext) => const FightUI(),
+      ),
+    );
   }
 
-  void getNewFriends(int id) async {
+  void getInvitaionList() async {
+    invitationList.clear();
     var response = await http.get(
-      Uri.parse("${Values.server}/Friend/RequestList?userId=$id"),
+      Uri.parse(
+        "${Values.server}/Invitation/InvitationList?userId=${Values.user.id}",
+      ),
     );
-    Values.newFriendList.clear();
     String str = utf8.decode(response.bodyBytes);
-    if (str == "") {
-      setState(() {});
-      return;
-    }
     List<dynamic> ls = json.decode(str);
-    for (Map<String, dynamic> mp in ls) {
-      if (mp["status"] == true) {
-        continue;
+    for (int i = 0; i < ls.length; i++) {
+      Invitation invitation = Invitation.mpToInvitation(ls[i]);
+      if (invitation.isValid) {
+        invitationList.add(invitation);
       }
-      Values.newFriendList.add(Friend.mpToFriend(mp));
-    }
-    setState(() {});
-  }
-
-  void getFriends(int id) async {
-    var response = await http.get(
-      Uri.parse("${Values.server}/Friend/FriendList?userId=$id"),
-    );
-    Values.friendList.clear();
-    String str = utf8.decode(response.bodyBytes);
-    if (str == "") {
-      setState(() {});
-      return;
-    }
-    List<dynamic> ls = json.decode(str);
-    for (Map<String, dynamic> mp in ls) {
-      Values.friendList.add(User.mpToUser(mp));
     }
     setState(() {});
   }

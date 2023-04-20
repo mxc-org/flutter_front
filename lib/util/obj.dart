@@ -107,7 +107,7 @@ class Match {
   int id;
   int winnerId;
   int loserId;
-  String history;
+  List<ChessBoard> history;
   String date;
 
   Match(
@@ -117,6 +117,28 @@ class Match {
     this.history,
     this.date,
   );
+
+  static Match mpToMatch(Map<String, dynamic> mp) {
+    String strHistory = mp["history"];
+    List<dynamic> ls = jsonDecode(strHistory);
+    List<ChessBoard> history = [];
+    for (int i = 0; i < ls.length; i++) {
+      history.add(ChessBoard.mpToChess(ls[i]));
+    }
+    Match match = Match(
+      mp["id"],
+      mp["winnerId"],
+      mp["loserId"],
+      history,
+      mp["date"],
+    );
+    return match;
+  }
+
+  static Match jsonToMatch(String str) {
+    Map<String, dynamic> mp = jsonDecode(str);
+    return mpToMatch(mp);
+  }
 }
 
 class Invitation {
@@ -137,6 +159,20 @@ class Invitation {
     this.isAccepted,
     this.Inviter,
   );
+
+  static Invitation mpToInvitation(Map<String, dynamic> mp) {
+    Invitation invitaion = Invitation(
+      mp["id"],
+      mp["roomId"],
+      mp["inviterId"],
+      mp["inviteeId"],
+      mp["isValid"],
+      // mp["isAccepted"],
+      true,
+      User.mpToUser(mp["inviter"]),
+    );
+    return invitaion;
+  }
 }
 
 class ChessBoard {
@@ -154,7 +190,7 @@ class ChessBoard {
     this.isWin,
     this.exist,
   );
-  static mpToChess(Map<String, dynamic> mp) {
+  static ChessBoard mpToChess(Map<String, dynamic> mp) {
     ChessBoard chess = ChessBoard(
       mp["userId"],
       mp["roomId"],

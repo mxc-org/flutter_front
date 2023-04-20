@@ -144,7 +144,6 @@ class _SearchUIState extends State<SearchUI> {
       listUser.add(User.mpToUser(mp));
       listUser[listUser.length - 1].isFriend = isFriend;
     }
-
     setState(() {});
   }
 
