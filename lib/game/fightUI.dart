@@ -18,8 +18,10 @@ class FightUI extends StatefulWidget {
 
 class _FightUIState extends State<FightUI> {
   final TextEditingController _controller = TextEditingController();
+  final scrollController = ScrollController();
   late Timer timer;
   List<Widget> gridList = [];
+  int channum = 0;
 
   @override
   void initState() {
@@ -64,6 +66,10 @@ class _FightUIState extends State<FightUI> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     Values.width = MediaQuery.of(context).size.width;
+    if (channum < Values.message.length) {
+      scrollToBottom();
+      channum = Values.message.length;
+    }
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -255,14 +261,6 @@ class _FightUIState extends State<FightUI> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         badges.Badge(
-          badgeContent: Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              shape: BoxShape.circle,
-            ),
-          ),
           showBadge: Values.notice,
           child: ElevatedButton(
             style: ButtonStyle(
@@ -304,6 +302,7 @@ class _FightUIState extends State<FightUI> {
         Expanded(
           flex: 2,
           child: SingleChildScrollView(
+            controller: scrollController,
             child: chatView(),
           ),
         ),
@@ -368,12 +367,14 @@ class _FightUIState extends State<FightUI> {
                     : const Color.fromARGB(255, 97, 153, 243),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: SelectableText(Values.message[index].content.toString(),
-                  style: TextStyle(
-                    color: Values.user.id != Values.message[index].fromId
-                        ? Colors.black
-                        : Colors.white,
-                  )),
+              child: SelectableText(
+                Values.message[index].content.toString(),
+                style: TextStyle(
+                  color: Values.user.id != Values.message[index].fromId
+                      ? Colors.black
+                      : Colors.white,
+                ),
+              ),
             ),
           ),
         ],
@@ -436,6 +437,7 @@ class _FightUIState extends State<FightUI> {
       Values.notice = false;
       if (Values.ischat == false) {
         Values.ischat = true;
+        scrollToBottom();
       }
     });
   }
@@ -522,6 +524,20 @@ class _FightUIState extends State<FightUI> {
         "roomId": Values.currentRoom.id.toString(),
       },
     );
+  }
+
+  void scrollToBottom() {
+    //延迟执行滚动，防止出现异常
+    Timer.periodic(const Duration(milliseconds: 200), (timer) {
+      timer.cancel();
+      try {
+        scrollController.jumpTo(
+          scrollController.position.maxScrollExtent,
+        );
+      } catch (e) {
+        e;
+      }
+    });
   }
 
   void showSingleActionDialogAndLeave(String content) {
