@@ -528,11 +528,13 @@ class _FightUIState extends State<FightUI> {
 
   void scrollToBottom() {
     //延迟执行滚动，防止出现异常
-    Timer.periodic(const Duration(milliseconds: 200), (timer) {
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
       timer.cancel();
       try {
-        scrollController.jumpTo(
+        scrollController.animateTo(
           scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.linear,
         );
       } catch (e) {
         e;

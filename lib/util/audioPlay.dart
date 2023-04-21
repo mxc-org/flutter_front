@@ -1,10 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 
 class AudioPlay {
-  final player = AudioPlayer();
-
-  void play(String asset) async {
-    await player.setSource(AssetSource(asset));
-    player.resume();
+  void play(String asset) {
+    var player = AudioPlayer();
+    player.play(AssetSource("audio/chess.mp3"));
   }
 }
