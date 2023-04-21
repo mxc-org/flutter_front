@@ -56,6 +56,7 @@ class _FightUIState extends State<FightUI> {
   @override
   void dispose() {
     timer.cancel();
+    leaveRoom();
     super.dispose();
   }
 
@@ -498,7 +499,6 @@ class _FightUIState extends State<FightUI> {
 
   void retrunRoomConfirm() {
     Navigator.of(context).pop();
-    leaveRoom();
     if (Values.currentRoom.userIdCreator == Values.user.id) {
       Navigator.of(context).pop();
     }

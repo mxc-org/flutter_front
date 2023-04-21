@@ -379,7 +379,7 @@ class _ReplayUIState extends State<ReplayUI> {
       Values.chessList[chess.x * 15 + chess.y] = chess;
       Values.currentChess = chess;
     } else {
-      Values.audioPlay.play("audio/chess.mp3");
+      // Values.audioPlay.play("audio/chess.mp3");
       Values.chessList[chess.x * 15 + chess.y] = ChessBoard(
         0,
         0,

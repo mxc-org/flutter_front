@@ -24,8 +24,21 @@ class _FriendsUIState extends State<FriendsUI> {
   @override
   void initState() {
     super.initState();
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        getFriends(Values.user.id);
+        getNewFriends(Values.user.id);
+      },
+    );
     getFriends(Values.user.id);
     getNewFriends(Values.user.id);
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
