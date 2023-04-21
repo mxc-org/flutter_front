@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/util/values.dart';
 
 class RemainTimeWidget extends StatefulWidget {
   const RemainTimeWidget({super.key});
@@ -35,7 +35,7 @@ class _RemainTimeWidgetState extends State<RemainTimeWidget> {
     return Text(
       "${Values.remainTime}秒",
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 24,
       ),
     );

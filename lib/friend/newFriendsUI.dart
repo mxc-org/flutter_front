@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:http/http.dart' as http;
 
-import 'obj.dart';
+import '../util/obj.dart';
 
 class NewFriendsUI extends StatefulWidget {
   const NewFriendsUI({super.key});
@@ -14,6 +15,25 @@ class NewFriendsUI extends StatefulWidget {
 }
 
 class _NewFriendsUIState extends State<NewFriendsUI> {
+  late Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        setState(() {});
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +42,10 @@ class _NewFriendsUIState extends State<NewFriendsUI> {
         backgroundColor: const Color.fromARGB(127, 255, 153, 0),
       ),
       body: SingleChildScrollView(
-        child: myListView(),
+        child: Container(
+          margin: const EdgeInsets.only(top: 10),
+          child: myListView(),
+        ),
       ),
     );
   }

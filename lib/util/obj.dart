@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class User {
@@ -105,9 +105,80 @@ class Room {
 
 class Match {
   int id;
+  int winnerId;
+  int loserId;
+  List<ChessBoard> history;
+  String date;
+  User winner;
+  User loser;
+
+  Match(
+    this.id,
+    this.winnerId,
+    this.loserId,
+    this.history,
+    this.date,
+    this.winner,
+    this.loser,
+  );
+
+  static Match mpToMatch(Map<String, dynamic> mp) {
+    String strHistory = mp["history"];
+    List<dynamic> ls = jsonDecode(strHistory);
+    List<ChessBoard> history = [];
+    for (int i = 0; i < ls.length; i++) {
+      history.add(ChessBoard.mpToChess(ls[i]));
+    }
+    Match match = Match(
+      mp["id"],
+      mp["winnerId"],
+      mp["loserId"],
+      history,
+      mp["date"],
+      User.mpToUser(mp["winner"]),
+      User.mpToUser(mp["loser"]),
+    );
+    return match;
+  }
+
+  static Match jsonToMatch(String str) {
+    Map<String, dynamic> mp = jsonDecode(str);
+    return mpToMatch(mp);
+  }
+}
+
+class Invitation {
+  int id;
   int roomId;
-  String info;
-  Match(this.id, this.roomId, this.info);
+  int inviterId;
+  int inviteeId;
+  bool isValid;
+  bool isAccepted;
+  User Inviter;
+
+  Invitation(
+    this.id,
+    this.roomId,
+    this.inviterId,
+    this.inviteeId,
+    this.isValid,
+    this.isAccepted,
+    this.Inviter,
+  );
+
+  static Invitation mpToInvitation(Map<String, dynamic> mp) {
+    Invitation invitaion = Invitation(
+      mp["id"],
+      mp["roomId"],
+      mp["inviterId"],
+      mp["inviteeId"],
+      mp["isValid"],
+      // mp["isAccepted"],
+      true,
+      User.mpToUser(mp["inviter"]),
+    );
+    return invitaion;
+  }
 }
 
 class ChessBoard {
@@ -125,7 +196,7 @@ class ChessBoard {
     this.isWin,
     this.exist,
   );
-  static mpToChess(Map<String, dynamic> mp) {
+  static ChessBoard mpToChess(Map<String, dynamic> mp) {
     ChessBoard chess = ChessBoard(
       mp["userId"],
       mp["roomId"],
@@ -189,16 +260,15 @@ class MyWebSocket {
     channel.sink.close();
   }
 
-  handleChess(Map<String, dynamic> mp) {
+  handleChess(Map<String, dynamic> mp) async {
     Values.remainTime = 60;
     ChessBoard chess = ChessBoard.mpToChess(mp);
     if (chess.userId == Values.user.id && chess.isWin == true) {
       Values.win = 1;
-      return;
     } else if (chess.userId != Values.user.id && chess.isWin == true) {
       Values.win = 2;
-      return;
     }
+    Values.audioPlay.play("audio/chess.mp3");
     Values.chessList[chess.x * 15 + chess.y] = chess;
     Values.currentChess = chess;
     if (chess.userId != Values.user.id) {

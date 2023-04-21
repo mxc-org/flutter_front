@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/gridUnit.dart';
-import 'package:flutter_front/obj.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/game/gridUnit.dart';
+import 'package:flutter_front/util/obj.dart';
+import 'package:flutter_front/util/values.dart';
 
 class BoardView extends StatefulWidget {
   const BoardView({super.key});
@@ -15,6 +15,7 @@ class BoardView extends StatefulWidget {
 class _BoardViewState extends State<BoardView> {
   List<Widget> gridList = [];
   late Timer timer;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   initState() {
@@ -25,6 +26,7 @@ class _BoardViewState extends State<BoardView> {
       (timer) {
         if (mounted) {
           initView();
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
           setState(() {});
         }
       },
@@ -70,6 +72,7 @@ class _BoardViewState extends State<BoardView> {
         shrinkWrap: true,
         crossAxisCount: 15,
         scrollDirection: Axis.vertical,
+        controller: _scrollController,
         children: gridList,
       ),
     );

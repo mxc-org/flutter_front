@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/roomUI.dart';
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/game/roomUI.dart';
+import 'package:flutter_front/util/values.dart';
 import 'package:http/http.dart' as http;
 
 import 'createRoomUI.dart';
 import 'fightUI.dart';
-import 'obj.dart';
+import '../util/obj.dart';
 
 class GameUI extends StatefulWidget {
   const GameUI({super.key});

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_front/fightUI.dart';
+import 'package:flutter_front/game/fightUI.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:flutter_front/values.dart';
+import 'package:flutter_front/util/values.dart';
 
 class CreateRoomUI extends StatefulWidget {
   const CreateRoomUI({super.key});
@@ -35,6 +35,7 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
   @override
   void dispose() {
     timer.cancel();
+    leaveRoom();
     super.dispose();
   }
 
@@ -83,7 +84,7 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
           const Expanded(child: Text("")),
           ElevatedButton(
             onPressed: () {
-              leaveRoom();
+              // leaveRoom();
               Navigator.of(context).pop();
             },
             style: ButtonStyle(
