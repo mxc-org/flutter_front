@@ -21,6 +21,7 @@ class _ReplayUIState extends State<ReplayUI> {
   late User firstUser;
   late User secondUser;
   bool isPlay = true;
+  int poiter = -1;
 
   @override
   void initState() {
@@ -30,7 +31,7 @@ class _ReplayUIState extends State<ReplayUI> {
     User winner = widget.match.winner;
     User loser = widget.match.loser;
     Values.remainTime = 0;
-
+    Values.turn = false;
     if (widget.match.history.isNotEmpty &&
         widget.match.history[0].userId == winner.id) {
       firstUser = winner;
@@ -39,26 +40,29 @@ class _ReplayUIState extends State<ReplayUI> {
       firstUser = loser;
       secondUser = winner;
     }
+    Values.currentRoom = Room(
+      0,
+      "FIGHTING",
+      firstUser.id,
+      secondUser.id,
+      firstUser,
+      secondUser,
+    );
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
         if (mounted) {
           setState(() {});
-          if (Values.win == 1) {
-            showSingleActionDialog("恭喜你，成功打败了对手");
-            timer.cancel();
-          } else if (Values.win == 2) {
-            showSingleActionDialog("很遗憾，你失败了，不要灰心噢");
-            timer.cancel();
-          }
-          if (Values.connectStatus == false) {
-            showSingleActionDialog("糟糕，你断线了，请重新登录");
-            timer.cancel();
-          }
-          if (Values.remainTime <= 0 && Values.turn == true) {
-            showSingleActionDialog("抱歉，你已超时");
-            timer.cancel();
-          }
+        }
+        // if (Values.win == 1) {
+        //   showSingleActionDialog("恭喜你，成功打败了对手");
+        //   timer.cancel();
+        // } else if (Values.win == 2) {
+        //   // showSingleActionDialog("很遗憾，你失败了，不要灰心噢");
+        //   timer.cancel();
+        // }
+        if (isPlay == true) {
+          nextStep();
         }
       },
     );
@@ -94,7 +98,7 @@ class _ReplayUIState extends State<ReplayUI> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  height: 180,
+                  height: 170,
                   decoration: BoxDecoration(
                     color: Colors.orangeAccent.withOpacity(0.5),
                   ),
@@ -132,7 +136,9 @@ class _ReplayUIState extends State<ReplayUI> {
                         Size(0, 50),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      preStep();
+                    },
                     child: const Text(
                       "上一步",
                       style: TextStyle(color: Colors.white),
@@ -170,7 +176,9 @@ class _ReplayUIState extends State<ReplayUI> {
                         Size(0, 50),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      nextStep();
+                    },
                     child: const Text(
                       "下一步",
                       style: TextStyle(color: Colors.white),
@@ -305,11 +313,33 @@ class _ReplayUIState extends State<ReplayUI> {
     );
   }
 
+  void preStep() {
+    if (poiter >= 0) {
+      handleChess(widget.match.history[poiter], true);
+      poiter--;
+    } else {
+      showSingleActionDialog("已经是第一步啦");
+    }
+    setState(() {});
+  }
+
   void playOrStop() {
     if (isPlay == true) {
       isPlay = false;
     } else {
       isPlay = true;
+    }
+    setState(() {});
+  }
+
+  void nextStep() {
+    poiter++;
+    if (poiter < widget.match.history.length) {
+      handleChess(widget.match.history[poiter], false);
+    } else {
+      showSingleActionDialog("已经是最后一步啦");
+      isPlay = false;
+      poiter--;
     }
     setState(() {});
   }
@@ -336,5 +366,37 @@ class _ReplayUIState extends State<ReplayUI> {
         ],
       ),
     );
+  }
+
+  void handleChess(ChessBoard chess, bool pre) async {
+    if (pre == false) {
+      if (chess.userId == Values.user.id && chess.isWin == true) {
+        Values.win = 1;
+      } else if (chess.userId != Values.user.id && chess.isWin == true) {
+        Values.win = 2;
+      }
+      Values.audioPlay.play("audio/chess.mp3");
+      Values.chessList[chess.x * 15 + chess.y] = chess;
+      Values.currentChess = chess;
+    } else {
+      Values.audioPlay.play("audio/chess.mp3");
+      Values.chessList[chess.x * 15 + chess.y] = ChessBoard(
+        0,
+        0,
+        -1,
+        -1,
+        false,
+        false,
+      );
+      Values.currentChess = ChessBoard(
+        0,
+        0,
+        -1,
+        -1,
+        false,
+        false,
+      );
+    }
+    setState(() {});
   }
 }

@@ -265,10 +265,8 @@ class MyWebSocket {
     ChessBoard chess = ChessBoard.mpToChess(mp);
     if (chess.userId == Values.user.id && chess.isWin == true) {
       Values.win = 1;
-      return;
     } else if (chess.userId != Values.user.id && chess.isWin == true) {
       Values.win = 2;
-      return;
     }
     Values.audioPlay.play("audio/chess.mp3");
     Values.chessList[chess.x * 15 + chess.y] = chess;

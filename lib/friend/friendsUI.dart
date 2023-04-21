@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ class FriendsUI extends StatefulWidget {
 }
 
 class _FriendsUIState extends State<FriendsUI> {
+  late Timer timer;
+
   @override
   void initState() {
     super.initState();

@@ -32,22 +32,22 @@ class _FightUIState extends State<FightUI> {
       (timer) {
         if (mounted) {
           setState(() {});
-          if (Values.win == 1) {
-            showSingleActionDialogAndLeave("恭喜你，成功打败了对手");
-            timer.cancel();
-          } else if (Values.win == 2) {
-            showSingleActionDialogAndLeave("很遗憾，你失败了，不要灰心噢");
-            timer.cancel();
-          }
-          if (Values.connectStatus == false) {
-            showSingleActionDialogAndLeave("糟糕，你断线了，请重新登录");
-            timer.cancel();
-          }
-          Values.remainTime--;
-          if (Values.remainTime <= 0 && Values.turn == true) {
-            showSingleActionDialogAndLeave("抱歉，你已超时");
-            timer.cancel();
-          }
+        }
+        if (Values.win == 1) {
+          showSingleActionDialogAndLeave("恭喜你，成功打败了对手");
+          timer.cancel();
+        } else if (Values.win == 2) {
+          showSingleActionDialogAndLeave("很遗憾，你失败了，不要灰心噢");
+          timer.cancel();
+        }
+        if (Values.connectStatus == false) {
+          showSingleActionDialogAndLeave("糟糕，你断线了，请重新登录");
+          timer.cancel();
+        }
+        Values.remainTime--;
+        if (Values.remainTime <= 0 && Values.turn == true) {
+          showSingleActionDialogAndLeave("抱歉，你已超时");
+          timer.cancel();
         }
       },
     );
