@@ -19,7 +19,7 @@ class _GridUnitState extends State<GridUnit> {
   void initState() {
     super.initState();
     timer = Timer.periodic(
-      const Duration(milliseconds: 500),
+      const Duration(milliseconds: 50),
       (timer) {
         if (mounted) {
           setState(() {});

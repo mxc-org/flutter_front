@@ -209,6 +209,13 @@ class _FightUIState extends State<FightUI> {
                     ),
                   ),
                 ),
+                child: (Values.turn &&
+                            Values.user.id ==
+                                Values.currentRoom.userIdCreator) ||
+                        (Values.turn == false &&
+                            Values.user.id == Values.currentRoom.userIdJoin)
+                    ? const CircularProgressIndicator()
+                    : Container(),
               ),
               const SizedBox(width: 10),
             ],
@@ -247,6 +254,12 @@ class _FightUIState extends State<FightUI> {
                     image: myImage,
                   ),
                 ),
+                child: (Values.turn &&
+                            Values.user.id == Values.currentRoom.userIdJoin) ||
+                        (Values.turn == false &&
+                            Values.user.id == Values.currentRoom.userIdCreator)
+                    ? const CircularProgressIndicator()
+                    : Container(),
               ),
             ],
           ),
