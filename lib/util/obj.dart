@@ -109,6 +109,8 @@ class Match {
   int loserId;
   List<ChessBoard> history;
   String date;
+  User winner;
+  User loser;
 
   Match(
     this.id,
@@ -116,6 +118,8 @@ class Match {
     this.loserId,
     this.history,
     this.date,
+    this.winner,
+    this.loser,
   );
 
   static Match mpToMatch(Map<String, dynamic> mp) {
@@ -131,6 +135,8 @@ class Match {
       mp["loserId"],
       history,
       mp["date"],
+      User.mpToUser(mp["winner"]),
+      User.mpToUser(mp["loser"]),
     );
     return match;
   }
@@ -259,10 +265,8 @@ class MyWebSocket {
     ChessBoard chess = ChessBoard.mpToChess(mp);
     if (chess.userId == Values.user.id && chess.isWin == true) {
       Values.win = 1;
-      return;
     } else if (chess.userId != Values.user.id && chess.isWin == true) {
       Values.win = 2;
-      return;
     }
     Values.audioPlay.play("audio/chess.mp3");
     Values.chessList[chess.x * 15 + chess.y] = chess;

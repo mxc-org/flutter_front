@@ -32,22 +32,22 @@ class _FightUIState extends State<FightUI> {
       (timer) {
         if (mounted) {
           setState(() {});
-          if (Values.win == 1) {
-            showSingleActionDialogAndLeave("恭喜你，成功打败了对手");
-            timer.cancel();
-          } else if (Values.win == 2) {
-            showSingleActionDialogAndLeave("很遗憾，你失败了，不要灰心噢");
-            timer.cancel();
-          }
-          if (Values.connectStatus == false) {
-            showSingleActionDialogAndLeave("糟糕，你断线了，请重新登录");
-            timer.cancel();
-          }
-          Values.remainTime--;
-          if (Values.remainTime <= 0 && Values.turn == true) {
-            showSingleActionDialogAndLeave("抱歉，你已超时");
-            timer.cancel();
-          }
+        }
+        if (Values.win == 1) {
+          showSingleActionDialogAndLeave("恭喜你，成功打败了对手");
+          timer.cancel();
+        } else if (Values.win == 2) {
+          showSingleActionDialogAndLeave("很遗憾，你失败了，不要灰心噢");
+          timer.cancel();
+        }
+        if (Values.connectStatus == false) {
+          showSingleActionDialogAndLeave("糟糕，你断线了，请重新登录");
+          timer.cancel();
+        }
+        Values.remainTime--;
+        if (Values.remainTime <= 0 && Values.turn == true) {
+          showSingleActionDialogAndLeave("抱歉，你已超时");
+          timer.cancel();
         }
       },
     );
@@ -56,6 +56,7 @@ class _FightUIState extends State<FightUI> {
   @override
   void dispose() {
     timer.cancel();
+    leaveRoom();
     super.dispose();
   }
 
@@ -80,7 +81,7 @@ class _FightUIState extends State<FightUI> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  height: 170,
+                  height: 190,
                   decoration: BoxDecoration(
                     color: Colors.orangeAccent.withOpacity(0.5),
                   ),
@@ -181,10 +182,14 @@ class _FightUIState extends State<FightUI> {
     return Row(
       children: [
         Expanded(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
+          flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Text(
+                Values.currentRoom.userCreator.username,
+                style: const TextStyle(fontSize: 20),
+              ),
               Container(
                 width: 60,
                 height: 60,
@@ -200,26 +205,22 @@ class _FightUIState extends State<FightUI> {
                 ),
               ),
               const SizedBox(width: 10),
-              Text(
-                Values.currentRoom.userCreator.username,
-                style: const TextStyle(fontSize: 20),
-              ),
             ],
           ),
         ),
         const Expanded(
+          flex: 1,
           child: Text(
             "VS",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 30,
-              color: Colors.red,
-            ),
+                fontSize: 30, color: Colors.red, fontWeight: FontWeight.bold),
           ),
         ),
         Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 //判空
@@ -506,7 +507,6 @@ class _FightUIState extends State<FightUI> {
 
   void retrunRoomConfirm() {
     Navigator.of(context).pop();
-    leaveRoom();
     if (Values.currentRoom.userIdCreator == Values.user.id) {
       Navigator.of(context).pop();
     }

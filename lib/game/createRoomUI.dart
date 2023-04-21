@@ -35,6 +35,7 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
   @override
   void dispose() {
     timer.cancel();
+    leaveRoom();
     super.dispose();
   }
 
@@ -83,7 +84,7 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
           const Expanded(child: Text("")),
           ElevatedButton(
             onPressed: () {
-              leaveRoom();
+              // leaveRoom();
               Navigator.of(context).pop();
             },
             style: ButtonStyle(
