@@ -80,7 +80,7 @@ class _FightUIState extends State<FightUI> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  height: 170,
+                  height: 190,
                   decoration: BoxDecoration(
                     color: Colors.orangeAccent.withOpacity(0.5),
                   ),
@@ -181,10 +181,14 @@ class _FightUIState extends State<FightUI> {
     return Row(
       children: [
         Expanded(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
+          flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Text(
+                Values.currentRoom.userCreator.username,
+                style: const TextStyle(fontSize: 20),
+              ),
               Container(
                 width: 60,
                 height: 60,
@@ -200,26 +204,22 @@ class _FightUIState extends State<FightUI> {
                 ),
               ),
               const SizedBox(width: 10),
-              Text(
-                Values.currentRoom.userCreator.username,
-                style: const TextStyle(fontSize: 20),
-              ),
             ],
           ),
         ),
         const Expanded(
+          flex: 1,
           child: Text(
             "VS",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 30,
-              color: Colors.red,
-            ),
+                fontSize: 30, color: Colors.red, fontWeight: FontWeight.bold),
           ),
         ),
         Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 //判空
