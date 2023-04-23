@@ -232,7 +232,7 @@ class Chat {
 }
 
 class MyWebSocket {
-  static late WebSocketChannel channel;
+  late WebSocketChannel channel;
 
   void connect() {
     channel = WebSocketChannel.connect(
