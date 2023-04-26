@@ -27,4 +27,5 @@ class Values {
   static int remainTime = 60;
   static String audioUri = "http://127.0.0.1:9876/chess.mp3";
   static var audioPlay = AudioPlay();
+  static bool judgeconnect = false;
 }
