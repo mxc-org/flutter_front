@@ -151,7 +151,9 @@ class _FriendsUIState extends State<FriendsUI> {
     for (Map<String, dynamic> mp in ls) {
       Values.friendList.add(User.mpToUser(mp));
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void getNewFriends(int id) async {
@@ -171,7 +173,9 @@ class _FriendsUIState extends State<FriendsUI> {
       }
       Values.newFriendList.add(Friend.mpToFriend(mp));
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void onInvitePressed(String inviteeId) async {

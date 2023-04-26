@@ -34,7 +34,7 @@ class _RegisterUIState extends State<RegisterUI> {
             image: const AssetImage("images/login.jpg"),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.5),
+              Colors.white.withOpacity(0.6),
               BlendMode.dstATop,
             ),
           ),
@@ -148,7 +148,7 @@ class _RegisterUIState extends State<RegisterUI> {
         showSingleActionDialog("注册失败，请换个用户名试试");
         return;
       }
-      showSingleActionDialog("注册成功，请返回登录");
+      showSingleActionDialog("注册成功，请登录");
     });
   }
 

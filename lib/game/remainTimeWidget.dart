@@ -38,12 +38,12 @@ class _RemainTimeWidgetState extends State<RemainTimeWidget> {
         Text(
           "${Values.remainTime}",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-          ),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         CircularProgressIndicator(
-          value: 1.0 - Values.remainTime / 90,
+          value: 1 - Values.remainTime / 60,
+          backgroundColor: Colors.brown,
+          color: const Color.fromARGB(255, 255, 230, 192),
         )
       ],
     );

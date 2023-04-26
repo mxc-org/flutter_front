@@ -5,6 +5,7 @@ import 'package:flutter_front/main.dart';
 import 'package:flutter_front/login_register/registerUI.dart';
 import 'package:flutter_front/util/values.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../util/obj.dart';
 
@@ -18,6 +19,15 @@ class LoginUI extends StatefulWidget {
 class _LoginUIState extends State<LoginUI> {
   String username = "";
   String password = "";
+  bool isRemember = false;
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    readRemember();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +40,7 @@ class _LoginUIState extends State<LoginUI> {
             image: const AssetImage("images/login.jpg"),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.5),
+              Colors.white.withOpacity(0.6),
               BlendMode.dstATop,
             ),
           ),
@@ -45,7 +55,8 @@ class _LoginUIState extends State<LoginUI> {
               margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
               child: Column(
                 children: [
-                  TextField(
+                  TextFormField(
+                    controller: usernameController,
                     decoration: const InputDecoration(
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -60,7 +71,8 @@ class _LoginUIState extends State<LoginUI> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  TextField(
+                  TextFormField(
+                    controller: passwordController,
                     obscureText: true,
                     decoration: const InputDecoration(
                       contentPadding:
@@ -76,6 +88,30 @@ class _LoginUIState extends State<LoginUI> {
                     },
                   ),
                   const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Checkbox(
+                        value: isRemember,
+                        onChanged: (value) {
+                          isRemember = !isRemember;
+                          setState(() {});
+                        },
+                      ),
+                      TextButton(
+                        style: const ButtonStyle(
+                          padding: MaterialStatePropertyAll(
+                            EdgeInsets.all(0),
+                          ),
+                        ),
+                        onPressed: () {
+                          isRemember = !isRemember;
+                          setState(() {});
+                        },
+                        child: const Text("记住密码"),
+                      ),
+                    ],
+                  ),
                   ElevatedButton(
                     onPressed: onLoginPressed,
                     style: ButtonStyle(
@@ -131,8 +167,34 @@ class _LoginUIState extends State<LoginUI> {
       Values.myWebSocket.connect();
       Values.connectStatus = true;
       Values.login = true;
+      writeDate();
       setState(() {});
     });
+    setState(() {});
+  }
+
+  void writeDate() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("username", username);
+    prefs.setBool("isRemember", isRemember);
+    if (isRemember) {
+      prefs.setString("password", password);
+    } else {
+      prefs.setString("password", "");
+    }
+  }
+
+  void readRemember() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    isRemember = prefs.getBool("isRemember") == null
+        ? false
+        : prefs.getBool("isRemember")!;
+    username =
+        prefs.getString("username") == null ? "" : prefs.getString("username")!;
+    password =
+        prefs.getString("password") == null ? "" : prefs.getString("password")!;
+    usernameController = TextEditingController(text: username);
+    passwordController = TextEditingController(text: password);
     setState(() {});
   }
 

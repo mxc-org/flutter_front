@@ -21,7 +21,7 @@ class _FightUIState extends State<FightUI> {
   final scrollController = ScrollController();
   late Timer timer;
   List<Widget> gridList = [];
-  int channum = 0;
+  int lastCount = 0;
 
   @override
   void initState() {
@@ -66,9 +66,9 @@ class _FightUIState extends State<FightUI> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     Values.width = MediaQuery.of(context).size.width;
-    if (channum < Values.message.length) {
+    if (lastCount < Values.message.length) {
       scrollToBottom();
-      channum = Values.message.length;
+      lastCount = Values.message.length;
     }
     return Scaffold(
       body: Container(
@@ -209,6 +209,13 @@ class _FightUIState extends State<FightUI> {
                     ),
                   ),
                 ),
+                child: (Values.turn &&
+                            Values.user.id ==
+                                Values.currentRoom.userIdCreator) ||
+                        (Values.turn == false &&
+                            Values.user.id == Values.currentRoom.userIdJoin)
+                    ? const CircularProgressIndicator()
+                    : Container(),
               ),
               const SizedBox(width: 10),
             ],
@@ -247,6 +254,12 @@ class _FightUIState extends State<FightUI> {
                     image: myImage,
                   ),
                 ),
+                child: (Values.turn &&
+                            Values.user.id == Values.currentRoom.userIdJoin) ||
+                        (Values.turn == false &&
+                            Values.user.id == Values.currentRoom.userIdCreator)
+                    ? const CircularProgressIndicator()
+                    : Container(),
               ),
             ],
           ),
@@ -332,8 +345,8 @@ class _FightUIState extends State<FightUI> {
     return ListTile(
       title: Row(
         textDirection: Values.user.id == Values.message[index].fromId
-            ? TextDirection.ltr
-            : TextDirection.rtl,
+            ? TextDirection.rtl
+            : TextDirection.ltr,
         children: [
           Container(
             width: 30,
@@ -528,11 +541,13 @@ class _FightUIState extends State<FightUI> {
 
   void scrollToBottom() {
     //延迟执行滚动，防止出现异常
-    Timer.periodic(const Duration(milliseconds: 200), (timer) {
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
       timer.cancel();
       try {
-        scrollController.jumpTo(
+        scrollController.animateTo(
           scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.linear,
         );
       } catch (e) {
         e;
