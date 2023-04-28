@@ -155,7 +155,7 @@ class _HistoryUIState extends State<HistoryUI> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(40),
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(
