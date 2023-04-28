@@ -232,12 +232,13 @@ class Chat {
 }
 
 class MyWebSocket {
-  static late WebSocketChannel channel;
+  late WebSocketChannel channel;
 
   void connect() {
     channel = WebSocketChannel.connect(
       Uri.parse("${Values.wsUrl}/play?id=${Values.user.id}"),
     );
+    Values.judgeconnect = true;
     channel.stream.listen(
       (event) {
         print("收到了websocket信息: $event");
