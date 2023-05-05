@@ -147,7 +147,7 @@ class _HistoryUIState extends State<HistoryUI> {
       ),
       trailing: Container(
         width: 80,
-        height: 30,
+        height: 35,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),

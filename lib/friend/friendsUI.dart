@@ -165,7 +165,7 @@ class _FriendsUIState extends State<FriendsUI> {
               ),
               trailing: Container(
                 width: 80,
-                height: 30,
+                height: 35,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
