@@ -1,0 +1,17 @@
+name: flutter test
+run-name: ${{ github.actor }} is testing flutter code
+on: [push]
+jobs:
+  flutter_obj_test: 
+    runs-on: fedora-latest
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v2
+      # https://github.com/marketplace/actions/flutter-action
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '3.10.0'
+          channel: 'dev'  # or: 'dev' or 'beta'
+      - run: "flutter pub get"
+      - name: "Run Flutter Obj Tests"
+        run: "flutter test test/obj_test.dart"
