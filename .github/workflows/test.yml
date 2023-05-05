@@ -13,8 +13,7 @@ jobs:
           chanel: 'master'
       - uses: dart-lang/setup-dart@v1
         with:
-          dart-version: '3.1.0'
-          chanel: 'dev'
+          sdk: 'main'
       - name: get dependencies
         run: "flutter pub get"
       - name: "Run Flutter Obj Tests"
