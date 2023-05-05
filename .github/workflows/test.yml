@@ -11,6 +11,8 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           flutter-version: '3.7.11'
+      - name: flutter upgrade
+        run: flutter upgrade
       - name: get dependencies
         run: "flutter pub get"
       - name: "Run Flutter Obj Tests"
