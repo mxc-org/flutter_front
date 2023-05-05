@@ -12,6 +12,8 @@ jobs:
         with:
           chanel: 'master'
       - uses: dart-lang/setup-dart@v1
+        with:
+          chanel: 'dev'
       - name: get dependencies
         run: "flutter pub get"
       - name: "Run Flutter Obj Tests"
