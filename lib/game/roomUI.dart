@@ -61,30 +61,65 @@ class _RoomUIState extends State<RoomUI> {
                 child: roomListView(),
               ),
             ),
-            ElevatedButton(
-              onPressed: onCreateRoomPressed,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.orange),
-                minimumSize: const MaterialStatePropertyAll(Size(10, 50)),
-              ),
-              child: const Text(
-                "创建房间",
-                style: TextStyle(fontSize: 20, color: Colors.white),
+            Container(
+              margin: const EdgeInsets.only(left: 60, right: 60, top: 5),
+              child: ElevatedButton(
+                onPressed: onCreateRoomPressed,
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.orangeAccent),
+                  minimumSize: MaterialStatePropertyAll(
+                    Size(double.infinity, 50),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.home_outlined,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      "创建房间",
+                      style: TextStyle(fontSize: 15, color: Colors.white),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.orange),
-                minimumSize: const MaterialStatePropertyAll(Size(10, 50)),
-              ),
-              child: const Text(
-                "返回主页",
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
+            const SizedBox(height: 5),
+            Container(
+              margin: const EdgeInsets.only(left: 60, right: 60, top: 10),
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.orangeAccent),
+                    minimumSize: MaterialStatePropertyAll(
+                      Size(double.infinity, 50),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.door_back_door_outlined,
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        "返回主页",
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      ),
+                    ],
+                  )),
             ),
             const SizedBox(height: 20)
           ],

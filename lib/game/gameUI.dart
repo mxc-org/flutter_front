@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:enhanced_button/enhanced_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_front/game/roomUI.dart';
 import 'package:flutter_front/util/values.dart';
@@ -37,36 +38,68 @@ class _GameUIState extends State<GameUI> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (buildContext) => const RoomUI(),
+            Container(
+              margin: const EdgeInsets.only(left: 60, right: 60, top: 5),
+              child: EnhancedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (buildContext) => const RoomUI(),
+                      ),
+                    );
+                  },
+                  enhancedStyle: EnhancedButtonStyle(
+                    gradient: MaterialStateProperty.all(const LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 239, 192, 74),
+                          Colors.orange
+                        ])),
                   ),
-                );
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.orange),
-                minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
-              ),
-              child: const Text(
-                "游戏大厅",
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.orange),
+                    minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40))),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "游戏大厅",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ],
+                  )),
             ),
             const SizedBox(height: 35),
-            ElevatedButton(
-              onPressed: () {
-                onPlayNowPressed();
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.orange),
-                minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
-              ),
-              child: const Text(
-                "立即匹配",
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
+            Container(
+              margin: const EdgeInsets.only(left: 60, right: 60, top: 5),
+              child: EnhancedButton(
+                  onPressed: () {
+                    onPlayNowPressed();
+                  },
+                  enhancedStyle: EnhancedButtonStyle(
+                    gradient: MaterialStateProperty.all(const LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 239, 192, 74),
+                          Colors.orange
+                        ])),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.orange),
+                    minimumSize: const MaterialStatePropertyAll(Size(0, 50)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40))),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "立即匹配",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ],
+                  )),
             ),
           ],
         ),

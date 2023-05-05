@@ -38,6 +38,7 @@ dependencies:
   http: ^0.13.5
   file_picker: ^5.2.6
   web_socket_channel: ^2.3.0
+  enhanced_button: 0.0.2
   audioplayers: ^4.0.1
   shared_preferences: ^2.1.0
   # flutter_sound: ^9.2.13
@@ -85,6 +86,14 @@ flutter:
     - images/black.png
     - images/flag.png
     - assets/audio/chess.mp3
+    - images/beijin.jpg
+    - images/beijin1.jpg
+    - images/button.webp
+    - images/return.jpg
+    - images/quanzhou.jpg
+    - images/q2.png
+    - images/pipei.jpg
+    - images/btn.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

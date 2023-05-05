@@ -64,36 +64,65 @@ class _FriendsUIState extends State<FriendsUI> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 10),
-            ListTile(
-              leading: const Icon(Icons.people),
-              title: const Text(
-                "新的朋友",
-                style: TextStyle(color: Colors.black, fontSize: 16),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color.fromARGB(255, 252, 241, 234),
+                      Color.fromARGB(255, 252, 241, 234), //开始颜色和结束颜色
+                    ]),
               ),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (buildContext) => const NewFriendsUI(),
-                  ),
-                );
-              },
+              child: ListTile(
+                leading: const Icon(Icons.people),
+                title: const Text(
+                  "新的朋友",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+                trailing: const Icon(Icons.arrow_forward),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (buildContext) => const NewFriendsUI(),
+                    ),
+                  );
+                },
+              ),
             ),
-            ListTile(
-              leading: const Icon(Icons.games),
-              title: const Text(
-                "对战请求",
-                style: TextStyle(color: Colors.black, fontSize: 16),
+            const Divider(
+              height: 1.0,
+              color: Colors.grey,
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color.fromARGB(255, 252, 241, 234),
+                      Color.fromARGB(255, 252, 241, 234), //开始颜色和结束颜色
+                    ]),
               ),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (buildContext) => const InvitedUI(),
-                  ),
-                );
-              },
+              child: ListTile(
+                leading: const Icon(Icons.games),
+                title: const Text(
+                  "对战请求",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+                trailing: const Icon(Icons.arrow_forward),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (buildContext) => const InvitedUI(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Divider(
+              height: 1.0,
+              color: Colors.grey,
             ),
             myListView()
           ],
@@ -108,30 +137,56 @@ class _FriendsUIState extends State<FriendsUI> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: Values.friendList.length,
       itemBuilder: (context, i) {
-        return ListTile(
-          title: Text(Values.friendList[i].username),
-          leading: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(
-                  "${Values.avatarUrl}${Values.friendList[i].avatarName}",
+        return Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(255, 252, 241, 234),
+                    Color.fromARGB(255, 252, 241, 234), //开始颜色和结束颜色
+                  ]),
+              border: Border(
+                  bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
+          child: ListTile(
+              title: Text(Values.friendList[i].username),
+              leading: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      "${Values.avatarUrl}${Values.friendList[i].avatarName}",
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          trailing: TextButton(
-            onPressed: () {
-              onInvitePressed(Values.friendList[i].id.toString());
-            },
-            child: const Text(
-              "对战",
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
+              trailing: Container(
+                width: 80,
+                height: 30,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: LinearGradient(
+                      //  begin: Alignment.topLeft,
+                      //end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromARGB(255, 239, 192, 74),
+                        Colors.orange //开始颜色和结束颜色
+                      ]),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    onInvitePressed(Values.friendList[i].id.toString());
+                  },
+                  child: Text(
+                    "对战",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              )),
         );
       },
     );
