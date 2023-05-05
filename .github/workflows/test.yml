@@ -10,7 +10,7 @@ jobs:
       - name: set up flutter
         uses: subosito/flutter-action@v1
         with:
-          channel: '3.7.11'
+          flutter-version: '3.7.11'
       - name: get dependencies
         run: "flutter pub get"
       - name: "Run Flutter Obj Tests"
