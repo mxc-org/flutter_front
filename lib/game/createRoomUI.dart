@@ -50,6 +50,7 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
       ),
       child: Column(
         children: [
+          const SizedBox(height: 70),
           const Expanded(
             child: Text(""),
           ),
@@ -65,9 +66,21 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            "VS",
-            style: TextStyle(color: Colors.black),
+          Container(
+            height: 100,
+            width: 100,
+            decoration: ShapeDecoration(
+              image: new DecorationImage(
+                //设置背景图片
+                image: AssetImage("images/pipei.jpg"),
+                fit: BoxFit.cover,
+              ),
+              //设置圆角
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusDirectional.circular(20)),
+            ),
+            //设置边距
+            margin: EdgeInsets.only(left: 20, right: 20),
           ),
           const SizedBox(height: 20),
           Container(
@@ -84,7 +97,7 @@ class _CreateRoomUIState extends State<CreateRoomUI> {
           const Expanded(child: Text("")),
           ElevatedButton(
             onPressed: () {
-              // leaveRoom();
+              leaveRoom();
               Navigator.of(context).pop();
             },
             style: ButtonStyle(

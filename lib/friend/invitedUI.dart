@@ -31,7 +31,6 @@ class _InvitedUIState extends State<InvitedUI> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.only(top: 10),
           child: myListView(),
         ),
       ),
@@ -45,6 +44,10 @@ class _InvitedUIState extends State<InvitedUI> {
       itemCount: invitationList.length,
       itemBuilder: (context, i) {
         return ListTile(
+          shape: const RoundedRectangleBorder(
+            side:
+                BorderSide(color: Color.fromARGB(255, 245, 229, 229), width: 1),
+          ),
           title: Text(invitationList[i].Inviter.username),
           leading: Container(
             margin: const EdgeInsets.only(left: 10),

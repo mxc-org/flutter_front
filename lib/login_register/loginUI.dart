@@ -29,6 +29,32 @@ class _LoginUIState extends State<LoginUI> {
     readRemember();
   }
 
+  Widget rpassword() {
+    return Row(
+      children: [
+        Checkbox(
+          value: isRemember,
+          onChanged: (value) {
+            isRemember = !isRemember;
+            setState(() {});
+          },
+        ),
+        TextButton(
+          style: const ButtonStyle(
+            padding: MaterialStatePropertyAll(
+              EdgeInsets.all(0),
+            ),
+          ),
+          onPressed: () {
+            isRemember = !isRemember;
+            setState(() {});
+          },
+          child: const Text("记住密码"),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (Values.login == true) return const MyHomePage(title: "网络五子棋");
@@ -70,7 +96,7 @@ class _LoginUIState extends State<LoginUI> {
                       setState(() {});
                     },
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   TextFormField(
                     controller: passwordController,
                     obscureText: true,
@@ -87,52 +113,43 @@ class _LoginUIState extends State<LoginUI> {
                       setState(() {});
                     },
                   ),
-                  const SizedBox(height: 10),
+
+                  const SizedBox(height: 15),
+                  Container(
+                    width: 200,
+                    height: 40,
+                    margin:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    child: ElevatedButton(
+                      onPressed: onLoginPressed,
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.orange),
+                      ),
+                      child: const Text(
+                        "登录",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Checkbox(
-                        value: isRemember,
-                        onChanged: (value) {
-                          isRemember = !isRemember;
-                          setState(() {});
-                        },
-                      ),
+                      rpassword(),
                       TextButton(
-                        style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(
-                            EdgeInsets.all(0),
-                          ),
-                        ),
                         onPressed: () {
-                          isRemember = !isRemember;
-                          setState(() {});
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (buildContext) => const RegisterUI(),
+                            ),
+                          );
                         },
-                        child: const Text("记住密码"),
-                      ),
+                        child: const Text("新用户？点击注册"),
+                      )
                     ],
                   ),
-                  ElevatedButton(
-                    onPressed: onLoginPressed,
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.orange),
-                    ),
-                    child: const Text(
-                      "登录",
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                  ),
                   // const SizedBox(height: 10),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (buildContext) => const RegisterUI(),
-                        ),
-                      );
-                    },
-                    child: const Text("新用户？点击注册"),
-                  )
                 ],
               ),
             ),
@@ -167,7 +184,7 @@ class _LoginUIState extends State<LoginUI> {
       Values.myWebSocket.connect();
       Values.connectStatus = true;
       Values.login = true;
-      writeDate();
+      //writeDate();
       setState(() {});
     });
     setState(() {});

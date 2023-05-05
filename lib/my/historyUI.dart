@@ -61,12 +61,22 @@ class _HistoryUIState extends State<HistoryUI> {
             );
           }
           return myListTile(
-            dateArr,
-            firstUser,
-            secondUser,
-            matchList[i],
-            winText,
-          );
+              dateArr,
+              firstUser,
+              secondUser,
+              matchList[i],
+              Container(
+                height: 30,
+                width: 50,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("images/q2.png"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: winText,
+              ));
         },
       ),
     );
@@ -75,6 +85,9 @@ class _HistoryUIState extends State<HistoryUI> {
   Widget myListTile(List<String> dateArr, User firstUser, User secondUser,
       Match match, Widget winText) {
     return ListTile(
+      shape: const RoundedRectangleBorder(
+        side: BorderSide(color: Color.fromARGB(255, 245, 229, 229), width: 1),
+      ),
       leading: Text(
         "${dateArr[0]}\n${dateArr[1]}",
         textAlign: TextAlign.center,
@@ -132,11 +145,26 @@ class _HistoryUIState extends State<HistoryUI> {
           ),
         ],
       ),
-      trailing: TextButton(
-        child: const Text("回放"),
-        onPressed: () {
-          onReplayPressed(match);
-        },
+      trailing: Container(
+        width: 80,
+        height: 30,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+              //  begin: Alignment.topLeft,
+              //end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 239, 192, 74),
+                Colors.orange //开始颜色和结束颜色
+              ]),
+        ),
+        child: TextButton(
+          child: const Text("回放"),
+          onPressed: () {
+            onReplayPressed(match);
+          },
+        ),
       ),
     );
   }

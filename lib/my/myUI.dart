@@ -45,56 +45,93 @@ class _MyUIState extends State<MyUI> {
               ),
             ),
             onPressed: onModifyUsername,
-            child: const Text(
-              "修改用户名",
-              style: TextStyle(fontSize: 16),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.person),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "修改用户名",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
             ),
           ),
         ),
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: ElevatedButton(
-            style: const ButtonStyle(
-              minimumSize: MaterialStatePropertyAll(
-                Size(double.infinity, 40),
+              style: const ButtonStyle(
+                minimumSize: MaterialStatePropertyAll(
+                  Size(double.infinity, 40),
+                ),
               ),
-            ),
-            onPressed: onModifyAvatar,
-            child: const Text(
-              "修改头像",
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
+              onPressed: onModifyAvatar,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.panorama),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "修改头像",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )),
         ),
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: ElevatedButton(
             style: const ButtonStyle(
+              /*side: MaterialStatePropertyAll(
+                BorderSide(width: 1, color: Colors.grey),
+              ),*/
               minimumSize: MaterialStatePropertyAll(
                 Size(double.infinity, 40),
               ),
             ),
             onPressed: onModifyPassword,
-            child: const Text(
-              "修改密码",
-              style: TextStyle(fontSize: 16),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.settings),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "修改密码",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
             ),
           ),
         ),
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: ElevatedButton(
-            style: const ButtonStyle(
-              minimumSize: MaterialStatePropertyAll(
-                Size(double.infinity, 40),
+              style: const ButtonStyle(
+                minimumSize: MaterialStatePropertyAll(
+                  Size(double.infinity, 40),
+                ),
               ),
-            ),
-            onPressed: onHistoryPressed,
-            child: const Text(
-              "历史记录",
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
+              onPressed: onHistoryPressed,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.access_alarm),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "历史记录",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )),
         ),
         const Expanded(child: Text("")),
         Container(
@@ -156,7 +193,7 @@ class _MyUIState extends State<MyUI> {
                 child: Text(
                   Values.user.username,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 25),
                 ),
               ),
             ),
@@ -170,19 +207,23 @@ class _MyUIState extends State<MyUI> {
           height: 20,
         ),
         //对局胜率信息展示
-        Row(
-          children: [
-            matchInfo("胜局", Values.user.winMatches.toString()),
-            matchInfo(
-              "败局",
-              (Values.user.totalMatches - Values.user.winMatches).toString(),
-            ),
-            matchInfo(
-              "胜率",
-              "${(Values.user.winPercentage * 100).toStringAsFixed(1)}%",
-            ),
-          ],
-        )
+
+        IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              matchInfo("胜局", Values.user.winMatches.toString()),
+              matchInfo(
+                "败局",
+                (Values.user.totalMatches - Values.user.winMatches).toString(),
+              ),
+              matchInfo(
+                "胜率",
+                "${(Values.user.winPercentage * 100).toStringAsFixed(1)}%",
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -190,6 +231,7 @@ class _MyUIState extends State<MyUI> {
   Widget matchInfo(String text1, String text2) {
     return Expanded(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(text1, style: const TextStyle(fontSize: 16)),
           Text(text2, style: const TextStyle(fontSize: 16)),

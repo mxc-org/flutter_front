@@ -43,7 +43,6 @@ class _NewFriendsUIState extends State<NewFriendsUI> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.only(top: 10),
           child: myListView(),
         ),
       ),
@@ -57,6 +56,10 @@ class _NewFriendsUIState extends State<NewFriendsUI> {
       itemCount: Values.newFriendList.length,
       itemBuilder: (context, i) {
         return ListTile(
+          shape: const RoundedRectangleBorder(
+            side:
+                BorderSide(color: Color.fromARGB(255, 245, 229, 229), width: 1),
+          ),
           title: Text(Values.newFriendList[i].userFrom.username),
           leading: Container(
             margin: const EdgeInsets.only(left: 10),
