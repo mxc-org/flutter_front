@@ -1,0 +1,20 @@
+name: flutter test
+run-name: ${{ github.actor }} is testing flutter code
+on: [push]
+jobs:
+  flutter_obj_test: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out code
+        uses: actions/checkout@v3
+      - name: set up flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'master'
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 'main'
+      - name: get dependencies
+        run: "flutter pub get"
+      - name: "Run Flutter Obj Tests"
+        run: "flutter test test/obj_test.dart"

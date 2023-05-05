@@ -109,6 +109,11 @@ class _HistoryUIState extends State<HistoryUI> {
                       ),
                     ),
                   ),
+                  child: GestureDetector(
+                    onTap: () {
+                      showDetail(firstUser);
+                    },
+                  ),
                 )
               ],
             ),
@@ -128,6 +133,11 @@ class _HistoryUIState extends State<HistoryUI> {
                         "${Values.avatarUrl}${secondUser.avatarName}",
                       ),
                     ),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      showDetail(secondUser);
+                    },
                   ),
                 )
               ],
@@ -159,6 +169,71 @@ class _HistoryUIState extends State<HistoryUI> {
     );
   }
 
+  void showDetail(User user) {
+    showDialog(
+      context: context,
+      builder: (buildContext) {
+        return AlertDialog(
+          title: Text(user.username),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      "${Values.avatarUrl}${user.avatarName}",
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text("总局数：${user.totalMatches}"),
+              Text("胜局数：${user.winMatches}"),
+              Text("败局数：${user.totalMatches - user.winMatches}"),
+              Text("胜率：${(user.winPercentage * 100).toStringAsFixed(2)}%"),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                onAddPressed(user.id);
+              },
+              child: const Text("加好友"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("确定"),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void onAddPressed(int id) async {
+    Navigator.of(context).pop();
+    if (id == Values.user.id) {
+      showSingleActionDialog("不能自己添加自己噢");
+      return;
+    }
+    http.post(
+      Uri.parse("${Values.server}/Friend/MakeFriend"),
+      body: {
+        "userIdFrom": Values.user.id.toString(),
+        "userIdTo": id.toString(),
+      },
+    );
+    showSingleActionDialog("已发送好友请求");
+  }
+
   void getHistory() async {
     matchList.clear();
     var response = await http.get(
@@ -179,6 +254,30 @@ class _HistoryUIState extends State<HistoryUI> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ReplayUI(match: match),
+      ),
+    );
+  }
+
+  showSingleActionDialog(String content) {
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: const Text("提示"),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "确定",
+              style: TextStyle(fontSize: 16),
+            ),
+          )
+        ],
       ),
     );
   }
