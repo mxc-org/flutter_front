@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing flutter code
 on: [push]
 jobs:
   flutter_obj_test: 
-    runs-on: fedora-latest
+    runs-on: ubuntu-latest
     steps:
       # https://github.com/actions/checkout
       - uses: actions/checkout@v2
