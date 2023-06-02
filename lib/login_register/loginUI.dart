@@ -57,7 +57,7 @@ class _LoginUIState extends State<LoginUI> {
 
   @override
   Widget build(BuildContext context) {
-    if (Values.login == true) return const MyHomePage(title: "网络五子棋");
+    if (Values.login == true) return const MyHomePage(title: "棋艺");
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -184,7 +184,7 @@ class _LoginUIState extends State<LoginUI> {
       Values.myWebSocket.connect();
       Values.connectStatus = true;
       Values.login = true;
-      //writeDate();
+      writeDate();
       setState(() {});
     });
     setState(() {});
