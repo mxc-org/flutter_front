@@ -120,9 +120,41 @@ class _FightUIState extends State<FightUI> {
               Container(
                 padding: const EdgeInsets.only(bottom: 10),
                 width: double.infinity,
-                height: height / 2,
+                height: height / 4,
                 color: Colors.white,
                 child: communicationView(),
+              ),
+            if (Values.notice == true && Values.ischat == false)
+              Positioned(
+                top: 50,
+                child: GestureDetector(
+                  onTap: () {
+                    Values.notice = false;
+                    Values.ischat = true;
+                    setState(() {});
+                    scrollToBottom();
+                  },
+                  child: Container(
+                    // height: height / 8,
+                    width: Values.width * 7 / 8,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.95),
+                        borderRadius: BorderRadius.circular(height / 32)),
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 10, bottom: 10),
+                      child: Text(
+                        Values.message.isEmpty
+                            ? ""
+                            : "对手：${Values.message[Values.message.length - 1].content}",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
               ),
           ],
         ),
@@ -164,7 +196,9 @@ class _FightUIState extends State<FightUI> {
                         : "对局数：${Values.currentRoom.userJoin!.totalMatches}场",
                   ),
                   Text(
-                    "胜率：${(Values.currentRoom.userJoin!.winPercentage * 100).toStringAsFixed(2)} %",
+                    Values.currentRoom.userJoin == null
+                        ? ""
+                        : "胜率：${(Values.currentRoom.userJoin!.winPercentage * 100).toStringAsFixed(2)} %",
                   ),
                 ],
               ),
